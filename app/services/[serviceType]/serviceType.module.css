@@ -1,0 +1,78 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--bg);
+}
+
+.heroBanner {
+  padding: 180px 0 100px;
+  background-color: var(--secondary);
+  color: #fff;
+  text-align: center;
+}
+
+.eyebrow {
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.heroBanner h1 {
+  font-size: 4rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.description {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+}
+
+.gallerySection {
+  padding: 100px 0;
+  background-color: var(--bg-light);
+}
+
+.gallerySection h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--secondary);
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.galleryItem {
+  position: relative;
+  height: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.galleryItem:hover .image {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .heroBanner h1 {
+    font-size: 2.5rem;
+  }
+  .galleryGrid {
+    grid-template-columns: 1fr;
+  }
+}

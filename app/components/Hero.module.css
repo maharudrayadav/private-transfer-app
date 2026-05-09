@@ -1,0 +1,231 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background-image: url('https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?q=80&w=2000&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding: 100px 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8) 0%,
+    rgba(15, 23, 42, 0.4) 100%
+  );
+}
+
+.heroContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.heroTextContent {
+  max-width: 100%;
+}
+
+.eyebrow {
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.eyebrow::after {
+  content: '';
+  width: 50px;
+  height: 1px;
+  background: var(--primary);
+}
+
+.title {
+  font-size: 5rem;
+  font-family: var(--font-playfair), serif;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.title span {
+  color: var(--primary);
+  font-style: italic;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+}
+
+.heroActions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+/* ── Horizontal Booking Bar ───────────────────────────────── */
+.bookingBar {
+  background: #fff;
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  max-width: 1100px;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 50;
+}
+
+.barFields {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  position: relative;
+}
+
+.barField {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: relative;
+}
+
+/* Vertical Divider */
+.barField:not(:last-child):not(:nth-last-child(2))::after {
+  content: '';
+  position: absolute;
+  right: -0.75rem;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: #e2e8f0;
+}
+
+.barField label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.barField input,
+.barField select {
+  background: transparent;
+  border: none;
+  color: var(--secondary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.4rem 0;
+  width: 100%;
+}
+
+/* Overriding child component input for this specific bar */
+.barField :global(input) {
+  background: transparent !important;
+  color: var(--secondary) !important;
+  padding: 0.4rem 0 !important;
+  border: none !important;
+  font-weight: 700 !important;
+}
+
+.barField input:focus,
+.barField select:focus {
+  outline: none;
+  color: var(--primary);
+}
+
+.inputWithFormat {
+  position: relative;
+}
+
+.hiddenDateInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.timeInput {
+  cursor: pointer;
+}
+
+.barAction {
+  flex: 0 0 auto;
+}
+
+.searchBtn {
+  background: var(--secondary);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+}
+
+.searchBtn:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .barFields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .barField::after {
+    display: none !important;
+  }
+
+  .barAction {
+    grid-column: span 2;
+  }
+
+  .searchBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .barFields {
+    grid-template-columns: 1fr;
+  }
+
+  .barAction {
+    grid-column: span 1;
+  }
+}

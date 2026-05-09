@@ -1,0 +1,153 @@
+.page {
+  padding-top: 76px;
+}
+
+.banner {
+  background: var(--bg-light);
+  padding: 4rem 0;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4rem;
+}
+
+.banner h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.banner h1 span {
+  color: var(--primary);
+}
+
+.banner p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 4rem;
+  padding-bottom: 6rem;
+  align-items: start;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.fieldGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.25s ease, background 0.25s ease;
+  color-scheme: dark;
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--primary-color);
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.field select option {
+  background: #1a1a1a;
+}
+
+.submit {
+  align-self: flex-start;
+  padding: 0.9rem 2.5rem;
+  font-size: 1rem;
+}
+
+/* Info Cards */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.infoCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.infoCard h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.infoCard a {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-main);
+  transition: color 0.3s;
+}
+
+.infoCard a:hover {
+  color: var(--primary-color);
+}
+
+.infoCard p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .info {
+    grid-template-columns: 1fr;
+  }
+}

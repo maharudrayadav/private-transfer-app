@@ -1,0 +1,59 @@
+.page {
+  padding-top: 76px;
+}
+
+.banner {
+  background: var(--bg-light);
+  padding: 4rem 0;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+.banner h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.banner h1 span {
+  color: var(--primary);
+}
+
+.banner p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.cta {
+  background: var(--primary);
+  padding: 5rem 0;
+  text-align: center;
+  color: #fff;
+}
+
+.cta h2 {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.cta p {
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+
+.cta a {
+  background: #fff;
+  color: var(--primary);
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.cta a:hover {
+  opacity: 0.9;
+}

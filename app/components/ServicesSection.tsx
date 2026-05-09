@@ -1,0 +1,152 @@
+'use client';
+
+import { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+
+import styles from './Services.module.css';
+
+interface ServiceItem {
+  id: number | string;
+  heading: string;
+  subHeading: string;
+  description: string;
+  imageUrl: string;
+  service: string;
+  passengers?: number;
+  mainService?: string;
+}
+
+interface ServicesSectionProps {
+  initialServices?: ServiceItem[];
+}
+
+export default function ServicesSection({ initialServices = [] }: ServicesSectionProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [displayServices, setDisplayServices] = useState<ServiceItem[]>(initialServices);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      // Check if we already have the data in this session
+      const cachedStr = sessionStorage.getItem('servicesCache');
+      if (cachedStr) {
+        const cached = JSON.parse(cachedStr);
+        setDisplayServices(cached.data);
+        return; // Use session cache on refresh
+      }
+
+      try {
+        const res = await fetch(`/api/images?service=services&t=${Date.now()}`, {
+          cache: 'no-store'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setDisplayServices(data);
+          // Store data for the current session (persists on refresh)
+          sessionStorage.setItem('servicesCache', JSON.stringify({
+            data: data
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching services on client:', error);
+      }
+    };
+    
+    // Only fetch if initialServices wasn't provided or we want to ensure fresh data
+    fetchServices();
+  }, []);
+
+  const scroll = (dir: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 400;
+      scrollRef.current.scrollBy({
+        left: dir === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Final list of services to show
+  const servicesList = displayServices;
+
+  const getServiceIcon = (title: string) => {
+    const t = title.toLowerCase();
+    if (t.includes('hotel')) return '🏨';
+    if (t.includes('airport')) return '✈️';
+    if (t.includes('wedding')) return '💍';
+    if (t.includes('tour') || t.includes('scenic')) return '🍀';
+    if (t.includes('business') || t.includes('executive')) return '💼';
+    return '✨';
+  };
+
+  return (
+    <section className={styles.section}>
+      <div className="container">
+        <div className={styles.header}>
+          <div className={styles.headerText}>
+            <p className={styles.eyebrow}>EXCLUSIVITY & COMFORT</p>
+            <h2 className={styles.title}>Bespoke <span>Chauffeur</span> Services</h2>
+          </div>
+          <div className={styles.navArea}>
+            <button className={styles.sliderBtn} onClick={() => scroll('left')}>‹</button>
+            <button className={styles.sliderBtn} onClick={() => scroll('right')}>›</button>
+          </div>
+        </div>
+
+        <div className={styles.grid} ref={scrollRef}>
+          {servicesList.length > 0 ? (
+            servicesList.map((s, idx) => (
+              <Link 
+                href={`/services/${s.mainService ? s.mainService.toLowerCase() : (s.heading || '').toLowerCase().replace(/ /g, '-')}`} 
+                key={s.id || idx} 
+                className={styles.card}
+              >
+                <div className={styles.imgWrap}>
+                  <Image 
+                    src={s.imageUrl || '/placeholder_service.png'} 
+                    alt={s.heading || 'Service Image'} 
+                    fill 
+                    sizes="(max-width:768px) 100vw, 400px" 
+                    className={styles.img} 
+                    priority={idx < 2}
+                  />
+                  <div className={styles.imgOverlay}></div>
+                </div>
+                <div className={styles.cardBody}>
+                  <span className={styles.cardIcon}>{getServiceIcon(s.heading || '')}</span>
+                  <span className={styles.cardSubtitle}>{(s.subHeading || '').trim()}</span>
+                  <h3>{(s.heading || '').trim()}</h3>
+                  <p>{s.description}</p>
+                  
+                  {s.passengers && s.passengers > 0 ? (
+                    <div className={styles.cardMeta}>
+                      <span className={styles.metaItem}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Capacity: {s.passengers}
+                      </span>
+                    </div>
+                  ) : null}
+
+                  <div className={styles.learnMore}>Explore Service <span>→</span></div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className={styles.noData}>
+              <p>Services are currently being updated. Please check back soon or contact us directly.</p>
+            </div>
+          )}
+          
+          {/* Uniform CTA Card */}
+          <div className={styles.ctaCard}>
+            <div className={styles.ctaContent}>
+              <h3>Custom Journey?</h3>
+              <p>Specializing in bespoke itineraries across Ireland.</p>
+              <Link href="/contact" className="btn-primary">Enquire Now</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
