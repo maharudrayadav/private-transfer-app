@@ -45,6 +45,9 @@ export default function BookingPage() {
   const [modTime, setModTime] = useState('');
   const modDateRef = useRef<HTMLInputElement>(null);
   const modTimeRef = useRef<HTMLInputElement>(null);
+  const returnDateRef = useRef<HTMLInputElement>(null);
+  const returnTimeRef = useRef<HTMLInputElement>(null);
+  const [returnDateDisplay, setReturnDateDisplay] = useState('');
 
   // ── Route Info state ──────────────────────────────────────
   const [routeInfo, setRouteInfo] = useState<{ distance_km: number; time_minutes: number } | null>(null);
@@ -138,7 +141,15 @@ export default function BookingPage() {
     setModDateRaw(val);
     if (!val) { setModDateDisplay(''); return; }
     const [y, m, d] = val.split('-');
-    setModDateDisplay(`${d} / ${m} / ${y}`);
+    setModDateDisplay(`${d}/${m}/${y}`);
+  };
+
+  const handleReturnDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setForm({ ...form, returnDate: val });
+    if (!val) { setReturnDateDisplay(''); return; }
+    const [y, m, d] = val.split('-');
+    setReturnDateDisplay(`${d}/${m}/${y}`);
   };
 
   const handleApplyModify = () => {
@@ -406,19 +417,21 @@ export default function BookingPage() {
                 <div className={styles.returnFieldsGrid}>
                   <div className={styles.formField}>
                     <label>Return Date</label>
-                    <div className={styles.inputWithIcon} onClick={(e) => {
-                      try { (e.currentTarget.querySelector('input') as HTMLInputElement)?.showPicker() } catch(err){}
+                    <div className={styles.inputWithIcon} onClick={() => {
+                      try { returnDateRef.current?.showPicker() } catch(err){}
                     }}>
-                      <input type="date" name="returnDate" required value={form.returnDate} onChange={handleChange} />
+                      <input type="text" readOnly placeholder="12/05/2026" value={returnDateDisplay} />
+                      <input type="date" ref={returnDateRef} className={styles.hiddenDateInput} name="returnDate" value={form.returnDate} onChange={handleReturnDateChange} />
                       <span className={styles.pickerIcon}>📅</span>
                     </div>
                   </div>
                   <div className={styles.formField}>
                     <label>Return Time</label>
-                    <div className={styles.inputWithIcon} onClick={(e) => {
-                      try { (e.currentTarget.querySelector('input') as HTMLInputElement)?.showPicker() } catch(err){}
+                    <div className={styles.inputWithIcon} onClick={() => {
+                      try { returnTimeRef.current?.showPicker() } catch(err){}
                     }}>
-                      <input type="time" name="returnTime" required value={form.returnTime} onChange={handleChange} />
+                      <input type="text" readOnly placeholder="Select time" value={form.returnTime} />
+                      <input type="time" ref={returnTimeRef} className={styles.hiddenDateInput} name="returnTime" value={form.returnTime} onChange={handleChange} />
                       <span className={styles.pickerIcon}>⏰</span>
                     </div>
                   </div>
