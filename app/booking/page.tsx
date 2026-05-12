@@ -56,7 +56,8 @@ export default function BookingPage() {
     firstName: '', lastName: '',
     email: '', phone: '',
     flightNumber: '', passengers: '1',
-    luggage: '1', notes: ''
+    luggage: '1', notes: '',
+    returnDate: '', returnTime: ''
   });
 
   useEffect(() => {
@@ -160,7 +161,8 @@ export default function BookingPage() {
 
   const extraTotal = (extras.childSeat ? 10 : 0) + (extras.boosterSeat ? 10 : 0);
   const vehiclePrice = selectedVehicle?.price || 0;
-  const total = vehiclePrice + extraTotal;
+  const tripMultiplier = tripType === 'return' ? 2 : 1;
+  const total = (vehiclePrice * tripMultiplier) + extraTotal;
 
   if (submitted) {
     return (
@@ -389,14 +391,29 @@ export default function BookingPage() {
 
               <div className={styles.tripToggle}>
                 <button
+                  type="button"
                   className={`${styles.tripBtn} ${tripType === 'one-way' ? styles.tripBtnActive : ''}`}
                   onClick={() => setTripType('one-way')}
                 >One Way</button>
                 <button
+                  type="button"
                   className={`${styles.tripBtn} ${tripType === 'return' ? styles.tripBtnActive : ''}`}
                   onClick={() => setTripType('return')}
                 >Return</button>
               </div>
+
+              {tripType === 'return' && (
+                <div className={styles.returnFieldsGrid}>
+                  <div className={styles.formField}>
+                    <label>Return Date</label>
+                    <input type="date" name="returnDate" required value={form.returnDate} onChange={handleChange} />
+                  </div>
+                  <div className={styles.formField}>
+                    <label>Return Time</label>
+                    <input type="time" name="returnTime" required value={form.returnTime} onChange={handleChange} />
+                  </div>
+                </div>
+              )}
 
               <form className={styles.passengerForm} onSubmit={handleSubmit}>
                 <div className={styles.formRow}>
@@ -523,6 +540,18 @@ export default function BookingPage() {
                   <label>Trip Type</label>
                   <p>{tripType === 'one-way' ? 'One Way' : 'Return'}</p>
                 </div>
+                {tripType === 'return' && (
+                  <>
+                    <div>
+                      <label>Return Date</label>
+                      <p>{form.returnDate || '—'}</p>
+                    </div>
+                    <div>
+                      <label>Return Time</label>
+                      <p>{form.returnTime || '—'}</p>
+                    </div>
+                  </>
+                )}
               </div>
 
               {routeInfo && (
@@ -546,8 +575,8 @@ export default function BookingPage() {
 
               <div className={styles.summaryPricing}>
                 <div className={styles.priceRow}>
-                  <span>Selected vehicle</span>
-                  <span>{selectedVehicle ? `€${vehiclePrice.toFixed(2)}` : '—'}</span>
+                  <span>Selected vehicle {tripType === 'return' && '(x2)'}</span>
+                  <span>{selectedVehicle ? `€${(vehiclePrice * tripMultiplier).toFixed(2)}` : '—'}</span>
                 </div>
                 <div className={styles.priceRow}>
                   <span>Extra options</span>

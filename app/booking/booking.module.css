@@ -400,29 +400,34 @@
 
 .tripToggle {
   display: flex;
-  gap: 0;
+  gap: 1rem;
   margin-bottom: 2rem;
-  background: #f1f5f9;
-  border-radius: 10px;
-  padding: 4px;
   width: fit-content;
 }
 
 .tripBtn {
-  padding: 0.6rem 1.5rem;
+  padding: 0.8rem 2.5rem;
   border: none;
   border-radius: 8px;
   font-weight: 700;
-  font-size: 0.85rem;
-  background: transparent;
-  color: #64748b;
+  font-size: 0.95rem;
+  background: #333;
+  color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .tripBtnActive {
-  background: var(--secondary);
+  background: #007bff;
   color: #fff;
+}
+
+.returnFieldsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  animation: slideDown 0.3s ease;
 }
 
 .passengerForm {
