@@ -18,10 +18,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://privateproject-r0ry.onrender.com';
     return [
       {
         source: '/api/:path*',
-        destination: 'https://privateproject-r0ry.onrender.com/api/:path*', // Proxy to Backend
+        destination: `${backendUrl}/api/:path*`, // Proxy to Backend
       },
     ];
   },
