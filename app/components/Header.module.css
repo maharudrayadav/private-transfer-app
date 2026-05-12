@@ -80,8 +80,86 @@
   width: 100%;
 }
 
+.mobileMenuBtn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.hamburgerLine {
+  width: 100%;
+  height: 3px;
+  background: var(--secondary);
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.lineTop {
+  transform: rotate(45deg);
+}
+
+.lineMiddle {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.lineBottom {
+  transform: rotate(-45deg);
+}
+
+.btnPrimaryMobile {
+  display: none;
+  text-align: center;
+  margin-top: 1rem;
+}
+
 @media (max-width: 768px) {
-  .nav {
+  .mobileMenuBtn {
+    display: flex;
+  }
+
+  .desktopCta {
     display: none;
+  }
+
+  .nav {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 76px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    padding: 2rem;
+    gap: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-150%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
+    visibility: hidden;
+  }
+
+  .navOpen {
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .navLink {
+    font-size: 1.2rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .btnPrimaryMobile {
+    display: inline-block;
   }
 }
