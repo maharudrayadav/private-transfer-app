@@ -55,7 +55,7 @@ export default function BookingPage() {
   const [form, setForm] = useState({
     firstName: '', lastName: '',
     email: '', phone: '',
-    flightNumber: '', passengers: '1',
+    passengers: '1',
     luggage: '1', notes: '',
     returnDate: '', returnTime: ''
   });
@@ -446,10 +446,7 @@ export default function BookingPage() {
                 </div>
 
                 <div className={styles.formRow}>
-                  <div className={styles.formField}>
-                    <label>Flight Number</label>
-                    <input type="text" name="flightNumber" value={form.flightNumber} onChange={handleChange} placeholder="e.g. EI105" />
-                  </div>
+
                   <div className={styles.formField}>
                     <label>Passengers</label>
                     <select name="passengers" value={form.passengers} onChange={handleChange}>
