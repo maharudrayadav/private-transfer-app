@@ -457,6 +457,7 @@
 .formField input,
 .formField select,
 .formField textarea {
+  width: 100%;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -465,6 +466,30 @@
   color: var(--secondary);
   transition: all 0.2s ease;
   font-family: inherit;
+}
+
+.inputWithIcon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.pickerIcon {
+  position: absolute;
+  right: 1rem;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* Hide native icon in webkit browsers since we provide our own */
+.inputWithIcon input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 2rem;
+  height: 100%;
+  cursor: pointer;
 }
 
 .formField input:focus,

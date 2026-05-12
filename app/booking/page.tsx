@@ -406,11 +406,21 @@ export default function BookingPage() {
                 <div className={styles.returnFieldsGrid}>
                   <div className={styles.formField}>
                     <label>Return Date</label>
-                    <input type="date" name="returnDate" required value={form.returnDate} onChange={handleChange} />
+                    <div className={styles.inputWithIcon} onClick={(e) => {
+                      try { (e.currentTarget.querySelector('input') as HTMLInputElement)?.showPicker() } catch(err){}
+                    }}>
+                      <input type="date" name="returnDate" required value={form.returnDate} onChange={handleChange} />
+                      <span className={styles.pickerIcon}>📅</span>
+                    </div>
                   </div>
                   <div className={styles.formField}>
                     <label>Return Time</label>
-                    <input type="time" name="returnTime" required value={form.returnTime} onChange={handleChange} />
+                    <div className={styles.inputWithIcon} onClick={(e) => {
+                      try { (e.currentTarget.querySelector('input') as HTMLInputElement)?.showPicker() } catch(err){}
+                    }}>
+                      <input type="time" name="returnTime" required value={form.returnTime} onChange={handleChange} />
+                      <span className={styles.pickerIcon}>⏰</span>
+                    </div>
                   </div>
                 </div>
               )}
