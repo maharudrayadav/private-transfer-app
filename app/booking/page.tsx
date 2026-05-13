@@ -20,10 +20,6 @@ interface FleetItem {
 
 const COUNTRY_CODES = [
   { code: '+353', flag: '🇮🇪', country: 'Ireland' },
-  { code: '+44', flag: '🇬🇧', country: 'UK' },
-  { code: '+1', flag: '🇺🇸', country: 'USA' },
-  { code: '+49', flag: '🇩🇪', country: 'Germany' },
-  { code: '+33', flag: '🇫🇷', country: 'France' },
 ];
 
 export default function BookingPage() {
@@ -49,6 +45,10 @@ export default function BookingPage() {
   const returnTimeRef = useRef<HTMLInputElement>(null);
   const [returnDateDisplay, setReturnDateDisplay] = useState('');
 
+  // ── Return journey address state ───────────────────────────
+  const [returnPickup, setReturnPickup] = useState('');
+  const [returnDropoff, setReturnDropoff] = useState('');
+
   // ── Route Info state ──────────────────────────────────────
   const [routeInfo, setRouteInfo] = useState<{ distance_km: number; time_minutes: number } | null>(null);
   const [routeData, setRouteData] = useState<any>(null);
@@ -73,6 +73,9 @@ export default function BookingPage() {
       setModDropoff(parsed.dropoff || '');
       setModDateDisplay(parsed.date || '');
       setModTime(parsed.time || '');
+      // Pre-fill return addresses as reverse of outbound by default
+      setReturnPickup(parsed.dropoff || '');
+      setReturnDropoff(parsed.pickup || '');
     } else {
       // If direct open without search, show the search inputs by default
       setModifyOpen(true);
@@ -195,6 +198,91 @@ export default function BookingPage() {
         {/* LEFT COLUMN */}
         <div className={styles.leftCol}>
 
+
+
+          {/* ── Return Journey Details Card (slides in when Return chosen) ── */}
+          {tripType === 'return' && (
+            <div className={styles.returnDetailsCard}>
+              <div className={styles.returnDetailsHeader}>
+                <span className={styles.returnDetailsIcon}>⇄</span>
+                <h3>Return Journey Details</h3>
+                <p>Enter your return trip information below</p>
+              </div>
+              <div className={styles.returnDetailsGrid}>
+                <div className={styles.returnField}>
+                  <label className={styles.returnLabel}>Return Pickup Address</label>
+                  <LocationAutocomplete
+                    id="return-pickup"
+                    label=""
+                    placeholder={search?.dropoff || 'Enter return pickup location'}
+                    variant="light"
+                    initialValue={returnPickup}
+                    onSelect={setReturnPickup}
+                  />
+                </div>
+                <div className={styles.returnField}>
+                  <label className={styles.returnLabel}>Return Drop-off Address</label>
+                  <LocationAutocomplete
+                    id="return-dropoff"
+                    label=""
+                    placeholder={search?.pickup || 'Enter return drop-off location'}
+                    variant="light"
+                    initialValue={returnDropoff}
+                    onSelect={setReturnDropoff}
+                  />
+                </div>
+                <div className={styles.returnField}>
+                  <label className={styles.returnLabel}>Return Date</label>
+                  <div
+                    className={styles.returnDateWrap}
+                    onClick={() => { try { returnDateRef.current?.showPicker(); } catch(e){} }}
+                  >
+                    <span className={styles.returnInputIcon}>📅</span>
+                    <input
+                      type="text"
+                      readOnly
+                      placeholder="DD / MM / YYYY"
+                      value={returnDateDisplay}
+                      className={styles.returnDateDisplay}
+                    />
+                    <input
+                      type="date"
+                      ref={returnDateRef}
+                      className={styles.hiddenDateInput}
+                      name="returnDate"
+                      value={form.returnDate}
+                      onChange={handleReturnDateChange}
+                    />
+                  </div>
+                </div>
+                <div className={styles.returnField}>
+                  <label className={styles.returnLabel}>Return Time</label>
+                  <div
+                    className={styles.returnTimeWrap}
+                    onClick={() => { try { returnTimeRef.current?.showPicker(); } catch(e){} }}
+                  >
+                    <span className={styles.returnInputIcon}>⏰</span>
+                    <input
+                      type="text"
+                      readOnly
+                      placeholder="HH : MM"
+                      value={form.returnTime}
+                      className={styles.returnDateDisplay}
+                    />
+                    <input
+                      type="time"
+                      ref={returnTimeRef}
+                      className={styles.hiddenDateInput}
+                      name="returnTime"
+                      value={form.returnTime}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ── Search Summary Bar ──────────────────────────────── */}
           <div className={styles.searchBar}>
             <div className={styles.routeDisplay}>
@@ -226,6 +314,7 @@ export default function BookingPage() {
                   <p>{search?.time || '—'}</p>
                 </div>
               </div>
+
               <button
                 className={styles.modifyBtn}
                 onClick={() => setModifyOpen(v => !v)}
@@ -400,44 +489,6 @@ export default function BookingPage() {
             <div ref={formRef} className={styles.passengerSection}>
               <h2 className={styles.passengerTitle}>Passenger Details</h2>
 
-              <div className={styles.tripToggle}>
-                <button
-                  type="button"
-                  className={`${styles.tripBtn} ${tripType === 'one-way' ? styles.tripBtnActive : ''}`}
-                  onClick={() => setTripType('one-way')}
-                >One Way</button>
-                <button
-                  type="button"
-                  className={`${styles.tripBtn} ${tripType === 'return' ? styles.tripBtnActive : ''}`}
-                  onClick={() => setTripType('return')}
-                >Return</button>
-              </div>
-
-              {tripType === 'return' && (
-                <div className={styles.returnFieldsGrid}>
-                  <div className={styles.formField}>
-                    <label>Return Date</label>
-                    <div className={styles.inputWithIcon} onClick={() => {
-                      try { returnDateRef.current?.showPicker() } catch(err){}
-                    }}>
-                      <input type="text" readOnly placeholder="12/05/2026" value={returnDateDisplay} />
-                      <input type="date" ref={returnDateRef} className={styles.hiddenDateInput} name="returnDate" value={form.returnDate} onChange={handleReturnDateChange} />
-                      <span className={styles.pickerIcon}>📅</span>
-                    </div>
-                  </div>
-                  <div className={styles.formField}>
-                    <label>Return Time</label>
-                    <div className={styles.inputWithIcon} onClick={() => {
-                      try { returnTimeRef.current?.showPicker() } catch(err){}
-                    }}>
-                      <input type="text" readOnly placeholder="Select time" value={form.returnTime} />
-                      <input type="time" ref={returnTimeRef} className={styles.hiddenDateInput} name="returnTime" value={form.returnTime} onChange={handleChange} />
-                      <span className={styles.pickerIcon}>⏰</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               <form className={styles.passengerForm} onSubmit={handleSubmit}>
                 <div className={styles.formRow}>
                   <div className={styles.formField}>
@@ -460,7 +511,7 @@ export default function BookingPage() {
                     <div className={styles.phoneGroup}>
                       <select className={styles.phoneCode} value={countryCode} onChange={e => setCountryCode(e.target.value)}>
                         {COUNTRY_CODES.map(c => (
-                          <option key={c.code} value={c.code}>{c.flag} {c.code} ({c.country})</option>
+                          <option key={c.code} value={c.code}>{c.flag} {c.code}</option>
                         ))}
                       </select>
                       <input type="tel" name="phone" required value={form.phone} onChange={handleChange} placeholder="Enter phone number" />
@@ -469,7 +520,6 @@ export default function BookingPage() {
                 </div>
 
                 <div className={styles.formRow}>
-
                   <div className={styles.formField}>
                     <label>Passengers</label>
                     <select name="passengers" value={form.passengers} onChange={handleChange}>
@@ -484,7 +534,75 @@ export default function BookingPage() {
                   </div>
                 </div>
 
-                <div className={styles.formField}>
+                {/* ── One Way / Return toggle inside form ─ matches reference site ── */}
+                <div className={styles.formTripToggle}>
+                  <button
+                    type="button"
+                    id="form-oneway-btn"
+                    className={`${styles.formTripBtn} ${tripType === 'one-way' ? styles.formTripBtnOneWay : styles.formTripBtnInactive}`}
+                    onClick={() => setTripType('one-way')}
+                  >
+                    One Way
+                  </button>
+                  <button
+                    type="button"
+                    id="form-return-btn"
+                    className={`${styles.formTripBtn} ${tripType === 'return' ? styles.formTripBtnReturn : styles.formTripBtnInactive}`}
+                    onClick={() => setTripType('return')}
+                  >
+                    Return
+                  </button>
+                </div>
+
+                {/* ── Return Date & Time (shown when Return is selected) ── */}
+                {tripType === 'return' && (
+                  <div className={styles.formReturnFields}>
+                    <div className={styles.formField}>
+                      <label>Return Date</label>
+                      <div
+                        className={styles.formReturnInput}
+                        onClick={() => { try { returnDateRef.current?.showPicker(); } catch(e){} }}
+                      >
+                        <input
+                          type="text"
+                          readOnly
+                          placeholder="Select date"
+                          value={returnDateDisplay}
+                        />
+                        <input
+                          type="date"
+                          ref={returnDateRef}
+                          className={styles.hiddenDateInput}
+                          name="returnDate"
+                          value={form.returnDate}
+                          onChange={handleReturnDateChange}
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Return Time</label>
+                      <div
+                        className={styles.formReturnInput}
+                        onClick={() => { try { returnTimeRef.current?.showPicker(); } catch(e){} }}
+                      >
+                        <input
+                          type="text"
+                          readOnly
+                          placeholder="Select time"
+                          value={form.returnTime}
+                        />
+                        <input
+                          type="time"
+                          ref={returnTimeRef}
+                          className={styles.hiddenDateInput}
+                          name="returnTime"
+                          value={form.returnTime}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}                <div className={styles.formField}>
                   <label>Notes to Driver (Optional)</label>
                   <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} placeholder="Any special instructions..." />
                 </div>
