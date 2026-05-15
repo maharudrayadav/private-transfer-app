@@ -245,239 +245,240 @@ export default function BookingPage() {
     <div className={styles.page}>
       <div className={styles.inner}>
 
-        {/* LEFT COLUMN */}
-        <div className={styles.leftCol}>
-
-
-
-          {/* ── Return Journey Details Card (slides in when Return chosen) ── */}
-          {tripType === 'return' && (
-            <div className={styles.returnDetailsCard}>
-              <div className={styles.returnDetailsHeader}>
-                <span className={styles.returnDetailsIcon}>⇄</span>
-                <h3>Return Journey Details</h3>
-                <p>Enter your return trip information below</p>
+        {/* ── Return Journey Details Card (slides in when Return chosen) ── */}
+        {tripType === 'return' && (
+          <div className={styles.returnDetailsCard}>
+            <div className={styles.returnDetailsHeader}>
+              <span className={styles.returnDetailsIcon}>⇄</span>
+              <h3>Return Journey Details</h3>
+              <p>Enter your return trip information below</p>
+            </div>
+            <div className={styles.returnDetailsGrid}>
+              <div className={styles.returnField}>
+                <label className={styles.returnLabel}>Return Pickup Address</label>
+                <LocationAutocomplete
+                  id="return-pickup"
+                  label=""
+                  placeholder={search?.dropoff || 'Enter return pickup location'}
+                  variant="light"
+                  initialValue={returnPickup}
+                  onSelect={setReturnPickup}
+                />
               </div>
-              <div className={styles.returnDetailsGrid}>
-                <div className={styles.returnField}>
-                  <label className={styles.returnLabel}>Return Pickup Address</label>
-                  <LocationAutocomplete
-                    id="return-pickup"
-                    label=""
-                    placeholder={search?.dropoff || 'Enter return pickup location'}
-                    variant="light"
-                    initialValue={returnPickup}
-                    onSelect={setReturnPickup}
+              <div className={styles.returnField}>
+                <label className={styles.returnLabel}>Return Drop-off Address</label>
+                <LocationAutocomplete
+                  id="return-dropoff"
+                  label=""
+                  placeholder={search?.pickup || 'Enter return drop-off location'}
+                  variant="light"
+                  initialValue={returnDropoff}
+                  onSelect={setReturnDropoff}
+                />
+              </div>
+              <div className={styles.returnField}>
+                <label className={styles.returnLabel}>Return Date</label>
+                <div
+                  className={styles.returnDateWrap}
+                  onClick={() => { try { returnDateRef.current?.showPicker(); } catch(e){} }}
+                >
+                  <span className={styles.returnInputIcon}>📅</span>
+                  <input
+                    type="text"
+                    readOnly
+                    placeholder="DD / MM / YYYY"
+                    value={returnDateDisplay}
+                    className={styles.returnDateDisplay}
+                  />
+                  <input
+                    type="date"
+                    ref={returnDateRef}
+                    className={styles.hiddenDateInput}
+                    name="returnDate"
+                    value={form.returnDate}
+                    onChange={handleReturnDateChange}
                   />
                 </div>
-                <div className={styles.returnField}>
-                  <label className={styles.returnLabel}>Return Drop-off Address</label>
-                  <LocationAutocomplete
-                    id="return-dropoff"
-                    label=""
-                    placeholder={search?.pickup || 'Enter return drop-off location'}
-                    variant="light"
-                    initialValue={returnDropoff}
-                    onSelect={setReturnDropoff}
+              </div>
+              <div className={styles.returnField}>
+                <label className={styles.returnLabel}>Return Time</label>
+                <div
+                  className={styles.returnTimeWrap}
+                  onClick={() => { try { returnTimeRef.current?.showPicker(); } catch(e){} }}
+                >
+                  <span className={styles.returnInputIcon}>⏰</span>
+                  <input
+                    type="text"
+                    readOnly
+                    placeholder="HH : MM"
+                    value={form.returnTime}
+                    className={styles.returnDateDisplay}
+                  />
+                  <input
+                    type="time"
+                    ref={returnTimeRef}
+                    className={styles.hiddenDateInput}
+                    name="returnTime"
+                    value={form.returnTime}
+                    onChange={handleChange}
                   />
                 </div>
-                <div className={styles.returnField}>
-                  <label className={styles.returnLabel}>Return Date</label>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Search Summary Bar ──────────────────────────────── */}
+        <div className={styles.searchBar}>
+          <div className={styles.routeDisplay}>
+            <span className={styles.routePin + ' ' + styles.pinFrom}>📍</span>
+            <div className={styles.routeText}>
+              <span className={styles.routeLabel}>Pickup</span>
+              <span className={styles.routeValue}>{search?.pickup || 'Not set'}</span>
+            </div>
+            <div className={styles.routeArrow}>→</div>
+            <span className={styles.routePin + ' ' + styles.pinTo}>📍</span>
+            <div className={styles.routeText}>
+              <span className={styles.routeLabel}>Drop-off</span>
+              <span className={styles.routeValue}>{search?.dropoff || 'Not set'}</span>
+            </div>
+          </div>
+
+          <div className={styles.tripMeta}>
+            <div className={styles.metaItem}>
+              <span>📅</span>
+              <div>
+                <label>Date</label>
+                <p>{search?.date || '—'}</p>
+              </div>
+            </div>
+            <div className={styles.metaItem}>
+              <span>⏰</span>
+              <div>
+                <label>Time</label>
+                <p>{search?.time || '—'}</p>
+              </div>
+            </div>
+
+            <button
+              className={styles.modifyBtn}
+              onClick={() => setModifyOpen(v => !v)}
+              aria-expanded={modifyOpen}
+            >
+              {modifyOpen ? '✕ Close' : '✏️ Modify Search'}
+            </button>
+          </div>
+
+          {/* ── Inline Modify Search Panel ───────────────────── */}
+          {modifyOpen && (
+            <div className={styles.modifyPanel}>
+              <div className={styles.modifyGrid}>
+                <div className={styles.modifyField}>
+                  <LocationAutocomplete
+                    id="mod-pickup"
+                    label="Pickup Location"
+                    placeholder="Enter pickup"
+                    variant="light"
+                    initialValue={modPickup}
+                    onSelect={setModPickup}
+                  />
+                </div>
+                <div className={styles.modifyField}>
+                  <LocationAutocomplete
+                    id="mod-dropoff"
+                    label="Drop-off Location"
+                    placeholder="Enter drop-off"
+                    variant="light"
+                    initialValue={modDropoff}
+                    onSelect={setModDropoff}
+                  />
+                </div>
+                <div className={styles.modifyField}>
+                  <label className={styles.modLabel}>Date</label>
                   <div
-                    className={styles.returnDateWrap}
-                    onClick={() => { try { returnDateRef.current?.showPicker(); } catch(e){} }}
+                    className={styles.modDateWrap}
+                    onClick={() => modDateRef.current?.showPicker()}
                   >
-                    <span className={styles.returnInputIcon}>📅</span>
                     <input
                       type="text"
                       readOnly
                       placeholder="DD / MM / YYYY"
-                      value={returnDateDisplay}
-                      className={styles.returnDateDisplay}
+                      value={modDateDisplay}
+                      className={styles.modDateDisplay}
                     />
                     <input
                       type="date"
-                      ref={returnDateRef}
+                      ref={modDateRef}
                       className={styles.hiddenDateInput}
-                      name="returnDate"
-                      value={form.returnDate}
-                      onChange={handleReturnDateChange}
+                      value={modDateRaw}
+                      onChange={handleModDateChange}
                     />
                   </div>
                 </div>
-                <div className={styles.returnField}>
-                  <label className={styles.returnLabel}>Return Time</label>
-                  <div
-                    className={styles.returnTimeWrap}
-                    onClick={() => { try { returnTimeRef.current?.showPicker(); } catch(e){} }}
-                  >
-                    <span className={styles.returnInputIcon}>⏰</span>
-                    <input
-                      type="text"
-                      readOnly
-                      placeholder="HH : MM"
-                      value={form.returnTime}
-                      className={styles.returnDateDisplay}
-                    />
-                    <input
-                      type="time"
-                      ref={returnTimeRef}
-                      className={styles.hiddenDateInput}
-                      name="returnTime"
-                      value={form.returnTime}
-                      onChange={handleChange}
-                    />
-                  </div>
+                <div className={styles.modifyField}>
+                  <label className={styles.modLabel}>Time</label>
+                  <input
+                    type="time"
+                    className={styles.modTimeInput}
+                    ref={modTimeRef}
+                    value={modTime}
+                    onChange={e => setModTime(e.target.value)}
+                    onClick={() => modTimeRef.current?.showPicker()}
+                  />
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* ── Search Summary Bar ──────────────────────────────── */}
-          <div className={styles.searchBar}>
-            <div className={styles.routeDisplay}>
-              <span className={styles.routePin + ' ' + styles.pinFrom}>📍</span>
-              <div className={styles.routeText}>
-                <span className={styles.routeLabel}>Pickup</span>
-                <span className={styles.routeValue}>{search?.pickup || 'Not set'}</span>
-              </div>
-              <div className={styles.routeArrow}>→</div>
-              <span className={styles.routePin + ' ' + styles.pinTo}>📍</span>
-              <div className={styles.routeText}>
-                <span className={styles.routeLabel}>Drop-off</span>
-                <span className={styles.routeValue}>{search?.dropoff || 'Not set'}</span>
-              </div>
-            </div>
-
-            <div className={styles.tripMeta}>
-              <div className={styles.metaItem}>
-                <span>📅</span>
-                <div>
-                  <label>Date</label>
-                  <p>{search?.date || '—'}</p>
-                </div>
-              </div>
-              <div className={styles.metaItem}>
-                <span>⏰</span>
-                <div>
-                  <label>Time</label>
-                  <p>{search?.time || '—'}</p>
-                </div>
-              </div>
-
-              <button
-                className={styles.modifyBtn}
-                onClick={() => setModifyOpen(v => !v)}
-                aria-expanded={modifyOpen}
-              >
-                {modifyOpen ? '✕ Close' : '✏️ Modify Search'}
+              <button className={styles.applyModifyBtn} onClick={handleApplyModify}>
+                Update Search →
               </button>
             </div>
+          )}
+        </div>
 
-            {/* ── Inline Modify Search Panel ───────────────────── */}
-            {modifyOpen && (
-              <div className={styles.modifyPanel}>
-                <div className={styles.modifyGrid}>
-                  <div className={styles.modifyField}>
-                    <LocationAutocomplete
-                      id="mod-pickup"
-                      label="Pickup Location"
-                      placeholder="Enter pickup"
-                      variant="light"
-                      initialValue={modPickup}
-                      onSelect={setModPickup}
-                    />
-                  </div>
-                  <div className={styles.modifyField}>
-                    <LocationAutocomplete
-                      id="mod-dropoff"
-                      label="Drop-off Location"
-                      placeholder="Enter drop-off"
-                      variant="light"
-                      initialValue={modDropoff}
-                      onSelect={setModDropoff}
-                    />
-                  </div>
-                  <div className={styles.modifyField}>
-                    <label className={styles.modLabel}>Date</label>
-                    <div
-                      className={styles.modDateWrap}
-                      onClick={() => modDateRef.current?.showPicker()}
-                    >
-                      <input
-                        type="text"
-                        readOnly
-                        placeholder="DD / MM / YYYY"
-                        value={modDateDisplay}
-                        className={styles.modDateDisplay}
-                      />
-                      <input
-                        type="date"
-                        ref={modDateRef}
-                        className={styles.hiddenDateInput}
-                        value={modDateRaw}
-                        onChange={handleModDateChange}
-                      />
+        {/* ── Route Map Section ─────────────────────────────────── */}
+        {search?.pickup && search?.dropoff && (
+          <div className={styles.routeMapSection}>
+            <button
+              className={styles.toggleRouteBtn}
+              onClick={() => setShowRouteMap(!showRouteMap)}
+            >
+              {showRouteMap ? 'Hide Route' : 'Show Route'}
+            </button>
+
+            {showRouteMap && (
+              <div className={styles.mapContainer}>
+                <div className={styles.mapInfo}>
+                  <span className={styles.mapDistance}>Distance: {routeInfo?.distance_km ?? '—'} km</span>
+                  {routeInfo?.time_minutes && (
+                    <span className={styles.mapTime}>Est. Time: {routeInfo.time_minutes} min</span>
+                  )}
+                </div>
+                {routeLoading ? (
+                  <div className={styles.mapPlaceholder}>
+                    <div className={styles.mapPlaceholderContent}>
+                      <span className={styles.mapIcon}>⏳</span>
+                      <p>Calculating route path...</p>
                     </div>
                   </div>
-                  <div className={styles.modifyField}>
-                    <label className={styles.modLabel}>Time</label>
-                    <input
-                      type="time"
-                      className={styles.modTimeInput}
-                      ref={modTimeRef}
-                      value={modTime}
-                      onChange={e => setModTime(e.target.value)}
-                      onClick={() => modTimeRef.current?.showPicker()}
-                    />
+                ) : routeData ? (
+                  <RouteMap routeData={routeData.route || routeData} />
+                ) : (
+                  <div className={styles.mapPlaceholder}>
+                    <div className={styles.mapPlaceholderContent}>
+                      <span className={styles.mapIcon}>🗺️</span>
+                      <p>Route visualization not available for this trip.</p>
+                    </div>
                   </div>
-                </div>
-                <button className={styles.applyModifyBtn} onClick={handleApplyModify}>
-                  Update Search →
-                </button>
+                )}
               </div>
             )}
           </div>
+        )}
 
-          {/* ── Route Map Section ─────────────────────────────────── */}
-          {search?.pickup && search?.dropoff && (
-            <div className={styles.routeMapSection}>
-              <button
-                className={styles.toggleRouteBtn}
-                onClick={() => setShowRouteMap(!showRouteMap)}
-              >
-                {showRouteMap ? 'Hide Route' : 'Show Route'}
-              </button>
+        {/* LEFT COLUMN (Vehicles & Form) */}
+        <div className={styles.leftCol}>
 
-              {showRouteMap && (
-                <div className={styles.mapContainer}>
-                  <div className={styles.mapInfo}>
-                    <span className={styles.mapDistance}>Distance: {routeInfo?.distance_km ?? '—'} km</span>
-                    {routeInfo?.time_minutes && (
-                      <span className={styles.mapTime}>Est. Time: {routeInfo.time_minutes} min</span>
-                    )}
-                  </div>
-                  {routeLoading ? (
-                    <div className={styles.mapPlaceholder}>
-                      <div className={styles.mapPlaceholderContent}>
-                        <span className={styles.mapIcon}>⏳</span>
-                        <p>Calculating route path...</p>
-                      </div>
-                    </div>
-                  ) : routeData ? (
-                    <RouteMap routeData={routeData.route || routeData} />
-                  ) : (
-                    <div className={styles.mapPlaceholder}>
-                      <div className={styles.mapPlaceholderContent}>
-                        <span className={styles.mapIcon}>🗺️</span>
-                        <p>Route visualization not available for this trip.</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+
+
 
           {/* Vehicle Cards */}
           <div className={styles.sectionTitle}>

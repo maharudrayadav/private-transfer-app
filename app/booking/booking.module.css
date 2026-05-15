@@ -203,6 +203,18 @@
   align-items: start;
 }
 
+.returnDetailsCard,
+.searchBar,
+.routeMapSection,
+.leftCol {
+  grid-column: 1;
+}
+
+.rightCol {
+  grid-column: 2;
+  grid-row: 1 / span 20; /* Keep it at the top-right on desktop */
+}
+
 /* ─── Search Bar ─────────────────────────────────────────────── */
 .searchBar {
   background: #fff;
@@ -1078,12 +1090,16 @@
 /* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .inner {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
-  .rightCol {
-    position: static;
-    order: -1;
-  }
+  .returnDetailsCard { order: 1; }
+  .searchBar { order: 2; }
+  .routeMapSection { order: 3; }
+  .rightCol { order: 4; margin-top: 0; } /* Ride Summary after search bar */
+  .leftCol { order: 5; } /* Vehicles/Form last */
+
   .vehicleCard {
     grid-template-columns: 200px 1fr auto;
   }
