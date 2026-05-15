@@ -33,6 +33,8 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [isCalculatingPrice, setIsCalculatingPrice] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
@@ -132,6 +134,34 @@ export default function BookingPage() {
         });
     }
   }, [search?.pickup, search?.dropoff]);
+
+  useEffect(() => {
+    if (selectedVehicle?.price && routeInfo?.distance_km) {
+      setIsCalculatingPrice(true);
+      const km = routeInfo.distance_km;
+      const rate = selectedVehicle.price;
+      fetch(`http://localhost:8080/caldata?km=${km}&rate=${rate}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.text())
+      .then(text => {
+        const parsed = parseFloat(text);
+        if (!isNaN(parsed)) {
+          setCalculatedPrice(parsed);
+        } else {
+          setCalculatedPrice(null);
+        }
+      })
+      .catch(err => {
+        console.error('Error calculating price:', err);
+        setCalculatedPrice(null);
+      })
+      .finally(() => setIsCalculatingPrice(false));
+    } else {
+      setCalculatedPrice(null);
+    }
+  }, [selectedVehicle?.price, routeInfo?.distance_km]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
@@ -295,7 +325,8 @@ export default function BookingPage() {
   const extraTotal = (extras.childSeat ? 10 : 0) + (extras.boosterSeat ? 10 : 0);
   const vehiclePrice = selectedVehicle?.price || 0;
   const tripMultiplier = tripType === 'return' ? 2 : 1;
-  const total = (vehiclePrice * tripMultiplier) + extraTotal;
+  const baseTripPrice = calculatedPrice !== null ? calculatedPrice : (vehiclePrice * tripMultiplier);
+  const total = baseTripPrice + extraTotal;
 
   // ... (previous logic)
 
@@ -825,8 +856,8 @@ export default function BookingPage() {
 
               <div className={styles.summaryPricing}>
                 <div className={styles.priceRow}>
-                  <span>Selected vehicle {tripType === 'return' && '(x2)'}</span>
-                  <span>{selectedVehicle ? `€${(vehiclePrice * tripMultiplier).toFixed(2)}` : '—'}</span>
+                  <span>Trip Cost {tripType === 'return' && '(Return)'}</span>
+                  <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${baseTripPrice.toFixed(2)}` : '—')}</span>
                 </div>
                 <div className={styles.priceRow}>
                   <span>Extra options</span>
@@ -834,7 +865,7 @@ export default function BookingPage() {
                 </div>
                 <div className={styles.totalRow}>
                   <span>Total</span>
-                  <strong>{selectedVehicle ? `€${total.toFixed(2)}` : '—'}</strong>
+                  <strong>{isCalculatingPrice ? '...' : (selectedVehicle ? `€${total.toFixed(2)}` : '—')}</strong>
                 </div>
               </div>
 
