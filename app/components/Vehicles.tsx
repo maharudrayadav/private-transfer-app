@@ -164,6 +164,7 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                       <div className={styles.feature}>
                         <span>🧳</span>
                         <p>{typeof displayBags === 'number' ? `${displayBags} Large Bags` : displayBags}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
