@@ -88,46 +88,28 @@ export default function PaymentPage() {
 
           {booking && (
             <div className={styles.resultSection}>
-              <div className={styles.bookingInfo}>
-                <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Customer</span>
-                  <span className={styles.infoValue}>{booking.customerName}</span>
-                </div>
-                <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Route</span>
-                  <span className={styles.infoValue}>{booking.pickupLocation} to {booking.dropoffLocation}</span>
-                </div>
-                <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Pickup Time</span>
-                  <span className={styles.infoValue}>
-                    {new Date(booking.pickupTime).toLocaleString('en-IE', { 
-                      dateStyle: 'medium', 
-                      timeStyle: 'short' 
-                    })}
-                  </span>
-                </div>
+              <div className={styles.bookingSummary}>
+                <p>Booking for <strong>{booking.customerName}</strong></p>
+                <p>{booking.pickupLocation} ➔ {booking.dropoffLocation}</p>
               </div>
 
-              <div className={styles.paymentOptions}>
-                <h3>Payment Options</h3>
-                <div className={styles.inputGroup} style={{marginBottom: '1.5rem'}}>
-                  <label htmlFor="payAmount">Amount to Pay (€)</label>
+              <div className={styles.paymentFields}>
+                <div className={styles.inputGroup}>
+                  <label htmlFor="payAmount">Payment Amount (€)</label>
                   <input 
                     id="payAmount"
                     type="number"
                     className={styles.amountInput}
                     value={editableAmount}
                     onChange={(e) => setEditableAmount(e.target.value)}
-                    placeholder="Enter amount..."
+                    placeholder="0.00"
                   />
-                  <small style={{color: 'var(--text-muted)', fontSize: '0.75rem', marginTop: '0.25rem'}}>
-                    Full amount for this booking is €{booking.amount.toFixed(2)}
-                  </small>
+                  <p className={styles.amountHint}>Total booking amount: €{booking.amount.toFixed(2)}</p>
                 </div>
 
                 <button className={styles.payBtn}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                  Pay €{parseFloat(editableAmount || '0').toFixed(2)} with Card
+                  Pay €{parseFloat(editableAmount || '0').toFixed(2)} Now
                 </button>
               </div>
             </div>
