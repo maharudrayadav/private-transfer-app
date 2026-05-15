@@ -1,108 +1,82 @@
-import type { Metadata } from 'next';
-import styles from './contact.module.css';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Contact & Booking | Private Transfer Ireland',
-  description: 'Get a personalised quote or book your private transfer and day trip across Ireland.',
-};
+import styles from './contact.module.css';
 
 export default function ContactPage() {
   return (
     <div className={styles.page}>
-      <div className={styles.banner}>
+      <section className={styles.hero}>
         <div className="container">
-          <h1>Get a <span>Quote & Book</span></h1>
-          <p>Fill in the form below and we'll get back to you with pricing and availability.</p>
+          <h1>Let's <span>Connect</span></h1>
+          <p>Have a question or special request? We're here to help you plan your perfect journey across Ireland.</p>
         </div>
-      </div>
+      </section>
 
-      <div className="container">
-        <div className={styles.layout}>
-          {/* Contact Form */}
-          <form className={styles.form}>
-            <div className={styles.fieldGroup}>
-              <div className={styles.field}>
-                <label htmlFor="name">Full Name</label>
-                <input id="name" type="text" placeholder="Your full name" />
+      <div className={`container ${styles.content}`}>
+        <div className={styles.grid}>
+          {/* Left Column: Contact Info */}
+          <div className={`${styles.card} ${styles.contactInfo}`}>
+            <h2>Get in Touch</h2>
+            <div className={styles.infoItems}>
+              <div className={styles.infoItem}>
+                <div className={styles.icon}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div>
+                  <span className={styles.itemLabel}>Call Us</span>
+                  <a href="tel:+353876899968" className={styles.itemValue}>+353 876 899 968</a>
+                </div>
               </div>
-              <div className={styles.field}>
-                <label htmlFor="email">Email Address</label>
-                <input id="email" type="email" placeholder="your@email.com" />
-              </div>
-            </div>
-            <div className={styles.fieldGroup}>
-              <div className={styles.field}>
-                <label htmlFor="phone">Phone Number</label>
-                <input id="phone" type="tel" placeholder="+353 ..." />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="service">Service Type</label>
-                <select id="service">
-                  <option value="">Select a service...</option>
-                  <option>Airport Transfer</option>
-                  <option>Private Driver</option>
-                  <option>Business Transfer</option>
-                  <option>Day Trip</option>
-                  <option>Wedding Car</option>
-                  <option>Golf Resort Transfer</option>
-                </select>
-              </div>
-            </div>
-            <div className={styles.fieldGroup}>
-              <div className={styles.field}>
-                <label htmlFor="pickup">Pickup Location</label>
-                <input id="pickup" type="text" placeholder="Address or airport" />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="dropoff">Drop-off Location</label>
-                <input id="dropoff" type="text" placeholder="Destination address" />
-              </div>
-            </div>
-            <div className={styles.fieldGroup}>
-              <div className={styles.field}>
-                <label htmlFor="cdate">Date</label>
-                <input id="cdate" type="date" />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="ctime">Time</label>
-                <input id="ctime" type="time" />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="passengers">Passengers</label>
-                <select id="passengers">
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
-                    <option key={n}>{n} Passenger{n > 1 ? 's' : ''}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className={styles.field}>
-              <label htmlFor="message">Additional Information</label>
-              <textarea id="message" rows={4} placeholder="Flight number, special requirements..." />
-            </div>
-            <button type="submit" className={`btn-primary ${styles.submit}`}>
-              Send Quote Request
-            </button>
-          </form>
 
-          {/* Contact Info */}
-          <div className={styles.info}>
-            <div className={styles.infoCard}>
-              <h3>📞 Call Us</h3>
-              <a href="tel:+353876899968">+353 876 899 968</a>
+              <div className={styles.infoItem}>
+                <div className={styles.icon}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div>
+                  <span className={styles.itemLabel}>Email Us</span>
+                  <a href="mailto:info@privatetransfer.ie" className={styles.itemValue}>info@privatetransfer.ie</a>
+                </div>
+              </div>
+
+              <div className={styles.infoItem}>
+                <div className={styles.icon}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div>
+                  <span className={styles.itemLabel}>Based In</span>
+                  <span className={styles.itemValue}>Dublin, Ireland</span>
+                </div>
+              </div>
             </div>
-            <div className={styles.infoCard}>
-              <h3>🕐 Available</h3>
-              <p>24/7 — We monitor your flight and adapt</p>
-            </div>
-            <div className={styles.infoCard}>
-              <h3>📍 Based In</h3>
-              <p>Dublin, Ireland — Serving all of Ireland</p>
-            </div>
-            <div className={styles.infoCard}>
-              <h3>✅ Guaranteed</h3>
-              <p>Fixed prices, no hidden fees, luxury fleet</p>
-            </div>
+          </div>
+
+          {/* Right Column: Contact Form */}
+          <div className={`${styles.card} ${styles.form}`}>
+            <h2>Send a Message</h2>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className={styles.fieldGroup}>
+                <div className={styles.field}>
+                  <label htmlFor="name">Full Name</label>
+                  <input id="name" type="text" placeholder="John Doe" />
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="email">Email</label>
+                  <input id="email" type="email" placeholder="john@example.com" />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="subject">Subject</label>
+                <input id="subject" type="text" placeholder="How can we help?" />
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="message">Message</label>
+                <textarea id="message" rows={5} placeholder="Tell us about your requirements..."></textarea>
+              </div>
+              <button type="submit" className={styles.submitBtn}>
+                Send Message
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </form>
           </div>
         </div>
       </div>
