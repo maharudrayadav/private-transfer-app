@@ -32,11 +32,11 @@ export default function Header() {
         {/* Nav */}
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ''}`}>
           <Link href="/" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-          <Link href="/about" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
           <Link href="/services" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Services</Link>
           <Link href="/booking" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Booking</Link>
           <Link href="/payment" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Payment</Link>
           <Link href="/contact" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+          <Link href="/about" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
           
           {/* Mobile CTA (visible only inside the open menu on small screens) */}
           <Link href="/booking" className={`${styles.btnPrimaryMobile} btn-primary`} onClick={() => setIsMobileMenuOpen(false)}>
