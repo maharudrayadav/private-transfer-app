@@ -172,16 +172,19 @@ export default function ServiceDetailsPage() {
             if (points.length === 0) return null;
             
             return (
-              <div className={styles.stylishPointsGrid}>
-                {points.map((pt, i) => (
-                  <div key={i} className={styles.stylishPointCard}>
-                    <div className={styles.spIcon}>{pt.icon}</div>
-                    <div className={styles.spContent}>
-                      <h4>{pt.title}</h4>
-                      <p>{pt.desc}</p>
+              <div style={{ marginTop: '6rem' }}>
+                <h2>Our Features</h2>
+                <div className={styles.stylishPointsGrid}>
+                  {points.map((pt, i) => (
+                    <div key={i} className={styles.stylishPointCard}>
+                      <div className={styles.spIcon}>{pt.icon}</div>
+                      <div className={styles.spContent}>
+                        <h4>{pt.title}</h4>
+                        <p>{pt.desc}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             );
           })()}
