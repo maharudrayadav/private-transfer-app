@@ -156,6 +156,34 @@
   display: block;
 }
 
+.paymentOptions {
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
+}
+
+.paymentOptions h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.amountInput {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  transition: border-color 0.2s;
+}
+
+.amountInput:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
 .payBtn {
   width: 100%;
   background: var(--secondary);
