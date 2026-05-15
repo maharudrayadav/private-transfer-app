@@ -41,25 +41,11 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Legal */}
-        <div className={styles.col}>
-          <h3>Legal</h3>
-          <ul>
-            <li><Link href="/privacy-policy">Privacy Policy</Link></li>
-            <li><Link href="/terms">Terms of Service</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
-          </ul>
-        </div>
-
       </div>
 
       <div className={styles.bottom}>
         <div className="container">
           <p>&copy; {new Date().getFullYear()} PrivateTransfer.ie — All rights reserved.</p>
-          <div className={styles.bottomLinks}>
-            <Link href="/privacy-policy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
-          </div>
         </div>
       </div>
     </footer>
