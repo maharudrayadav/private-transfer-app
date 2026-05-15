@@ -306,9 +306,14 @@ export default function AdminDashboard() {
                       <div>
                         <strong>{b.customerName || 'Unknown Customer'}</strong>
                         <div className={styles.subText}>{b.phone}</div>
-                        {(b.email || b.notes?.match(/Email:\s*([^\s\n]+)/)?.[1]) && (
-                          <div className={styles.subText} style={{fontSize: '0.75rem', opacity: 0.8, color: 'var(--primary)'}}>
-                            ✉️ {b.email || b.notes?.match(/Email:\s*([^\s\n]+)/)?.[1]}
+                        {b.email && (
+                          <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px' }}>
+                            ✉️ {b.email}
+                          </div>
+                        )}
+                        {!b.email && b.notes?.match(/Email:\s*([^\s\n]+)/) && (
+                          <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px' }}>
+                            ✉️ {b.notes.match(/Email:\s*([^\s\n]+)/)?.[1]}
                           </div>
                         )}
                         {b.bookingCode && <span className={styles.codeBadge}>#{b.bookingCode}</span>}

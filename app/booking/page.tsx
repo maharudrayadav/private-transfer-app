@@ -194,8 +194,9 @@ export default function BookingPage() {
       // Format Date/Time to YYYY-MM-DDTHH:mm:ss
       // Expected search.date: DD/MM/YYYY
       // Expected search.time: HH:mm
-      const [d, m, y] = search.date.split('/');
-      const pickupTime = `${y}-${m}-${d}T${search.time}:00`;
+      const [d, m, y] = search.date.split('/').map((s: string) => s.trim());
+      const timeStr = search.time ? search.time.trim() : '00:00';
+      const pickupTime = `${y}-${m}-${d}T${timeStr}:00`;
 
       const payload = {
         firstName: form.firstName,
