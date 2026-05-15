@@ -141,19 +141,32 @@ export default function BookingPage() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let value = e.target.value;
+    if (e.target.name === 'phone') {
+      value = value.replace(/\D/g, '').slice(0, 10);
+    }
+    setForm({ ...form, [e.target.name]: value });
   };
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!form.firstName.trim()) newErrors.firstName = 'First name is required';
+    else if (form.firstName.trim().length < 2) newErrors.firstName = 'First name is too short';
+    
     if (!form.lastName.trim()) newErrors.lastName = 'Last name is required';
+    else if (form.lastName.trim().length < 2) newErrors.lastName = 'Last name is too short';
+    
     if (!form.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = 'Invalid email format';
     }
-    if (!form.phone.trim()) newErrors.phone = 'Phone number is required';
+    
+    if (!form.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (form.phone.trim().length !== 10) {
+      newErrors.phone = 'Phone number must be exactly 10 digits';
+    }
     
     if (tripType === 'return') {
       if (!form.returnDate) newErrors.returnDate = 'Return date is required';
@@ -572,9 +585,10 @@ export default function BookingPage() {
                       <input 
                         type="tel" 
                         name="phone" 
+                        maxLength={10}
                         value={form.phone} 
                         onChange={handleChange} 
-                        placeholder="Enter phone number" 
+                        placeholder="Enter 10-digit phone number" 
                       />
                     </div>
                     {errors.phone && <span className={styles.errorText}>{errors.phone}</span>}
