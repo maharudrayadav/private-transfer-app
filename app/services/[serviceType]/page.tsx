@@ -127,9 +127,7 @@ export default function ServiceDetailsPage() {
                 </div>
               ))}
             </div>
-          ) : (
-            <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Gallery images are being updated for this service.</p>
-          )}
+          ) : null}
           
           {(() => {
             const heading = (mainContent.heading || '').toLowerCase();
