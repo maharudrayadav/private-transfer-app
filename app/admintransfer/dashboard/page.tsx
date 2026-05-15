@@ -39,9 +39,9 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState('');
   const [driverFilter, setDriverFilter] = useState('');
   const [customerFilter, setCustomerFilter] = useState('');
-  const [filterDate, setFilterDate] = useState('');
+  const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
   const [sortBy, setSortBy] = useState('bookingDate');
-  const [sortDirection, setSortDirection] = useState('desc');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const router = useRouter();
 
@@ -159,6 +159,43 @@ export default function AdminDashboard() {
       setApproveLoading(false);
     }
   };
+  
+  const downloadCSV = () => {
+    if (bookings.length === 0) {
+      alert("No data to download");
+      return;
+    }
+    
+    // Define headers
+    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver'];
+    
+    // Create CSV rows
+    const rows = bookings.map(b => [
+      b.id,
+      `"${(b.customerName || '').replace(/"/g, '""')}"`,
+      `"${b.phone || ''}"`,
+      `"${b.email || b.notes?.match(/Email:\s*([^\s\n]+)/)?.[1] || ''}"`,
+      `"${(b.pickupLocation || '').replace(/"/g, '""')}"`,
+      `"${(b.dropoffLocation || '').replace(/"/g, '""')}"`,
+      `"${b.pickupTime || b.bookingDate || ''}"`,
+      `"${b.status || ''}"`,
+      `"${b.vehicleType || ''}"`,
+      b.amount || 0,
+      `"${b.driverName || ''}"`
+    ]);
+    
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `bookings_report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -266,20 +303,29 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <button 
-            className={styles.resetBtn} 
-            onClick={() => {
-              setStatusFilter('');
-              setDriverFilter('');
-              setCustomerFilter('');
-              setFilterDate('');
-              setSortBy('bookingDate');
-              setSortDirection('desc');
-              setPage(0);
-            }}
-          >
-            Reset
-          </button>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', marginTop: 'auto' }}>
+            <button 
+              className={styles.resetBtn} 
+              onClick={() => {
+                setStatusFilter('');
+                setDriverFilter('');
+                setCustomerFilter('');
+                setFilterDate(new Date().toISOString().split('T')[0]);
+                setSortBy('bookingDate');
+                setSortDirection('asc');
+                setPage(0);
+              }}
+            >
+              Reset
+            </button>
+            <button
+              className={styles.resetBtn}
+              style={{ backgroundColor: '#28a745', color: 'white', borderColor: '#28a745' }}
+              onClick={downloadCSV}
+            >
+              📥 Download CSV
+            </button>
+          </div>
         </section>
 
         <section className={styles.tableWrapper}>
