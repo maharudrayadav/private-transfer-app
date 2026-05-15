@@ -55,9 +55,9 @@ export default function Gallery() {
       <div className="container">
         <div className={styles.headerArea}>
           <p className={styles.eyebrow}>EXPERIENCE THE LUXURY</p>
-          <h2 className={styles.title}>Our <span>Gallery</span></h2>
+          <h2 className={styles.title}>Explore Our <span>Gallery</span></h2>
           <p className={styles.subtitle}>
-            A glimpse into the premium fleet and exceptional service you can expect with Private Transfer.
+            Get a glimpse of the exceptional service we provide. From private transfers and business travel to scenic day trips across Ireland, our professional chauffeurs ensure a seamless and comfortable experience.
           </p>
         </div>
         
