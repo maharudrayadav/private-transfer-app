@@ -49,7 +49,7 @@ export default function Hero() {
       <div className={styles.overlay}></div>
       <div className={styles.heroContainer + " container"}>
         <div className={styles.heroTextContent}>
-          <p className={styles.eyebrow}>EXECUTIVE CHAUFFEUR SERVICE</p>
+
           <h1 className={styles.title}>
             Bespoke Private <br />
             <span>Transfers</span> Ireland
