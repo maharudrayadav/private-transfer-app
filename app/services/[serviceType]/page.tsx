@@ -103,6 +103,25 @@ export default function ServiceDetailsPage() {
           <p className={styles.eyebrow}>{mainContent.subHeading}</p>
           <h1>{(mainContent.heading || '').trim()}</h1>
           <p className={styles.description}>{mainContent.description}</p>
+          
+          {(mainContent.heading || '').toLowerCase().includes('hotel') && (
+            <div style={{ marginTop: '2rem', textAlign: 'left', maxWidth: '800px', margin: '2rem auto 0' }}>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', color: '#fff' }}>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <span style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</span>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Ireland's best luxury transfer service for premium hotels and historic castles.</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <span style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</span>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Seamless, stress-free travel straight from the airport to your vacation destination.</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <span style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</span>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>VIP Meet &amp; Greet with professional, courteous chauffeurs.</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
