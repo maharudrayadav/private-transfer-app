@@ -408,7 +408,9 @@ export default function AdminDashboard() {
                   </td>
                   <td>
                     <div className={styles.vehicleCell}>
-                      {b.vehicleType || 'Standard'}
+                      <div style={{ fontWeight: '600', color: 'var(--secondary)' }}>
+                        🚙 {b.vehicleType || 'Standard'}
+                      </div>
                       {b.driverName && <div className={styles.driverTag}>👤 {b.driverName}</div>}
                     </div>
                   </td>
