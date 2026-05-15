@@ -29,9 +29,7 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
   const [searchDetails, setSearchDetails] = useState<any>(null);
 
   const handleSelectVehicle = (vehicle: FleetItem) => {
-    if (!isBookingPage) return;
-    sessionStorage.setItem('selectedVehicle', JSON.stringify(vehicle));
-    router.push('/checkout');
+    router.push('/booking');
   };
 
   useEffect(() => {
@@ -144,7 +142,6 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                       sizes="(max-width: 768px) 100vw, 50vw"
                       className={styles.image}
                     />
-                    <div className={styles.badge}>{details.type}</div>
                   </div>
                   <div className={styles.content}>
                     <h3>{v.heading}</h3>
@@ -163,7 +160,7 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                         className={styles.selectBtn}
                         onClick={() => handleSelectVehicle(v)}
                       >
-                        {searchDetails ? 'Select & Book' : 'Explore Fleet'}
+                        Book Now
                       </button>
                     </div>
                   </div>
