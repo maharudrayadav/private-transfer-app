@@ -139,25 +139,33 @@ export default function ServiceDetailsPage() {
               points = [
                 { icon: '🏰', title: 'Premium Estates', desc: "Ireland's best luxury transfer service for premium hotels and historic castles." },
                 { icon: '✨', title: 'Seamless Travel', desc: 'Stress-free journey straight to your vacation destination.' },
-                { icon: '🎩', title: 'VIP Service', desc: 'Meet & Greet with professional, courteous chauffeurs.' }
+                { icon: '🎩', title: 'VIP Service', desc: 'Meet & Greet with professional, courteous chauffeurs.' },
+                { icon: '🕒', title: 'Punctual Arrivals', desc: 'We value your time, ensuring prompt pick-ups and drop-offs.' },
+                { icon: '👔', title: 'Discreet Chauffeurs', desc: 'Our experienced drivers provide a private, confidential service.' }
               ];
             } else if (heading.includes('airport')) {
               points = [
                 { icon: '🛫', title: 'Flight Tracking', desc: 'Real-time monitoring ensures we are there exactly when you land.' },
                 { icon: '⏱️', title: 'Zero Waiting', desc: 'Your chauffeur will be ready at arrivals, holding a personalized sign.' },
-                { icon: '🧳', title: 'Luggage Assistance', desc: 'Relax after your flight while we handle your heavy bags.' }
+                { icon: '🧳', title: 'Luggage Assistance', desc: 'Relax after your flight while we handle your heavy bags.' },
+                { icon: '🛡️', title: 'Fixed Pricing', desc: 'No hidden fees or surge pricing, regardless of flight delays.' },
+                { icon: '📶', title: 'On-Board Wi-Fi', desc: 'Stay connected on the go with our complimentary premium Wi-Fi.' }
               ];
             } else if (heading.includes('vacation') || heading.includes('tour') || heading.includes('scenic')) {
               points = [
                 { icon: '📸', title: 'Scenic Routes', desc: 'Discover hidden gems and breathtaking landscapes along the way.' },
                 { icon: '🗺️', title: 'Custom Itineraries', desc: 'Tailor your journey with flexible stops and personalized scheduling.' },
-                { icon: '🍀', title: 'Local Expertise', desc: 'Travel with knowledgeable chauffeurs who know the best of Ireland.' }
+                { icon: '🍀', title: 'Local Expertise', desc: 'Travel with knowledgeable chauffeurs who know the best of Ireland.' },
+                { icon: '🍽️', title: 'Dining Recommendations', desc: 'Get insider tips on the best local restaurants and authentic pubs.' },
+                { icon: '⏱️', title: 'Unrushed Experience', desc: 'Take your time at each location; we adapt entirely to your pace.' }
               ];
             } else {
               points = [
                 { icon: '🚘', title: 'Luxury Fleet', desc: 'Travel in our impeccably maintained executive vehicles.' },
                 { icon: '🌟', title: 'Premium Service', desc: 'Experience the highest standard of professional chauffeuring.' },
-                { icon: '🛡️', title: 'Safe & Secure', desc: 'Your safety and comfort are our top priorities on every journey.' }
+                { icon: '🛡️', title: 'Safe & Secure', desc: 'Your safety and comfort are our top priorities on every journey.' },
+                { icon: '👔', title: 'Expert Drivers', desc: 'Fully licensed, vetted, and highly experienced chauffeurs.' },
+                { icon: '📅', title: '24/7 Availability', desc: 'Round-the-clock service to accommodate any travel schedule.' }
               ];
             }
 
