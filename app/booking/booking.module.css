@@ -1097,8 +1097,14 @@
   .returnDetailsCard { order: 1; }
   .searchBar { order: 2; }
   .routeMapSection { order: 3; }
-  .rightCol { order: 4; margin-top: 0; } /* Ride Summary after search bar */
-  .leftCol { order: 5; } /* Vehicles/Form last */
+  .rightCol { 
+    order: 4; 
+    margin-top: 0; 
+    position: static; 
+    width: 100%;
+    z-index: 1;
+  }
+  .leftCol { order: 5; width: 100%; } /* Vehicles/Form last */
 
   .vehicleCard {
     grid-template-columns: 200px 1fr auto;
