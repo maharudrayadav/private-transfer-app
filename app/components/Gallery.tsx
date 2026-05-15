@@ -18,7 +18,7 @@ export default function Gallery() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await fetch('https://private-transfer-app-nine.vercel.app/api/images?service=gallery');
+        const res = await fetch('/api/images?service=gallery');
         if (res.ok) {
           const data = await res.json();
           setImages(data);

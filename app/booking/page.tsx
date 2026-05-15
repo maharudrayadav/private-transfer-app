@@ -140,7 +140,7 @@ export default function BookingPage() {
       setIsCalculatingPrice(true);
       const km = routeInfo.distance_km;
       const rate = selectedVehicle.price;
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/caldata?km=${km}&rate=${rate}`, {
+      fetch(`https://privateproject-r0ry.onrender.com/api/admin/caldata?km=${km}&rate=${rate}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
