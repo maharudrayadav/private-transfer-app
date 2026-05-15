@@ -35,11 +35,9 @@ export default function Footer() {
         <div className={styles.col}>
           <h3>Our Services</h3>
           <ul>
-            <li><Link href="/services">Hotel Transfer</Link></li>
-            <li><Link href="/services">Airport Service</Link></li>
-            <li><Link href="/services">Vacation Transfer</Link></li>
-            <li><Link href="/services">Business Transfer</Link></li>
-            <li><Link href="/services">Wedding Car</Link></li>
+            <li><Link href="/services/hotel-transfer">Hotel Transfer</Link></li>
+            <li><Link href="/services/airport-transfer">Airport Service</Link></li>
+            <li><Link href="/services/vacation-tour">Vacation Transfer</Link></li>
           </ul>
         </div>
 
