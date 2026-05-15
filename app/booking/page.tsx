@@ -691,6 +691,7 @@ export default function BookingPage() {
                         {errors.returnTime && <span className={styles.errorText}>{errors.returnTime}</span>}
                       </div>
                     </div>
+                  </div>
                 )}
                 <div className={styles.formField}>
                   <label>Notes to Driver (Optional)</label>
