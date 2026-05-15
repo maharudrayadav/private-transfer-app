@@ -52,26 +52,26 @@
   letter-spacing: 0.05em;
 }
 
-.inputWrapper {
+.fieldWrapper {
   display: flex;
-  gap: 1rem;
 }
 
-.inputWrapper input {
-  flex: 1;
-  padding: 0.8rem 1.2rem;
+.fieldWrapper input {
+  width: 100%;
+  padding: 1rem 1.2rem;
   border: 2px solid #eee;
-  border-radius: 10px;
-  font-size: 1.1rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  transition: border-color 0.2s;
-  text-transform: uppercase;
+  transition: all 0.2s;
+  background: var(--bg-light);
 }
 
-.inputWrapper input:focus {
+.fieldWrapper input:focus {
   outline: none;
   border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(var(--primary-rgb), 0.1);
 }
 
 .searchBtn {

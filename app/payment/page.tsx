@@ -65,52 +65,48 @@ export default function PaymentPage() {
           <div className={styles.searchSection}>
             <div className={styles.inputGroup}>
               <label htmlFor="resCode">Reservation Code</label>
-              <div className={styles.inputWrapper}>
+              <div className={styles.fieldWrapper}>
                 <input 
                   id="resCode"
                   type="text" 
                   placeholder="e.g. AB12345" 
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 />
-                <button 
-                  className={styles.searchBtn} 
-                  onClick={handleSearch}
-                  disabled={loading || !code}
-                >
-                  {loading ? '...' : 'Search'}
-                </button>
               </div>
             </div>
+
+            <div className={styles.inputGroup} style={{marginTop: '1.5rem'}}>
+              <label htmlFor="payAmount">Payment Amount (€)</label>
+              <div className={styles.fieldWrapper}>
+                <input 
+                  id="payAmount"
+                  type="number" 
+                  placeholder="0.00" 
+                  value={editableAmount}
+                  onChange={(e) => setEditableAmount(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button 
+              className={styles.payBtn} 
+              style={{marginTop: '2rem'}}
+              onClick={handleSearch}
+              disabled={loading || !code || !editableAmount}
+            >
+              {loading ? 'Processing...' : `Pay €${parseFloat(editableAmount || '0').toFixed(2)} Now`}
+            </button>
+
             {error && <div className={styles.error}>{error}</div>}
           </div>
 
           {booking && (
             <div className={styles.resultSection}>
               <div className={styles.bookingSummary}>
-                <p>Booking for <strong>{booking.customerName}</strong></p>
+                <p>Booking found for <strong>{booking.customerName}</strong></p>
                 <p>{booking.pickupLocation} ➔ {booking.dropoffLocation}</p>
-              </div>
-
-              <div className={styles.paymentFields}>
-                <div className={styles.inputGroup}>
-                  <label htmlFor="payAmount">Payment Amount (€)</label>
-                  <input 
-                    id="payAmount"
-                    type="number"
-                    className={styles.amountInput}
-                    value={editableAmount}
-                    onChange={(e) => setEditableAmount(e.target.value)}
-                    placeholder="0.00"
-                  />
-                  <p className={styles.amountHint}>Total booking amount: €{booking.amount.toFixed(2)}</p>
-                </div>
-
-                <button className={styles.payBtn}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                  Pay €{parseFloat(editableAmount || '0').toFixed(2)} Now
-                </button>
+                <p className={styles.amountHint}>Original booking total: €{booking.amount.toFixed(2)}</p>
               </div>
             </div>
           )}
