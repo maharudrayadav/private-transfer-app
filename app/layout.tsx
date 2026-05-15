@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import LayoutWrapper from "./components/LayoutWrapper";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -29,11 +28,7 @@ export default function RootLayout({
       lang="en"
       className={`${outfit.variable} ${playfair.variable} antialiased`}
     >
-      <body className="flex flex-col">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </body>
+      <LayoutWrapper>{children}</LayoutWrapper>
     </html>
   );
 }

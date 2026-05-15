@@ -30,6 +30,7 @@ export default function BookingPage() {
   const [countryCode, setCountryCode] = useState('+353');
   const [extras, setExtras] = useState({ childSeat: false, boosterSeat: false });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
   // ── Modify Search state ─────────────────────────────────────
@@ -133,9 +134,58 @@ export default function BookingPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (!selectedVehicle || !search) return;
+
+    setLoading(true);
+
+    try {
+      // Format Date/Time to YYYY-MM-DDTHH:mm:ss
+      // Expected search.date: DD/MM/YYYY
+      // Expected search.time: HH:mm
+      const [d, m, y] = search.date.split('/');
+      const pickupTime = `${y}-${m}-${d}T${search.time}:00`;
+
+      const payload = {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        phone: countryCode + form.phone,
+        pickupLocation: search.pickup,
+        dropoffLocation: search.dropoff,
+        pickupTime: pickupTime,
+        passengers: parseInt(form.passengers),
+        vehicleType: selectedVehicle.heading,
+        amount: total,
+        driverNote: form.notes,
+        notes: `
+          Trip Type: ${tripType.toUpperCase()}
+          Luggage: ${form.luggage}
+          Extras: ${extras.childSeat ? 'Child Seat' : ''} ${extras.boosterSeat ? 'Booster Seat' : ''}
+          ${tripType === 'return' ? `Return Date: ${form.returnDate}, Return Time: ${form.returnTime}` : ''}
+        `.trim()
+      };
+
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to submit booking');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong while processing your booking. Please try again or contact us.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ── Modify Search handlers ───────────────────────────────────
@@ -631,8 +681,8 @@ export default function BookingPage() {
                   <strong>ℹ️ Important:</strong> No payment is required at this stage. Once you submit your request, our team will review availability and send you a confirmation email with a payment link.
                 </div>
 
-                <button type="submit" className={styles.submitBtn}>
-                  Request Availability →
+                <button type="submit" className={styles.submitBtn} disabled={loading}>
+                  {loading ? 'Processing...' : 'Request Availability →'}
                 </button>
               </form>
             </div>
