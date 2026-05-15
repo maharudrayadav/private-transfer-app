@@ -108,25 +108,26 @@ export default function ServiceDetailsPage() {
 
       <div className={styles.gallerySection}>
         <div className="container">
-          <h2>Our Vehicles</h2>
-          
           {fleetImages.length > 0 ? (
-            <div className={styles.galleryGrid}>
-              {fleetImages.map((item, idx) => (
-                <div key={item.id || idx} className={styles.galleryItem}>
-                  <Image 
-                    src={item.imageUrl} 
-                    alt={`${item.heading || 'Fleet Vehicle'} option ${idx + 1}`} 
-                    fill 
-                    sizes="(max-width: 768px) 100vw, 350px"
-                    className={styles.image} 
-                  />
-                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px', background: 'linear-gradient(to top, rgba(15,23,42,0.8), transparent)', color: 'white', fontWeight: 'bold' }}>
-                    {item.heading}
+            <>
+              <h2>Our Vehicles</h2>
+              <div className={styles.galleryGrid}>
+                {fleetImages.map((item, idx) => (
+                  <div key={item.id || idx} className={styles.galleryItem}>
+                    <Image 
+                      src={item.imageUrl} 
+                      alt={`${item.heading || 'Fleet Vehicle'} option ${idx + 1}`} 
+                      fill 
+                      sizes="(max-width: 768px) 100vw, 350px"
+                      className={styles.image} 
+                    />
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px', background: 'linear-gradient(to top, rgba(15,23,42,0.8), transparent)', color: 'white', fontWeight: 'bold' }}>
+                      {item.heading}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           ) : null}
           
           {(() => {
