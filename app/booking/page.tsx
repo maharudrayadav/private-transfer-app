@@ -31,6 +31,8 @@ export default function BookingPage() {
   const [extras, setExtras] = useState({ childSeat: false, boosterSeat: false });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
   // ── Modify Search state ─────────────────────────────────────
@@ -134,9 +136,49 @@ export default function BookingPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!form.firstName.trim()) newErrors.firstName = 'First name is required';
+    if (!form.lastName.trim()) newErrors.lastName = 'Last name is required';
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+    if (!form.phone.trim()) newErrors.phone = 'Phone number is required';
+    
+    if (tripType === 'return') {
+      if (!form.returnDate) newErrors.returnDate = 'Return date is required';
+      if (!form.returnTime) newErrors.returnTime = 'Return time is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedVehicle || !search) return;
+    setSubmitError(null);
+
+    if (!selectedVehicle) {
+      setSubmitError('Please select a vehicle first.');
+      return;
+    }
+
+    if (!search || !search.date || !search.time) {
+      setSubmitError('Search details are incomplete. Please update your search.');
+      return;
+    }
+
+    if (!validate()) {
+      // Scroll to first error
+      const firstError = Object.keys(errors)[0];
+      if (firstError) {
+        const el = document.getElementsByName(firstError)[0];
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
 
     setLoading(true);
 
@@ -163,7 +205,11 @@ export default function BookingPage() {
           Trip Type: ${tripType.toUpperCase()}
           Luggage: ${form.luggage}
           Extras: ${extras.childSeat ? 'Child Seat' : ''} ${extras.boosterSeat ? 'Booster Seat' : ''}
-          ${tripType === 'return' ? `Return Date: ${form.returnDate}, Return Time: ${form.returnTime}` : ''}
+          ${tripType === 'return' ? `
+          Return Date: ${form.returnDate}, Return Time: ${form.returnTime}
+          Return Pickup: ${returnPickup || search.dropoff}
+          Return Drop-off: ${returnDropoff || search.pickup}
+          `.trim() : ''}
         `.trim()
       };
 
@@ -180,9 +226,12 @@ export default function BookingPage() {
       }
 
       setSubmitted(true);
-    } catch (err) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    } catch (err: any) {
       console.error(err);
-      alert('Something went wrong while processing your booking. Please try again or contact us.');
+      setSubmitError(err.message || 'Something went wrong while processing your booking. Please try again or contact us.');
     } finally {
       setLoading(false);
     }
@@ -228,22 +277,26 @@ export default function BookingPage() {
   const tripMultiplier = tripType === 'return' ? 2 : 1;
   const total = (vehiclePrice * tripMultiplier) + extraTotal;
 
-  if (submitted) {
-    return (
-      <div className={styles.successPage}>
-        <div className={styles.successCard}>
-          <div className={styles.successIcon}>✓</div>
-          <h2>Booking Request Submitted!</h2>
-          <p>No payment is required at this stage. Our team will review availability and send you a confirmation email with a payment link shortly.</p>
-          <a href="/" className={styles.homeBtn}>Return to Home</a>
-        </div>
-      </div>
-    );
-  }
+  // ... (previous logic)
 
   return (
     <div className={styles.page}>
       <div className={styles.inner}>
+        
+        {submitted ? (
+          <div className={styles.successFullWidth}>
+            <div className={styles.successCard}>
+              <div className={styles.successIcon}>✓</div>
+              <h2>Booking Request Submitted!</h2>
+              <p>No payment is required at this stage. Our team will review availability and send you a confirmation email with a payment link shortly.</p>
+              <div className={styles.successActions}>
+                <a href="/" className={styles.homeBtn}>Return to Home</a>
+                <button onClick={() => window.location.reload()} className={styles.secondaryBtn}>Make Another Booking</button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
 
         {/* ── Return Journey Details Card (slides in when Return chosen) ── */}
         {tripType === 'return' && (
@@ -544,29 +597,60 @@ export default function BookingPage() {
                 <div className={styles.formRow}>
                   <div className={styles.formField}>
                     <label>Name</label>
-                    <input type="text" name="firstName" required value={form.firstName} onChange={handleChange} placeholder="First name" />
+                    <input 
+                      type="text" 
+                      name="firstName" 
+                      className={errors.firstName ? styles.inputError : ''} 
+                      value={form.firstName} 
+                      onChange={handleChange} 
+                      placeholder="First name" 
+                    />
+                    {errors.firstName && <span className={styles.errorText}>{errors.firstName}</span>}
                   </div>
                   <div className={styles.formField}>
                     <label>Last Name</label>
-                    <input type="text" name="lastName" required value={form.lastName} onChange={handleChange} placeholder="Last name" />
+                    <input 
+                      type="text" 
+                      name="lastName" 
+                      className={errors.lastName ? styles.inputError : ''} 
+                      value={form.lastName} 
+                      onChange={handleChange} 
+                      placeholder="Last name" 
+                    />
+                    {errors.lastName && <span className={styles.errorText}>{errors.lastName}</span>}
                   </div>
                 </div>
 
                 <div className={styles.formRow}>
                   <div className={styles.formField}>
                     <label>Email Address</label>
-                    <input type="email" name="email" required value={form.email} onChange={handleChange} placeholder="your@email.com" />
+                    <input 
+                      type="email" 
+                      name="email" 
+                      className={errors.email ? styles.inputError : ''} 
+                      value={form.email} 
+                      onChange={handleChange} 
+                      placeholder="your@email.com" 
+                    />
+                    {errors.email && <span className={styles.errorText}>{errors.email}</span>}
                   </div>
                   <div className={styles.formField}>
                     <label>Phone Number</label>
-                    <div className={styles.phoneGroup}>
+                    <div className={`${styles.phoneGroup} ${errors.phone ? styles.inputError : ''}`}>
                       <select className={styles.phoneCode} value={countryCode} onChange={e => setCountryCode(e.target.value)}>
                         {COUNTRY_CODES.map(c => (
                           <option key={c.code} value={c.code}>{c.flag} {c.code}</option>
                         ))}
                       </select>
-                      <input type="tel" name="phone" required value={form.phone} onChange={handleChange} placeholder="Enter phone number" />
+                      <input 
+                        type="tel" 
+                        name="phone" 
+                        value={form.phone} 
+                        onChange={handleChange} 
+                        placeholder="Enter phone number" 
+                      />
                     </div>
+                    {errors.phone && <span className={styles.errorText}>{errors.phone}</span>}
                   </div>
                 </div>
 
@@ -611,7 +695,7 @@ export default function BookingPage() {
                     <div className={styles.formField}>
                       <label>Return Date</label>
                       <div
-                        className={styles.formReturnInput}
+                        className={`${styles.formReturnInput} ${errors.returnDate ? styles.inputError : ''}`}
                         onClick={() => { try { returnDateRef.current?.showPicker(); } catch(e){} }}
                       >
                         <input
@@ -629,11 +713,12 @@ export default function BookingPage() {
                           onChange={handleReturnDateChange}
                         />
                       </div>
+                      {errors.returnDate && <span className={styles.errorText}>{errors.returnDate}</span>}
                     </div>
                     <div className={styles.formField}>
                       <label>Return Time</label>
                       <div
-                        className={styles.formReturnInput}
+                        className={`${styles.formReturnInput} ${errors.returnTime ? styles.inputError : ''}`}
                         onClick={() => { try { returnTimeRef.current?.showPicker(); } catch(e){} }}
                       >
                         <input
@@ -651,6 +736,7 @@ export default function BookingPage() {
                           onChange={handleChange}
                         />
                       </div>
+                      {errors.returnTime && <span className={styles.errorText}>{errors.returnTime}</span>}
                     </div>
                   </div>
                 )}                <div className={styles.formField}>
@@ -681,6 +767,12 @@ export default function BookingPage() {
                 <div className={styles.noPaymentNote}>
                   <strong>ℹ️ Important:</strong> No payment is required at this stage. Once you submit your request, our team will review availability and send you a confirmation email with a payment link.
                 </div>
+
+                {submitError && (
+                  <div className={styles.submitErrorMessage}>
+                    <span>⚠️</span> {submitError}
+                  </div>
+                )}
 
                 <button type="submit" className={styles.submitBtn} disabled={loading}>
                   {loading ? 'Processing...' : 'Request Availability →'}
@@ -789,7 +881,7 @@ export default function BookingPage() {
               )}
             </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
