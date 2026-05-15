@@ -137,19 +137,19 @@ export default function ServiceDetailsPage() {
             
             if (heading.includes('hotel')) {
               points = [
-                { icon: '🏰', title: 'Premium Estates', desc: "Ireland's best luxury transfer service for premium hotels and historic castles." },
+                { icon: '🏰', title: 'Hotel Transfers', desc: "Reliable transport to hotels and historic locations across Ireland." },
                 { icon: '✨', title: 'Seamless Travel', desc: 'Stress-free journey straight to your vacation destination.' },
-                { icon: '🎩', title: 'VIP Service', desc: 'Meet & Greet with professional, courteous chauffeurs.' },
+                { icon: '🎩', title: 'Friendly Service', desc: 'Meet & Greet with professional, courteous drivers.' },
                 { icon: '🕒', title: 'Punctual Arrivals', desc: 'We value your time, ensuring prompt pick-ups and drop-offs.' },
-                { icon: '👔', title: 'Discreet Chauffeurs', desc: 'Our experienced drivers provide a private, confidential service.' }
+                { icon: '🚗', title: 'Private & Secure', desc: 'Enjoy a quiet, comfortable ride to your accommodation.' }
               ];
             } else if (heading.includes('airport')) {
               points = [
-                { icon: '🛫', title: 'Flight Tracking', desc: 'Real-time monitoring ensures we are there exactly when you land.' },
+                { icon: '🛬', title: 'Reliable Pick-ups', desc: 'We ensure your chauffeur is there on time, every time.' },
                 { icon: '⏱️', title: 'Zero Waiting', desc: 'Your chauffeur will be ready at arrivals, holding a personalized sign.' },
                 { icon: '🧳', title: 'Luggage Assistance', desc: 'Relax after your flight while we handle your heavy bags.' },
-                { icon: '🛡️', title: 'Fixed Pricing', desc: 'No hidden fees or surge pricing, regardless of flight delays.' },
-                { icon: '📶', title: 'On-Board Wi-Fi', desc: 'Stay connected on the go with our complimentary premium Wi-Fi.' }
+                { icon: '🛣️', title: 'Direct Transfers', desc: 'Smooth, direct journeys from the airport to your destination.' },
+                { icon: '✨', title: 'Comfortable Ride', desc: 'Relax and enjoy a peaceful journey after a long flight.' }
               ];
             } else if (heading.includes('vacation') || heading.includes('tour') || heading.includes('scenic')) {
               points = [
@@ -161,8 +161,8 @@ export default function ServiceDetailsPage() {
               ];
             } else {
               points = [
-                { icon: '🚘', title: 'Luxury Fleet', desc: 'Travel in our impeccably maintained executive vehicles.' },
-                { icon: '🌟', title: 'Premium Service', desc: 'Experience the highest standard of professional chauffeuring.' },
+                { icon: '🚘', title: 'Clean Fleet', desc: 'Travel in our impeccably maintained and comfortable vehicles.' },
+                { icon: '🌟', title: 'Friendly Service', desc: 'Experience a high standard of professional chauffeuring.' },
                 { icon: '🛡️', title: 'Safe & Secure', desc: 'Your safety and comfort are our top priorities on every journey.' },
                 { icon: '👔', title: 'Expert Drivers', desc: 'Fully licensed, vetted, and highly experienced chauffeurs.' },
                 { icon: '📅', title: '24/7 Availability', desc: 'Round-the-clock service to accommodate any travel schedule.' }
