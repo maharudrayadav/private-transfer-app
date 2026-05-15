@@ -660,6 +660,17 @@
   box-shadow: 0 3px 10px rgba(37,99,235,0.3);
 }
 
+.formReturnSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  animation: slideDown 0.3s ease;
+}
+
 /* ─── Return Date/Time row in form ───────────────────────────── */
 .formReturnFields {
   display: grid;
