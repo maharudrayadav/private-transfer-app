@@ -38,8 +38,8 @@ export default function BookingPage() {
 
   // ── Auto-scroll to success message when submitted ───────────
   useEffect(() => {
-    if (submitted && successRef.current) {
-      successRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (submitted) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [submitted]);
 
@@ -834,6 +834,8 @@ export default function BookingPage() {
               )}
             </div>
           </div>
+        </div>
+          </>
         )}
 
       </div>
