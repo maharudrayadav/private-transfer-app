@@ -15,8 +15,9 @@ export default function WhyUs() {
             <p className={styles.sub}>Professional chauffeur services &amp; custom itineraries</p>
             <ul className={styles.list}>
               <li>Friendly private driver, comfortable car</li>
-              <li>Airport transfers with flight monitoring</li>
+              <li>Airport transfers and vacation travel</li>
               <li>Hotel and castle transfers across the country</li>
+              <li>Advanced booking platform for seamless reservations</li>
               <li>Flexible stops and timings to fit your schedule</li>
             </ul>
             <Link href="/contact" className={styles.link}>Plan your trip today →</Link>

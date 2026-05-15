@@ -142,6 +142,17 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                       sizes="(max-width: 768px) 100vw, 50vw"
                       className={styles.image}
                     />
+                    <div className={styles.overlay}>
+                      <button 
+                        className={styles.hoverBookBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectVehicle(v);
+                        }}
+                      >
+                        Book Now
+                      </button>
+                    </div>
                   </div>
                   <div className={styles.content}>
                     <h3>{v.heading}</h3>
@@ -153,15 +164,6 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                       <div className={styles.feature}>
                         <span>🧳</span>
                         <p>{typeof displayBags === 'number' ? `${displayBags} Large Bags` : displayBags}</p>
-                      </div>
-                    </div>
-                    <div className={styles.footer}>
-                      <button 
-                        className={styles.selectBtn}
-                        onClick={() => handleSelectVehicle(v)}
-                      >
-                        Book Now
-                      </button>
                     </div>
                   </div>
                 </div>

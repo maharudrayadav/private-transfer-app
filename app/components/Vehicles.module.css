@@ -122,6 +122,48 @@
   border: 1px solid rgba(179, 139, 77, 0.3);
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.card:hover .overlay {
+  opacity: 1;
+}
+
+.hoverBookBtn {
+  background: var(--secondary);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 2.2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.card:hover .hoverBookBtn {
+  transform: translateY(0);
+}
+
+.hoverBookBtn:hover {
+  background: var(--primary);
+  color: var(--secondary);
+}
+
 .content {
   padding: 2rem;
   flex: 1;
