@@ -34,6 +34,14 @@ export default function BookingPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+
+  // ── Auto-scroll to success message when submitted ───────────
+  useEffect(() => {
+    if (submitted && successRef.current) {
+      successRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [submitted]);
 
   // ── Modify Search state ─────────────────────────────────────
   const [modifyOpen, setModifyOpen] = useState(false);
@@ -226,9 +234,7 @@ export default function BookingPage() {
       }
 
       setSubmitted(true);
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
+      // The useEffect will handle the scrolling
     } catch (err: any) {
       console.error(err);
       setSubmitError(err.message || 'Something went wrong while processing your booking. Please try again or contact us.');
@@ -284,7 +290,7 @@ export default function BookingPage() {
       <div className={styles.inner}>
         
         {submitted ? (
-          <div className={styles.successFullWidth}>
+          <div ref={successRef} className={styles.successFullWidth}>
             <div className={styles.successCard}>
               <div className={styles.successIcon}>✓</div>
               <h2>Booking Request Submitted!</h2>
