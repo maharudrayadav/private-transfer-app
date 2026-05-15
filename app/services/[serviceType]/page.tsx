@@ -108,7 +108,7 @@ export default function ServiceDetailsPage() {
 
       <div className={styles.gallerySection}>
         <div className="container">
-          <h2>Select Your Vehicle</h2>
+          <h2>Our Premium Fleet</h2>
           
           {fleetImages.length > 0 ? (
             <div className={styles.galleryGrid}>
