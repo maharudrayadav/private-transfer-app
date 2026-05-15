@@ -1166,6 +1166,16 @@
   .returnDetailsGrid {
     grid-template-columns: 1fr;
   }
+  .summaryCard {
+    padding: 1.25rem;
+  }
+  .summaryMeta {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .summaryMeta div:last-child {
+    grid-column: span 1;
+  }
 }
 
 /* ─── Route Map Section ─────────────────────────────────── */

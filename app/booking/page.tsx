@@ -871,7 +871,6 @@ export default function BookingPage() {
 
               <div className={styles.summaryGuarantees}>
                 <p>✓ All prices include tolls &amp; parking</p>
-                <p>✓ Flight tracking included</p>
                 <p>✓ Free cancellation up to 24h before</p>
                 <p>✓ Meet &amp; greet service</p>
               </div>
