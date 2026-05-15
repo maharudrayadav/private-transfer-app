@@ -68,6 +68,64 @@
   transform: scale(1.05);
 }
 
+.stylishPointsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+  text-align: left;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stylishPointCard {
+  background: #ffffff;
+  border: 1px solid rgba(179, 139, 77, 0.15);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.stylishPointCard:hover {
+  background: #ffffff;
+  border-color: var(--primary);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(179, 139, 77, 0.1);
+}
+
+.spIcon {
+  font-size: 1.8rem;
+  background: rgba(179, 139, 77, 0.1);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.spContent h4 {
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+.spContent p {
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .heroBanner h1 {
     font-size: 2.5rem;

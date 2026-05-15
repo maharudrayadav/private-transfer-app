@@ -103,25 +103,6 @@ export default function ServiceDetailsPage() {
           <p className={styles.eyebrow}>{mainContent.subHeading}</p>
           <h1>{(mainContent.heading || '').trim()}</h1>
           <p className={styles.description}>{mainContent.description}</p>
-          
-          {(mainContent.heading || '').toLowerCase().includes('hotel') && (
-            <div style={{ marginTop: '2rem', textAlign: 'left', maxWidth: '800px', margin: '2rem auto 0' }}>
-              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem', color: '#fff' }}>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <span style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Ireland's best luxury transfer service for premium hotels and historic castles.</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <span style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>Seamless, stress-free travel straight from the airport to your vacation destination.</span>
-                </li>
-                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                  <span style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>✓</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: 500 }}>VIP Meet &amp; Greet with professional, courteous chauffeurs.</span>
-                </li>
-              </ul>
-            </div>
-          )}
         </div>
       </div>
 
@@ -150,9 +131,52 @@ export default function ServiceDetailsPage() {
             <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Gallery images are being updated for this service.</p>
           )}
           
-          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <Link href="/contact" className="btn-primary">Book This Service</Link>
-          </div>
+          {(() => {
+            const heading = (mainContent.heading || '').toLowerCase();
+            let points: {icon: string, title: string, desc: string}[] = [];
+            
+            if (heading.includes('hotel')) {
+              points = [
+                { icon: '🏰', title: 'Premium Estates', desc: "Ireland's best luxury transfer service for premium hotels and historic castles." },
+                { icon: '✨', title: 'Seamless Travel', desc: 'Stress-free journey straight to your vacation destination.' },
+                { icon: '🎩', title: 'VIP Service', desc: 'Meet & Greet with professional, courteous chauffeurs.' }
+              ];
+            } else if (heading.includes('airport')) {
+              points = [
+                { icon: '🛫', title: 'Flight Tracking', desc: 'Real-time monitoring ensures we are there exactly when you land.' },
+                { icon: '⏱️', title: 'Zero Waiting', desc: 'Your chauffeur will be ready at arrivals, holding a personalized sign.' },
+                { icon: '🧳', title: 'Luggage Assistance', desc: 'Relax after your flight while we handle your heavy bags.' }
+              ];
+            } else if (heading.includes('vacation') || heading.includes('tour') || heading.includes('scenic')) {
+              points = [
+                { icon: '📸', title: 'Scenic Routes', desc: 'Discover hidden gems and breathtaking landscapes along the way.' },
+                { icon: '🗺️', title: 'Custom Itineraries', desc: 'Tailor your journey with flexible stops and personalized scheduling.' },
+                { icon: '🍀', title: 'Local Expertise', desc: 'Travel with knowledgeable chauffeurs who know the best of Ireland.' }
+              ];
+            } else {
+              points = [
+                { icon: '🚘', title: 'Luxury Fleet', desc: 'Travel in our impeccably maintained executive vehicles.' },
+                { icon: '🌟', title: 'Premium Service', desc: 'Experience the highest standard of professional chauffeuring.' },
+                { icon: '🛡️', title: 'Safe & Secure', desc: 'Your safety and comfort are our top priorities on every journey.' }
+              ];
+            }
+
+            if (points.length === 0) return null;
+            
+            return (
+              <div className={styles.stylishPointsGrid}>
+                {points.map((pt, i) => (
+                  <div key={i} className={styles.stylishPointCard}>
+                    <div className={styles.spIcon}>{pt.icon}</div>
+                    <div className={styles.spContent}>
+                      <h4>{pt.title}</h4>
+                      <p>{pt.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>
