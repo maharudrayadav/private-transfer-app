@@ -173,7 +173,15 @@ export default function AdminDashboard() {
     if (!selectedBookingId || !driverNameInput) return;
     
     const booking = bookings.find(b => b.id === selectedBookingId);
-    const isReturn = !!(booking?.returnDate || booking?.notes?.includes('Return Date:'));
+    const isReturn = !!(
+      booking?.returnDate || 
+      booking?.returnTime || 
+      booking?.returnPickupLocation || 
+      booking?.returnDropoffLocation || 
+      booking?.notes?.toLowerCase().includes('return date') || 
+      booking?.notes?.toLowerCase().includes('return time') ||
+      booking?.notes?.toLowerCase().includes('return journey')
+    );
     
     // If it's a return trip, we also need a return driver
     if (isReturn && !returnDriverNameInput) {
@@ -340,7 +348,7 @@ export default function AdminDashboard() {
       `"${b.vehicleType || ''}"`,
       b.amount || 0,
       `"${b.driverName || ''}"`,
-      `"${b.returndriverName || ''}"`
+      `"${b.returnDriverName || b.returndriverName || ''}"`
     ]);
     
     const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -586,7 +594,15 @@ export default function AdminDashboard() {
             </thead>
             <tbody>
               {bookings.length > 0 ? bookings.map((b) => {
-                const isReturn = !!(b.returnDate || b.notes?.includes('Return Date:'));
+                const isReturn = !!(
+                  b.returnDate || 
+                  b.returnTime || 
+                  b.returnPickupLocation || 
+                  b.returnDropoffLocation || 
+                  b.notes?.toLowerCase().includes('return date') || 
+                  b.notes?.toLowerCase().includes('return time') ||
+                  b.notes?.toLowerCase().includes('return journey')
+                );
                 return (
                   <tr key={b.id} className={isReturn ? styles.returnTripRow : ''}>
                   <td data-label="Customer">
@@ -641,11 +657,11 @@ export default function AdminDashboard() {
                           : (b.bookingDate ? new Date(b.bookingDate).toLocaleTimeString('en-IE', { timeZone: 'Europe/Dublin', hour: '2-digit', minute:'2-digit' }) : '—')}
                       </div>
 
-                      {(b.returnDate || b.notes?.includes('Return Date:')) && (
+                      {(b.returnDate || b.returnTime || b.notes?.toLowerCase().includes('return')) && (
                         <div className={styles.returnInfo}>
                           <span className={styles.returnBadge}>↩ Return</span>
                           <span className={styles.returnTime}>
-                            {b.returnDate || b.notes?.match(/Return Date:\s*([\d-]+)/)?.[1]} {b.returnTime || b.notes?.match(/Return Time:\s*([\d:]+)/)?.[1]}
+                            {b.returnDate || b.notes?.match(/Return Date:\s*([\d-]+)/i)?.[1] || ''} {b.returnTime || b.notes?.match(/Return Time:\s*([\d:]+)/i)?.[1] || ''}
                           </span>
                         </div>
                       )}
@@ -875,7 +891,11 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  {(editingBooking.returnDate || editingBooking.notes?.includes('Return Date:')) && (
+                  {(editingBooking.returnDate || 
+                    editingBooking.returnTime || 
+                    editingBooking.returnPickupLocation || 
+                    editingBooking.returnDropoffLocation || 
+                    editingBooking.notes?.toLowerCase().includes('return')) && (
                     <div className={styles.formBox}>
                       <div className={styles.boxHeader} style={{color: '#2563eb'}}>
                         <RotateCcw size={18} />
