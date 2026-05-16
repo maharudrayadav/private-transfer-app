@@ -68,6 +68,23 @@ export default function AdminDashboard() {
 
   const router = useRouter();
 
+  // Helper to format date for datetime-local input (YYYY-MM-DDTHH:mm)
+  const formatForDateTimeLocal = (dateStr?: string) => {
+    if (!dateStr) return '';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return '';
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    } catch (e) {
+      return '';
+    }
+  };
+
   // Auth check
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
@@ -204,21 +221,26 @@ export default function AdminDashboard() {
       const res = await fetch(`/api/bookings/${booking.id}`);
       if (!res.ok) throw new Error('Failed to fetch latest booking data');
       const latestData = await res.json();
+      console.log('Fetched latest data for edit:', latestData);
       
       let fName = latestData.firstName || '';
       let lName = latestData.lastName || '';
       
-      if (!fName && latestData.customerName) {
+      // If firstName/lastName are missing, try splitting customerName
+      if ((!fName || !lName) && latestData.customerName) {
         const parts = latestData.customerName.trim().split(' ');
-        fName = parts[0];
-        lName = parts.slice(1).join(' ');
+        if (!fName) fName = parts[0] || '';
+        if (!lName) lName = parts.slice(1).join(' ') || '';
       }
 
       setEditingBooking({
         ...latestData,
         firstName: fName,
         lastName: lName,
-        returnDriverName: latestData.returnDriverName || latestData.returndriverName || ''
+        pickupTime: formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate),
+        returnDriverName: latestData.returnDriverName || latestData.returndriverName || '',
+        passengers: latestData.passengers || 0,
+        amount: latestData.amount || 0
       });
     } catch (err) {
       console.error('Fetch error:', err);
@@ -234,12 +256,41 @@ export default function AdminDashboard() {
     
     setUpdateLoading(true);
     try {
+      // Ensure pickupTime has seconds (YYYY-MM-DDTHH:mm:ss)
+      let formattedTime = editingBooking.pickupTime || '';
+      if (formattedTime && formattedTime.length === 16) {
+        formattedTime += ':00';
+      }
+
+      const payload = {
+        firstName: editingBooking.firstName,
+        lastName: editingBooking.lastName,
+        email: editingBooking.email,
+        phone: editingBooking.phone,
+        pickupLocation: editingBooking.pickupLocation,
+        dropoffLocation: editingBooking.dropoffLocation,
+        pickupTime: formattedTime,
+        passengers: Number(editingBooking.passengers) || 0,
+        vehicleType: editingBooking.vehicleType,
+        amount: Number(editingBooking.amount) || 0,
+        driverNote: editingBooking.driverNote,
+        driverName: editingBooking.driverName,
+        returnDriverName: editingBooking.returnDriverName,
+        returnDate: editingBooking.returnDate,
+        returnTime: editingBooking.returnTime,
+        returnPickupLocation: editingBooking.returnPickupLocation,
+        returnDropoffLocation: editingBooking.returnDropoffLocation,
+        status: editingBooking.status
+      };
+
+      console.log('Sending update payload:', payload);
+
       const res = await fetch(`/api/bookings/${editingBooking.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editingBooking)
+        body: JSON.stringify(payload)
       });
       
       if (!res.ok) {
@@ -753,7 +804,7 @@ export default function AdminDashboard() {
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>Pickup Date/Time</label>
-                        <input type="datetime-local" value={editingBooking.pickupTime?.substring(0, 16) || ''} onChange={e => setEditingBooking({...editingBooking, pickupTime: e.target.value})} />
+                        <input type="datetime-local" value={editingBooking.pickupTime || ''} onChange={e => setEditingBooking({...editingBooking, pickupTime: e.target.value})} />
                       </div>
                       <div className={styles.formField}>
                         <label>Passengers</label>
