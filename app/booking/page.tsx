@@ -538,14 +538,6 @@ export default function BookingPage() {
                     </div>
                   </div>
                   <div className={styles.vehiclePricing}>
-                    {v.price ? (
-                      <>
-                        <div className={styles.price}>€{v.price.toFixed(2)}</div>
-                        <div className={styles.priceNote}>All-inclusive</div>
-                      </>
-                    ) : (
-                      <div className={styles.priceOnRequest}>Price on Request</div>
-                    )}
                     <button
                       className={`${styles.selectBtn} ${isSelected ? styles.selectedBtn : ''}`}
                       onClick={() => handleSelect(v)}
@@ -766,6 +758,23 @@ export default function BookingPage() {
                         <span>+€10.00</span>
                       </div>
                     </label>
+                  </div>
+                </div>
+
+                <div className={styles.finalPriceBox}>
+                  <div className={styles.finalPriceRow}>
+                    <span>Base Trip Cost ({tripType === 'one-way' ? 'One Way' : 'Return'})</span>
+                    <strong>€{baseTripPrice.toFixed(2)}</strong>
+                  </div>
+                  {extraTotal > 0 && (
+                    <div className={styles.finalPriceRow}>
+                      <span>Additional Options</span>
+                      <strong>€{extraTotal.toFixed(2)}</strong>
+                    </div>
+                  )}
+                  <div className={`${styles.finalPriceRow} ${styles.finalTotalRow}`}>
+                    <span>Total Amount</span>
+                    <strong>€{total.toFixed(2)}</strong>
                   </div>
                 </div>
 

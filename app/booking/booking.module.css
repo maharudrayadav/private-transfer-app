@@ -599,6 +599,45 @@
   margin-bottom: 1.5rem;
 }
 
+.finalPriceBox {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.finalPriceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.finalPriceRow strong {
+  color: var(--secondary);
+  font-weight: 700;
+}
+
+.finalTotalRow {
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--secondary);
+  color: var(--secondary);
+  font-weight: 800;
+}
+
+.finalTotalRow span {
+  font-size: 1.1rem;
+}
+
+.finalTotalRow strong {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
 /* tripToggle & tripBtn kept for compatibility, replaced by topTripToggle above */
 .tripToggle { display: none; }
 .tripBtn { display: none; }
