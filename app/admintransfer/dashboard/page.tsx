@@ -50,9 +50,9 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState('');
   const [driverFilter, setDriverFilter] = useState('');
   const [customerFilter, setCustomerFilter] = useState('');
-  const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
+  const [filterDate, setFilterDate] = useState('');
   const [sortBy, setSortBy] = useState('bookingDate');
-  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortDirection, setSortDirection] = useState('desc');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const router = useRouter();
@@ -347,9 +347,9 @@ export default function AdminDashboard() {
                 setStatusFilter('');
                 setDriverFilter('');
                 setCustomerFilter('');
-                setFilterDate(new Date().toISOString().split('T')[0]);
+                setFilterDate('');
                 setSortBy('bookingDate');
-                setSortDirection('asc');
+                setSortDirection('desc');
                 setPage(0);
               }}
               title="Reset Filters"
@@ -417,7 +417,7 @@ export default function AdminDashboard() {
                   setStatusFilter('');
                   setDriverFilter('');
                   setCustomerFilter('');
-                  setFilterDate(new Date().toISOString().split('T')[0]);
+                  setFilterDate('');
                 }}>Reset</button>
                 <button className={styles.applyBtn} onClick={() => setIsFilterDrawerOpen(false)}>Apply</button>
               </div>
@@ -505,15 +505,24 @@ export default function AdminDashboard() {
                   </td>
                   <td>
                     <div className={styles.vehicleCell}>
-                      <div style={{ fontWeight: '600', color: 'var(--secondary)' }}>
+                      <div className={styles.vehicleName}>
                         🚙 {b.vehicleType || 'Standard'}
                       </div>
-                      {b.driverName && <div className={styles.driverTag}>👤 {b.driverName}</div>}
-                      {(b.returndriverName || b.returnDriverName) && (
-                        <div className={styles.driverTag} style={{marginTop: '4px', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '4px'}}>
-                          👤 {b.returndriverName || b.returnDriverName} (Return)
-                        </div>
-                      )}
+                      <div className={styles.driverTags}>
+                        {b.driverName && (
+                          <div className={styles.driverTag} title="Outbound Driver">
+                            <span className={styles.driverIcon}>👤</span> {b.driverName}
+                          </div>
+                        )}
+                        {(b.returndriverName || b.returnDriverName) && (
+                          <div className={`${styles.driverTag} ${styles.returnDriverTag}`} title="Return Driver">
+                            <span className={styles.driverIcon}>↩️</span> {b.returndriverName || b.returnDriverName}
+                          </div>
+                        )}
+                        {!b.driverName && !(b.returndriverName || b.returnDriverName) && (
+                          <div className={styles.unassignedTag}>Unassigned</div>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td className={styles.amountCell}>

@@ -517,17 +517,52 @@
 }
 
 .vehicleCell {
-  font-weight: 600;
-  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vehicleName {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.driverTags {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .driverTag {
   background: #f1f5f9;
   color: #475569;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
   font-size: 0.75rem;
-  margin-top: 0.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  border: 1px solid #e2e8f0;
+}
+
+.returnDriverTag {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #dbeafe;
+}
+
+.driverIcon {
+  font-size: 0.85rem;
+}
+
+.unassignedTag {
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-style: italic;
+  font-weight: 500;
 }
 
 .amountCell {
