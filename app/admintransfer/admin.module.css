@@ -125,6 +125,8 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .adminInfo {
@@ -376,7 +378,8 @@
 .tableWrapper {
   background: #fff;
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   border: 1px solid var(--border);
 }
@@ -749,6 +752,28 @@
 }
 
 @media (max-width: 768px) {
+  .topBar {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .adminInfo span:not(.adminBadge) {
+    display: none; /* Hide 'Private Transfer Dashboard' text on mobile */
+  }
+
+  .liveClock {
+    padding: 0.3rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .timeStr {
+    font-size: 0.95rem;
+  }
+
+  .dateStr {
+    display: none; /* Hide date string on mobile to save space */
+  }
+
   .mobileFilterBtn {
     display: flex;
   }
@@ -763,6 +788,10 @@
     gap: 1rem;
   }
 
+  .dashboardHeader h1 {
+    font-size: 1.75rem;
+  }
+
   .headerActions {
     width: 100%;
     justify-content: space-between;
@@ -773,6 +802,31 @@
     border-radius: 0;
     border-left: none;
     border-right: none;
+  }
+
+  .table th, .table td {
+    padding: 1rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .topBar {
+    justify-content: center;
+  }
+  
+  .liveClock {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logoutBtn {
+    order: 2;
+  }
+  
+  .adminInfo {
+    order: 1;
+    flex: 1;
   }
 }
 
@@ -1080,6 +1134,16 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+}
+
+@media (max-width: 480px) {
+  .modalActions {
+    flex-direction: column-reverse;
+  }
+  
+  .modalActions button {
+    width: 100%;
+  }
 }
 
 .cancelBtn {
