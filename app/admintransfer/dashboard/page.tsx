@@ -283,7 +283,9 @@ export default function AdminDashboard() {
         returnTime: editingBooking.returnTime,
         returnPickupLocation: editingBooking.returnPickupLocation,
         returnDropoffLocation: editingBooking.returnDropoffLocation,
-        status: editingBooking.status
+        status: editingBooking.status,
+        driverName: editingBooking.driverName,
+        returnDriverName: editingBooking.returnDriverName
       };
 
       console.log('Sending update payload:', payload);
@@ -855,11 +857,11 @@ export default function AdminDashboard() {
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>Outbound Driver</label>
-                        <input type="text" value={editingBooking.driverName || ''} readOnly className={styles.readOnlyInput} placeholder="Assign via Approve button" />
+                        <input type="text" value={editingBooking.driverName || ''} onChange={e => setEditingBooking({...editingBooking, driverName: e.target.value})} placeholder="Driver name" />
                       </div>
                       <div className={styles.formField}>
                         <label>Return Driver</label>
-                        <input type="text" value={editingBooking.returnDriverName || ''} readOnly className={styles.readOnlyInput} placeholder="Assign via Approve button" />
+                        <input type="text" value={editingBooking.returnDriverName || ''} onChange={e => setEditingBooking({...editingBooking, returnDriverName: e.target.value})} placeholder="Return driver name" />
                       </div>
                     </div>
                     <div className={styles.formField}>
