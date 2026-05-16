@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { MapPin } from 'lucide-react';
 import styles from './LocationAutocomplete.module.css';
 
 interface LocationAutocompleteProps {
@@ -131,7 +132,7 @@ export default function LocationAutocomplete({ label, placeholder, id, onSelect,
         <ul className={`${styles.suggestions} ${variant === 'light' ? styles.suggestionsLight : ''}`}>
           {suggestions.map((s, idx) => (
             <li key={idx} onClick={() => handleSelect(s)}>
-              <span className={styles.icon}>📍</span>
+              <span className={styles.icon} style={{display: 'inline-flex', alignItems: 'center'}}><MapPin size={16} /></span>
               {s}
             </li>
           ))}

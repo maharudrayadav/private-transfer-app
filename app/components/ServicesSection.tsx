@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Building, Plane, Heart, Map, Briefcase, Sparkles } from 'lucide-react';
 
 import styles from './Services.module.css';
 
@@ -71,12 +72,13 @@ export default function ServicesSection({ initialServices = [] }: ServicesSectio
 
   const getServiceIcon = (title: string) => {
     const t = title.toLowerCase();
-    if (t.includes('hotel')) return '🏨';
-    if (t.includes('airport')) return '✈️';
-    if (t.includes('wedding')) return '💍';
-    if (t.includes('tour') || t.includes('scenic')) return '🍀';
-    if (t.includes('business') || t.includes('executive')) return '💼';
-    return '✨';
+    const size = 20;
+    if (t.includes('hotel')) return <Building size={size} />;
+    if (t.includes('airport')) return <Plane size={size} />;
+    if (t.includes('wedding')) return <Heart size={size} />;
+    if (t.includes('tour') || t.includes('scenic')) return <Map size={size} />;
+    if (t.includes('business') || t.includes('executive')) return <Briefcase size={size} />;
+    return <Sparkles size={size} />;
   };
 
   return (
