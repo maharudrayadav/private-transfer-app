@@ -75,6 +75,51 @@ export default function AdminDashboard() {
 
   const router = useRouter();
 
+  // Helper to extract return driver name from any possible field or notes
+  const getReturnDriver = (b: any) => {
+    if (!b) return '';
+    
+    // 1. Direct field checks (ordered by commonality)
+    const directFields = [
+      b.returnDriverName, 
+      b.returndriverName, 
+      b.return_driver_name, 
+      b.returnDriver, 
+      b.returndriver, 
+      b.driverNameReturn,
+      b.driver_name_return
+    ];
+    for (const val of directFields) {
+      if (val && typeof val === 'string' && val.trim().length > 0) return val.trim();
+    }
+
+    // 2. Scan all object keys for anything containing "return" and "driver"
+    const keys = Object.keys(b);
+    for (const key of keys) {
+      const lowerKey = key.toLowerCase();
+      if (lowerKey.includes('return') && lowerKey.includes('driver')) {
+        const val = b[key];
+        if (val && typeof val === 'string' && val.trim().length > 0) return val.trim();
+      }
+    }
+
+    // 3. Scan notes for patterns
+    if (b.notes) {
+      const patterns = [
+        /Return Driver:\s*([^,\n]+)/i,
+        /RET Driver:\s*([^,\n]+)/i,
+        /Return Leg Driver:\s*([^,\n]+)/i,
+        /Return:\s*([^,\n]+)/i
+      ];
+      for (const pattern of patterns) {
+        const match = b.notes.match(pattern);
+        if (match && match[1]) return match[1].trim();
+      }
+    }
+
+    return '';
+  };
+
   // Helper to format date for datetime-local input (YYYY-MM-DDTHH:mm)
   const formatForDateTimeLocal = (dateStr?: string) => {
     if (!dateStr) return '';
@@ -177,16 +222,13 @@ export default function AdminDashboard() {
     if (!selectedBookingId || !driverNameInput) return;
     
     const booking = bookings.find(b => b.id === selectedBookingId);
+    const returnDr = getReturnDriver(booking);
     const isReturn = !!(
       booking?.returnDate || 
       booking?.returnTime || 
       booking?.returnPickupLocation || 
       booking?.returnDropoffLocation || 
-      booking?.returnDriverName ||
-      booking?.returndriverName ||
-      booking?.returnDriver ||
-      booking?.returndriver ||
-      booking?.driverNameReturn ||
+      returnDr ||
       booking?.notes?.toLowerCase().includes('return date') || 
       booking?.notes?.toLowerCase().includes('return time') ||
       booking?.notes?.toLowerCase().includes('return journey')
@@ -260,7 +302,7 @@ export default function AdminDashboard() {
         firstName: fName,
         lastName: lName,
         pickupTime: formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate),
-        returnDriverName: latestData.returnDriverName || latestData.returndriverName || latestData.return_driver_name || latestData.returnDriver || latestData.returndriver || latestData.driverNameReturn || '',
+        returnDriverName: getReturnDriver(latestData),
         passengers: latestData.passengers || 0,
         amount: latestData.amount || 0
       });
@@ -357,7 +399,7 @@ export default function AdminDashboard() {
       `"${b.vehicleType || ''}"`,
       b.amount || 0,
       `"${b.driverName || ''}"`,
-      `"${b.returnDriverName || b.returndriverName || b.return_driver_name || b.returnDriver || b.returndriver || b.driverNameReturn || ''}"`
+      `"${getReturnDriver(b)}"`
     ]);
     
     const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -603,16 +645,13 @@ export default function AdminDashboard() {
             </thead>
             <tbody>
               {bookings.length > 0 ? bookings.map((b) => {
+                const retDr = getReturnDriver(b);
                 const isReturn = !!(
                   b.returnDate || 
                   b.returnTime || 
                   b.returnPickupLocation || 
                   b.returnDropoffLocation || 
-                  b.returnDriverName ||
-                  b.returndriverName ||
-                  b.returnDriver ||
-                  b.returndriver ||
-                  b.driverNameReturn ||
+                  retDr ||
                   b.notes?.toLowerCase().includes('return date') || 
                   b.notes?.toLowerCase().includes('return time') ||
                   b.notes?.toLowerCase().includes('return journey')
@@ -702,7 +741,7 @@ export default function AdminDashboard() {
                           <div className={`${styles.driverTag} ${styles.returnDriverTag}`} title="Return Driver">
                             <RotateCcw size={12} className={styles.driverIconSmall} />
                             <span className={styles.legLabel}>RET:</span> 
-                            {b.returnDriverName || b.returndriverName || b.return_driver_name || b.returnDriver || b.returndriver || b.driverNameReturn || <span className={styles.unassignedText}>Unassigned</span>}
+                            {retDr || <span className={styles.unassignedText}>Unassigned</span>}
                           </div>
                         )}
                       </div>
