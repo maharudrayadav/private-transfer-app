@@ -3,6 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '../admin.module.css';
+import { 
+  Filter, X, Download, RotateCcw, 
+  Calendar as CalendarIcon, User, 
+  Tag, ArrowUpDown, ChevronDown,
+  Search, Clock, LayoutDashboard
+} from 'lucide-react';
 
 interface Booking {
   id: number;
@@ -47,6 +53,7 @@ export default function AdminDashboard() {
   const [filterDate, setFilterDate] = useState(new Date().toISOString().split('T')[0]);
   const [sortBy, setSortBy] = useState('bookingDate');
   const [sortDirection, setSortDirection] = useState('asc');
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const router = useRouter();
 
@@ -254,12 +261,28 @@ export default function AdminDashboard() {
 
       <main className={styles.content}>
         <div className={styles.dashboardHeader}>
-          <h1>Bookings</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div className={styles.headerIcon}><LayoutDashboard size={28} color="var(--primary)" /></div>
+            <h1>Bookings</h1>
+          </div>
+          
+          <div className={styles.headerActions}>
+            <button 
+              className={styles.mobileFilterBtn}
+              onClick={() => setIsFilterDrawerOpen(true)}
+            >
+              <Filter size={18} /> Filters
+            </button>
+            <button className={styles.downloadBtn} onClick={downloadCSV}>
+              <Download size={18} /> CSV
+            </button>
+          </div>
         </div>
 
+        {/* ── Desktop Filters ─────────────────────────── */}
         <section className={styles.filters}>
           <div className={styles.filterGroup}>
-            <label><span className={styles.filterIcon}>📊</span> Status</label>
+            <label><Filter size={14} className={styles.filterIcon} /> Status</label>
             <div className={styles.filterInputWrap}>
               <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}>
                 <option value="">All Statuses</option>
@@ -271,7 +294,7 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className={styles.filterGroup}>
-            <label><span className={styles.filterIcon}>👤</span> Driver</label>
+            <label><User size={14} className={styles.filterIcon} /> Driver</label>
             <div className={styles.filterInputWrap}>
               <input 
                 type="text" 
@@ -282,7 +305,7 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className={styles.filterGroup}>
-            <label><span className={styles.filterIcon}>🤝</span> Customer</label>
+            <label><Search size={14} className={styles.filterIcon} /> Customer</label>
             <div className={styles.filterInputWrap}>
               <input 
                 type="text" 
@@ -294,7 +317,7 @@ export default function AdminDashboard() {
           </div>
           
           <div className={styles.filterGroup}>
-            <label><span className={styles.filterIcon}>📅</span> Date</label>
+            <label><CalendarIcon size={14} className={styles.filterIcon} /> Date</label>
             <div className={styles.filterInputWrap}>
               <input 
                 type="date" 
@@ -305,7 +328,7 @@ export default function AdminDashboard() {
           </div>
 
           <div className={styles.filterGroup}>
-            <label><span className={styles.filterIcon}>🔃</span> Sort By</label>
+            <label><ArrowUpDown size={14} className={styles.filterIcon} /> Sort By</label>
             <div className={styles.filterInputWrap}>
               <select value={sortBy} onChange={(e) => { setSortBy(e.target.value); setPage(0); }}>
                 <option value="bookingDate">Booking Date</option>
@@ -317,17 +340,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className={styles.filterGroup}>
-            <label><span className={styles.filterIcon}>↕️</span> Direction</label>
-            <div className={styles.filterInputWrap}>
-              <select value={sortDirection} onChange={(e) => { setSortDirection(e.target.value); setPage(0); }}>
-                <option value="desc">Descending</option>
-                <option value="asc">Ascending</option>
-              </select>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', marginTop: 'auto' }}>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button 
               className={styles.resetBtn} 
               onClick={() => {
@@ -339,18 +352,78 @@ export default function AdminDashboard() {
                 setSortDirection('asc');
                 setPage(0);
               }}
+              title="Reset Filters"
             >
-              Reset
-            </button>
-            <button
-              className={styles.resetBtn}
-              style={{ backgroundColor: '#28a745', color: 'white', borderColor: '#28a745' }}
-              onClick={downloadCSV}
-            >
-              📥 Download CSV
+              <RotateCcw size={18} />
             </button>
           </div>
         </section>
+
+        {/* ── Mobile Filter Drawer ────────────────────── */}
+        {isFilterDrawerOpen && (
+          <div className={styles.filterDrawerOverlay} onClick={() => setIsFilterDrawerOpen(false)}>
+            <div className={styles.filterDrawer} onClick={e => e.stopPropagation()}>
+              <div className={styles.drawerHeader}>
+                <h3>Filters</h3>
+                <button className={styles.closeDrawer} onClick={() => setIsFilterDrawerOpen(false)}>
+                  <X size={24} />
+                </button>
+              </div>
+              <div className={styles.drawerContent}>
+                <div className={styles.filterGroup}>
+                  <label><Filter size={14} /> Status</label>
+                  <div className={styles.filterInputWrap}>
+                    <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}>
+                      <option value="">All Statuses</option>
+                      <option value="CONFIRMED">Confirmed</option>
+                      <option value="PENDING_ADMIN">Pending Admin</option>
+                      <option value="PENDING_PAYMENT">Pending Payment</option>
+                      <option value="CANCELLED">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label><User size={14} /> Driver</label>
+                  <div className={styles.filterInputWrap}>
+                    <input type="text" placeholder="Driver name..." value={driverFilter} onChange={e => setDriverFilter(e.target.value)} />
+                  </div>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label><Search size={14} /> Customer</label>
+                  <div className={styles.filterInputWrap}>
+                    <input type="text" placeholder="Customer name..." value={customerFilter} onChange={e => setCustomerFilter(e.target.value)} />
+                  </div>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label><CalendarIcon size={14} /> Date</label>
+                  <div className={styles.filterInputWrap}>
+                    <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)} />
+                  </div>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label><ArrowUpDown size={14} /> Sort By</label>
+                  <div className={styles.filterInputWrap}>
+                    <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                      <option value="bookingDate">Booking Date</option>
+                      <option value="amount">Amount</option>
+                      <option value="status">Status</option>
+                      <option value="pickupTime">Pickup Time</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.drawerFooter}>
+                <button className={styles.resetBtn} onClick={() => {
+                  setStatusFilter('');
+                  setDriverFilter('');
+                  setCustomerFilter('');
+                  setFilterDate(new Date().toISOString().split('T')[0]);
+                }}>Reset</button>
+                <button className={styles.applyBtn} onClick={() => setIsFilterDrawerOpen(false)}>Apply</button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <section className={styles.tableWrapper}>
           <table className={styles.table}>

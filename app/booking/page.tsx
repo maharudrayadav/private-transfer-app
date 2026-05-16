@@ -38,7 +38,7 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [calculatedPrice, setCalculatedPrice] = useState<number | null>(null);
+  const [fleetPrices, setFleetPrices] = useState<Record<number, number>>({});
   const [isCalculatingPrice, setIsCalculatingPrice] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -156,44 +156,51 @@ export default function BookingPage() {
     }
   }, [tripType, returnPickup, returnDropoff]);
 
-  // Calculate Combined Journey Price
+  // Calculate Combined Journey Price for all vehicles
   useEffect(() => {
-    if (selectedVehicle?.price && routeInfo?.distance_km) {
+    if (fleet.length > 0 && routeInfo?.distance_km) {
       const km = routeInfo.distance_km;
-      const rate = selectedVehicle.price;
       let returnKm = 0;
 
       if (tripType === 'return') {
         if (!returnRouteInfo?.distance_km) {
-          setCalculatedPrice(null);
+          setFleetPrices({});
           return;
         }
         returnKm = returnRouteInfo.distance_km;
       }
 
       setIsCalculatingPrice(true);
-      fetch(`https://privateproject-r0ry.onrender.com/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(res => res.text())
-      .then(text => {
-        const parsed = parseFloat(text);
-        if (!isNaN(parsed)) {
-          setCalculatedPrice(parsed);
-        } else {
-          setCalculatedPrice(null);
-        }
-      })
-      .catch(err => {
-        console.error('Error calculating price:', err);
-        setCalculatedPrice(null);
+      
+      const pricePromises = fleet.map(v => {
+        if (!v.price) return Promise.resolve({ id: v.id, price: null });
+        
+        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.text())
+        .then(text => ({ id: v.id, price: parseFloat(text) }))
+        .catch(err => {
+          console.error(`Error calculating price for ${v.heading}:`, err);
+          return { id: v.id, price: null };
+        });
+      });
+
+      Promise.all(pricePromises).then(results => {
+        const newPrices: Record<number, number> = {};
+        results.forEach(res => {
+          if (res.price !== null && !isNaN(res.price)) {
+            newPrices[res.id] = res.price;
+          }
+        });
+        setFleetPrices(newPrices);
       })
       .finally(() => setIsCalculatingPrice(false));
     } else {
-      setCalculatedPrice(null);
+      setFleetPrices({});
     }
-  }, [selectedVehicle?.price, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km]);
+  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
@@ -361,7 +368,9 @@ export default function BookingPage() {
   };
 
   const extraTotal = (extras.childSeat ? 10 : 0) + (extras.boosterSeat ? 10 : 0);
-  const journeyFare = calculatedPrice !== null ? calculatedPrice : ((selectedVehicle?.price || 0) * (tripType === 'return' ? 2 : 1));
+  const journeyFare = (selectedVehicle && fleetPrices[selectedVehicle.id]) 
+    ? fleetPrices[selectedVehicle.id] 
+    : ((selectedVehicle?.price || 0) * (tripType === 'return' ? 2 : 1));
   const total = journeyFare + extraTotal;
 
   // ... (previous logic)
@@ -569,6 +578,16 @@ export default function BookingPage() {
                     </div>
                   </div>
                   <div className={styles.vehiclePricing}>
+                    {fleetPrices[v.id] ? (
+                      <>
+                        <div className={styles.price}>€{fleetPrices[v.id].toFixed(2)}</div>
+                        <div className={styles.priceNote}>All-inclusive price</div>
+                      </>
+                    ) : (
+                      <div className={styles.priceOnRequest}>
+                        {isCalculatingPrice ? 'Calculating...' : (v.price ? `€${v.price.toFixed(2)}/km` : 'Price on request')}
+                      </div>
+                    )}
                     <button
                       className={`${styles.selectBtn} ${isSelected ? styles.selectedBtn : ''}`}
                       onClick={() => handleSelect(v)}
