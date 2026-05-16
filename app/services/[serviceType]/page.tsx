@@ -5,6 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import styles from './serviceType.module.css';
+import { 
+  Castle, Sparkles, UserCheck, Clock, Car, 
+  PlaneLanding, Timer, Luggage, Route, 
+  Camera, Map, Leaf, Utensils,
+  Star, ShieldCheck, Calendar
+} from 'lucide-react';
 
 interface ServiceItem {
   id: number | string;
@@ -132,39 +138,39 @@ export default function ServiceDetailsPage() {
           
           {(() => {
             const heading = (mainContent.heading || '').toLowerCase();
-            let points: {icon: string, title: string, desc: string}[] = [];
+            let points: {icon: React.ReactNode, title: string, desc: string}[] = [];
             
             if (heading.includes('hotel')) {
               points = [
-                { icon: '🏰', title: 'Hotel Transfers', desc: "Reliable transport to hotels and historic locations across Ireland." },
-                { icon: '✨', title: 'Seamless Travel', desc: 'Stress-free journey straight to your vacation destination.' },
-                { icon: '🎩', title: 'Friendly Service', desc: 'Meet & Greet with professional, courteous drivers.' },
-                { icon: '🕒', title: 'Punctual Arrivals', desc: 'We value your time, ensuring prompt pick-ups and drop-offs.' },
-                { icon: '🚗', title: 'Private & Secure', desc: 'Enjoy a quiet, comfortable ride to your accommodation.' }
+                { icon: <Castle />, title: 'Hotel Transfers', desc: "Reliable transport to hotels and historic locations across Ireland." },
+                { icon: <Sparkles />, title: 'Seamless Travel', desc: 'Stress-free journey straight to your vacation destination.' },
+                { icon: <UserCheck />, title: 'Friendly Service', desc: 'Meet & Greet with professional, courteous drivers.' },
+                { icon: <Clock />, title: 'Punctual Arrivals', desc: 'We value your time, ensuring prompt pick-ups and drop-offs.' },
+                { icon: <Car />, title: 'Private & Secure', desc: 'Enjoy a quiet, comfortable ride to your accommodation.' }
               ];
             } else if (heading.includes('airport')) {
               points = [
-                { icon: '🛬', title: 'Reliable Pick-ups', desc: 'We ensure your chauffeur is there on time, every time.' },
-                { icon: '⏱️', title: 'Zero Waiting', desc: 'Your chauffeur will be ready at arrivals, holding a personalized sign.' },
-                { icon: '🧳', title: 'Luggage Assistance', desc: 'Relax after your flight while we handle your heavy bags.' },
-                { icon: '🛣️', title: 'Direct Transfers', desc: 'Smooth, direct journeys from the airport to your destination.' },
-                { icon: '✨', title: 'Comfortable Ride', desc: 'Relax and enjoy a peaceful journey after a long flight.' }
+                { icon: <PlaneLanding />, title: 'Reliable Pick-ups', desc: 'We ensure your chauffeur is there on time, every time.' },
+                { icon: <Timer />, title: 'Zero Waiting', desc: 'Your chauffeur will be ready at arrivals, holding a personalized sign.' },
+                { icon: <Luggage />, title: 'Luggage Assistance', desc: 'Relax after your flight while we handle your heavy bags.' },
+                { icon: <Route />, title: 'Direct Transfers', desc: 'Smooth, direct journeys from the airport to your destination.' },
+                { icon: <Sparkles />, title: 'Comfortable Ride', desc: 'Relax and enjoy a peaceful journey after a long flight.' }
               ];
             } else if (heading.includes('vacation') || heading.includes('tour') || heading.includes('scenic')) {
               points = [
-                { icon: '📸', title: 'Scenic Routes', desc: 'Discover hidden gems and breathtaking landscapes along the way.' },
-                { icon: '🗺️', title: 'Custom Itineraries', desc: 'Tailor your journey with flexible stops and personalized scheduling.' },
-                { icon: '🍀', title: 'Local Expertise', desc: 'Travel with knowledgeable chauffeurs who know the best of Ireland.' },
-                { icon: '🍽️', title: 'Dining Recommendations', desc: 'Get insider tips on the best local restaurants and authentic pubs.' },
-                { icon: '⏱️', title: 'Unrushed Experience', desc: 'Take your time at each location; we adapt entirely to your pace.' }
+                { icon: <Camera />, title: 'Scenic Routes', desc: 'Discover hidden gems and breathtaking landscapes along the way.' },
+                { icon: <Map />, title: 'Custom Itineraries', desc: 'Tailor your journey with flexible stops and personalized scheduling.' },
+                { icon: <Leaf />, title: 'Local Expertise', desc: 'Travel with knowledgeable chauffeurs who know the best of Ireland.' },
+                { icon: <Utensils />, title: 'Dining Recommendations', desc: 'Get insider tips on the best local restaurants and authentic pubs.' },
+                { icon: <Timer />, title: 'Unrushed Experience', desc: 'Take your time at each location; we adapt entirely to your pace.' }
               ];
             } else {
               points = [
-                { icon: '🚘', title: 'Clean Fleet', desc: 'Travel in our impeccably maintained and comfortable vehicles.' },
-                { icon: '🌟', title: 'Friendly Service', desc: 'Experience a high standard of professional chauffeuring.' },
-                { icon: '🛡️', title: 'Safe & Secure', desc: 'Your safety and comfort are our top priorities on every journey.' },
-                { icon: '👔', title: 'Expert Drivers', desc: 'Fully licensed, vetted, and highly experienced chauffeurs.' },
-                { icon: '📅', title: '24/7 Availability', desc: 'Round-the-clock service to accommodate any travel schedule.' }
+                { icon: <Car />, title: 'Clean Fleet', desc: 'Travel in our impeccably maintained and comfortable vehicles.' },
+                { icon: <Star />, title: 'Friendly Service', desc: 'Experience a high standard of professional chauffeuring.' },
+                { icon: <ShieldCheck />, title: 'Safe & Secure', desc: 'Your safety and comfort are our top priorities on every journey.' },
+                { icon: <UserCheck />, title: 'Expert Drivers', desc: 'Fully licensed, vetted, and highly experienced chauffeurs.' },
+                { icon: <Calendar />, title: '24/7 Availability', desc: 'Round-the-clock service to accommodate any travel schedule.' }
               ];
             }
 

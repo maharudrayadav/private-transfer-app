@@ -1,9 +1,10 @@
+import { ShieldCheck, Banknote, Car } from 'lucide-react';
 import styles from './Features.module.css';
 
 const features = [
-  { icon: '🛡️', title: 'Safety First',           desc: 'Travel with fully licensed and insured professional drivers, ensuring the highest safety standards.' },
-  { icon: '💶', title: 'Transparent Pricing',     desc: 'No hidden fees, no surprises. Enjoy fixed and competitive rates for premium transportation across Ireland.' },
-  { icon: '🚘', title: 'Luxury & Comfort',         desc: 'Travel in style with our fleet of luxury sedans and spacious MPVs, tailored to your comfort.' },
+  { icon: <ShieldCheck />, title: 'Safety First',           desc: 'Travel with fully licensed and insured professional drivers, ensuring the highest safety standards.' },
+  { icon: <Banknote />, title: 'Transparent Pricing',     desc: 'No hidden fees, no surprises. Enjoy fixed and competitive rates for premium transportation across Ireland.' },
+  { icon: <Car />, title: 'Luxury & Comfort',         desc: 'Travel in style with our fleet of luxury sedans and spacious MPVs, tailored to your comfort.' },
 ];
 
 export default function Features() {
