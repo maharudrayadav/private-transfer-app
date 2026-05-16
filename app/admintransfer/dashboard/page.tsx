@@ -20,6 +20,7 @@ interface Booking {
   bookingCode?: string;
   notes?: string;
   returndriverName?: string;
+  returnDriverName?: string;
   returnDate?: string;
   returnTime?: string;
 }
@@ -136,7 +137,7 @@ export default function AdminDashboard() {
     if (!selectedBookingId || !driverNameInput) return;
     
     const booking = bookings.find(b => b.id === selectedBookingId);
-    const isReturn = !!booking?.returnDate;
+    const isReturn = !!(booking?.returnDate || booking?.notes?.includes('Return Date:'));
     
     // If it's a return trip, we also need a return driver
     if (isReturn && !returnDriverNameInput) {
@@ -419,11 +420,11 @@ export default function AdminDashboard() {
                           : (b.bookingDate ? new Date(b.bookingDate).toLocaleTimeString('en-IE', { timeZone: 'Europe/Dublin', hour: '2-digit', minute:'2-digit' }) : '—')}
                       </div>
 
-                      {b.returnDate && (
+                      {(b.returnDate || b.notes?.includes('Return Date:')) && (
                         <div className={styles.returnInfo}>
                           <span className={styles.returnBadge}>↩ Return</span>
                           <span className={styles.returnTime}>
-                            {b.returnDate} {b.returnTime}
+                            {b.returnDate || b.notes?.match(/Return Date:\s*([\d-]+)/)?.[1]} {b.returnTime || b.notes?.match(/Return Time:\s*([\d:]+)/)?.[1]}
                           </span>
                         </div>
                       )}
@@ -435,7 +436,11 @@ export default function AdminDashboard() {
                         🚙 {b.vehicleType || 'Standard'}
                       </div>
                       {b.driverName && <div className={styles.driverTag}>👤 {b.driverName}</div>}
-                      {b.returndriverName && <div className={styles.driverTag} style={{marginTop: '4px', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '4px'}}>👤 {b.returndriverName} (Return)</div>}
+                      {(b.returndriverName || b.returnDriverName) && (
+                        <div className={styles.driverTag} style={{marginTop: '4px', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '4px'}}>
+                          👤 {b.returndriverName || b.returnDriverName} (Return)
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td className={styles.amountCell}>
@@ -521,7 +526,7 @@ export default function AdminDashboard() {
               />
             </div>
 
-            {bookings.find(b => b.id === selectedBookingId)?.returnDate && (
+            {bookings.find(b => b.id === selectedBookingId)?.returnDate || bookings.find(b => b.id === selectedBookingId)?.notes?.includes('Return Date:') ? (
               <div className={styles.modalField}>
                 <label>Return Driver Name</label>
                 <input 
@@ -531,14 +536,14 @@ export default function AdminDashboard() {
                   placeholder="e.g. Sarah Johnson"
                 />
               </div>
-            )}
+            ) : null}
 
             <div className={styles.modalActions}>
               <button className={styles.cancelBtn} onClick={() => setShowApproveModal(false)}>Cancel</button>
               <button 
                 className={styles.saveBtn} 
                 onClick={handleConfirmApproval}
-                disabled={approveLoading || !driverNameInput || (!!bookings.find(b => b.id === selectedBookingId)?.returnDate && !returnDriverNameInput)}
+                disabled={approveLoading || !driverNameInput || (!!(bookings.find(b => b.id === selectedBookingId)?.returnDate || bookings.find(b => b.id === selectedBookingId)?.notes?.includes('Return Date:')) && !returnDriverNameInput)}
               >
                 {approveLoading ? 'Saving...' : 'Save & Confirm'}
               </button>
