@@ -50,7 +50,8 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState('');
   const [driverFilter, setDriverFilter] = useState('');
   const [customerFilter, setCustomerFilter] = useState('');
-  const [filterDate, setFilterDate] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [sortBy, setSortBy] = useState('bookingDate');
   const [sortDirection, setSortDirection] = useState('desc');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -79,10 +80,8 @@ export default function AdminDashboard() {
       if (driverFilter) params.append('driverName', driverFilter);
       if (customerFilter) params.append('customerName', customerFilter);
       
-      if (filterDate) {
-        params.append('startDate', `${filterDate}T00:00:00`);
-        params.append('endDate', `${filterDate}T23:59:59`);
-      }
+      if (startDate) params.append('startDate', `${startDate}T00:00:00`);
+      if (endDate) params.append('endDate', `${endDate}T23:59:59`);
 
       const res = await fetch(`/api/bookings?${params.toString()}`);
       console.log('Fetching bookings from:', `/api/bookings?${params.toString()}`);
@@ -122,7 +121,7 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [page, size, statusFilter, driverFilter, customerFilter, filterDate, sortBy, sortDirection]);
+  }, [page, size, statusFilter, driverFilter, customerFilter, startDate, endDate, sortBy, sortDirection]);
 
   useEffect(() => {
     fetchBookings();
@@ -168,7 +167,7 @@ export default function AdminDashboard() {
         body: JSON.stringify({
           bookingId: selectedBookingId,
           driverName: driverNameInput,
-          ...(isReturn ? { returnDriverName: returnDriverNameInput } : {})
+          returnDriverName: isReturn ? returnDriverNameInput : null
         })
       });
       
@@ -317,12 +316,22 @@ export default function AdminDashboard() {
           </div>
           
           <div className={styles.filterGroup}>
-            <label><CalendarIcon size={14} className={styles.filterIcon} /> Date</label>
+            <label><CalendarIcon size={14} className={styles.filterIcon} /> Start Date</label>
             <div className={styles.filterInputWrap}>
               <input 
                 type="date" 
-                value={filterDate} 
-                onChange={(e) => { setFilterDate(e.target.value); setPage(0); }} 
+                value={startDate} 
+                onChange={(e) => { setStartDate(e.target.value); setPage(0); }} 
+              />
+            </div>
+          </div>
+          <div className={styles.filterGroup}>
+            <label><CalendarIcon size={14} className={styles.filterIcon} /> End Date</label>
+            <div className={styles.filterInputWrap}>
+              <input 
+                type="date" 
+                value={endDate} 
+                onChange={(e) => { setEndDate(e.target.value); setPage(0); }} 
               />
             </div>
           </div>
@@ -347,7 +356,8 @@ export default function AdminDashboard() {
                 setStatusFilter('');
                 setDriverFilter('');
                 setCustomerFilter('');
-                setFilterDate('');
+                setStartDate('');
+                setEndDate('');
                 setSortBy('bookingDate');
                 setSortDirection('desc');
                 setPage(0);
@@ -395,9 +405,15 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <div className={styles.filterGroup}>
-                  <label><CalendarIcon size={14} /> Date</label>
+                  <label><CalendarIcon size={14} /> Start Date</label>
                   <div className={styles.filterInputWrap}>
-                    <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)} />
+                    <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+                  </div>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label><CalendarIcon size={14} /> End Date</label>
+                  <div className={styles.filterInputWrap}>
+                    <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
                   </div>
                 </div>
                 <div className={styles.filterGroup}>
@@ -417,7 +433,8 @@ export default function AdminDashboard() {
                   setStatusFilter('');
                   setDriverFilter('');
                   setCustomerFilter('');
-                  setFilterDate('');
+                  setStartDate('');
+                  setEndDate('');
                 }}>Reset</button>
                 <button className={styles.applyBtn} onClick={() => setIsFilterDrawerOpen(false)}>Apply</button>
               </div>
@@ -439,8 +456,10 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {bookings.length > 0 ? bookings.map((b) => (
-                <tr key={b.id}>
+              {bookings.length > 0 ? bookings.map((b) => {
+                const isReturn = !!(b.returnDate || b.notes?.includes('Return Date:'));
+                return (
+                  <tr key={b.id} className={isReturn ? styles.returnTripRow : ''}>
                   <td>
                     <div className={styles.customerCell}>
                       <span className={styles.customerAvatar}>
@@ -541,7 +560,8 @@ export default function AdminDashboard() {
                     )}
                   </td>
                 </tr>
-              )) : (
+              )
+            }) : (
                 <tr>
                   <td colSpan={7} style={{textAlign: 'center', padding: '3rem'}}>No bookings found.</td>
                 </tr>

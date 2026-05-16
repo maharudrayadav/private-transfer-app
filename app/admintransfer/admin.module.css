@@ -409,6 +409,14 @@
   background: #f8fafc;
 }
 
+.returnTripRow td {
+  background-color: rgba(37, 99, 235, 0.03); /* Faint blue for return trips */
+}
+
+.returnTripRow:hover td {
+  background-color: rgba(37, 99, 235, 0.06);
+}
+
 /* ── Cells ─────────────────────────────────────── */
 .customerCell {
   display: flex;
