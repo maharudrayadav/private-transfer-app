@@ -282,7 +282,8 @@ export default function AdminDashboard() {
         returnDate: editingBooking.returnDate,
         returnTime: editingBooking.returnTime,
         returnPickupLocation: editingBooking.returnPickupLocation,
-        returnDropoffLocation: editingBooking.returnDropoffLocation
+        returnDropoffLocation: editingBooking.returnDropoffLocation,
+        status: editingBooking.status
       };
 
       console.log('Sending update payload:', payload);
@@ -803,8 +804,13 @@ export default function AdminDashboard() {
                         <input type="text" value={editingBooking.bookingCode || ''} readOnly className={styles.readOnlyInput} />
                       </div>
                       <div className={styles.formField}>
-                        <label>Status <span className={styles.note}>(Read Only here)</span></label>
-                        <input type="text" value={editingBooking.status || ''} readOnly className={styles.readOnlyInput} />
+                        <label>Status</label>
+                        <select value={editingBooking.status || ''} onChange={e => setEditingBooking({...editingBooking, status: e.target.value})}>
+                          <option value="CONFIRMED">CONFIRMED</option>
+                          <option value="PENDING_ADMIN">PENDING_ADMIN</option>
+                          <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
+                          <option value="CANCELLED">CANCELLED</option>
+                        </select>
                       </div>
                     </div>
                     <div className={styles.formField}>

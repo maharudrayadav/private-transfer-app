@@ -43,18 +43,14 @@ export async function PUT(
   try {
     const body = await request.json();
     
-    // Explicitly exclude 'status' from the update payload
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { status, ...updateData } = body;
-    
-    console.log(`[API] Updating booking ${id}. Filtering out status.`);
+    console.log(`[API] Updating booking ${id}.`);
     
     const res = await fetch(`${BACKEND_URL}/api/bookings/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updateData),
+      body: JSON.stringify(body),
     });
 
     if (!res.ok) {
