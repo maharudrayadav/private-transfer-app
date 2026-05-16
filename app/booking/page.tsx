@@ -5,6 +5,11 @@ import Image from 'next/image';
 import LocationAutocomplete from '../components/LocationAutocomplete';
 import styles from './booking.module.css';
 import dynamic from 'next/dynamic';
+import { 
+  MapPin, Calendar, Clock, Pencil, 
+  Hourglass, Map, Users, Luggage, 
+  Info, AlertTriangle 
+} from 'lucide-react';
 
 const RouteMap = dynamic(() => import('../components/RouteMap'), { ssr: false });
 
@@ -355,13 +360,13 @@ export default function BookingPage() {
         {/* ── Search Summary Bar ──────────────────────────────── */}
         <div className={styles.searchBar}>
           <div className={styles.routeDisplay}>
-            <span className={styles.routePin + ' ' + styles.pinFrom}>📍</span>
+            <span className={styles.routePin + ' ' + styles.pinFrom}><MapPin size={16} /></span>
             <div className={styles.routeText}>
               <span className={styles.routeLabel}>Pickup</span>
               <span className={styles.routeValue}>{search?.pickup || 'Not set'}</span>
             </div>
             <div className={styles.routeArrow}>→</div>
-            <span className={styles.routePin + ' ' + styles.pinTo}>📍</span>
+            <span className={styles.routePin + ' ' + styles.pinTo}><MapPin size={16} /></span>
             <div className={styles.routeText}>
               <span className={styles.routeLabel}>Drop-off</span>
               <span className={styles.routeValue}>{search?.dropoff || 'Not set'}</span>
@@ -370,14 +375,14 @@ export default function BookingPage() {
 
           <div className={styles.tripMeta}>
             <div className={styles.metaItem}>
-              <span>📅</span>
+              <span style={{display: 'flex'}}><Calendar size={18} /></span>
               <div>
                 <label>Date</label>
                 <p>{search?.date || '—'}</p>
               </div>
             </div>
             <div className={styles.metaItem}>
-              <span>⏰</span>
+              <span style={{display: 'flex'}}><Clock size={18} /></span>
               <div>
                 <label>Time</label>
                 <p>{search?.time || '—'}</p>
@@ -389,7 +394,7 @@ export default function BookingPage() {
               onClick={() => setModifyOpen(v => !v)}
               aria-expanded={modifyOpen}
             >
-              {modifyOpen ? '✕ Close' : '✏️ Modify Search'}
+              {modifyOpen ? '✕ Close' : <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Pencil size={14} /> Modify Search</span>}
             </button>
           </div>
 
@@ -479,7 +484,7 @@ export default function BookingPage() {
                 {routeLoading ? (
                   <div className={styles.mapPlaceholder}>
                     <div className={styles.mapPlaceholderContent}>
-                      <span className={styles.mapIcon}>⏳</span>
+                      <span className={styles.mapIcon}><Hourglass size={24} /></span>
                       <p>Calculating route path...</p>
                     </div>
                   </div>
@@ -488,7 +493,7 @@ export default function BookingPage() {
                 ) : (
                   <div className={styles.mapPlaceholder}>
                     <div className={styles.mapPlaceholderContent}>
-                      <span className={styles.mapIcon}>🗺️</span>
+                      <span className={styles.mapIcon}><Map size={24} /></span>
                       <p>Route visualization not available for this trip.</p>
                     </div>
                   </div>
@@ -522,8 +527,8 @@ export default function BookingPage() {
                     <h3>{v.heading}</h3>
                     <p className={styles.vDesc}>Professional chauffeur service with all-inclusive pricing for your comfort and convenience.</p>
                     <div className={styles.vSpecs}>
-                      <span>👥 Passengers {v.passengers ?? '—'}</span>
-                      <span>🧳 Luggage {v.bags ?? '—'}</span>
+                      <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Users size={14} /> Passengers {v.passengers ?? '—'}</span>
+                      <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Luggage size={14} /> Luggage {v.bags ?? '—'}</span>
                     </div>
                     <div className={styles.vFeatures}>
                       <span>✓ Welcome service</span>
@@ -765,12 +770,12 @@ export default function BookingPage() {
                 </div>
 
                 <div className={styles.noPaymentNote}>
-                  <strong>ℹ️ Important:</strong> No payment is required at this stage. Once you submit your request, our team will review availability and send you a confirmation email with a payment link.
+                  <strong><Info size={16} style={{display: 'inline-block', verticalAlign: 'text-bottom', marginRight: '4px'}}/> Important:</strong> No payment is required at this stage. Once you submit your request, our team will review availability and send you a confirmation email with a payment link.
                 </div>
 
                 {submitError && (
                   <div className={styles.submitErrorMessage}>
-                    <span>⚠️</span> {submitError}
+                    <span><AlertTriangle size={16} /></span> {submitError}
                   </div>
                 )}
 
@@ -791,7 +796,7 @@ export default function BookingPage() {
               {search && (
                 <div className={styles.summaryRoute}>
                   <div className={styles.summaryRouteItem}>
-                    <span className={styles.pinRed}>📍</span>
+                    <span className={styles.pinRed}><MapPin size={16} /></span>
                     <div>
                       <label>From</label>
                       <p>{search.pickup}</p>
@@ -799,7 +804,7 @@ export default function BookingPage() {
                   </div>
                   <div className={styles.routeDots}></div>
                   <div className={styles.summaryRouteItem}>
-                    <span className={styles.pinBlue}>📍</span>
+                    <span className={styles.pinBlue}><MapPin size={16} /></span>
                     <div>
                       <label>To</label>
                       <p>{search.dropoff}</p>

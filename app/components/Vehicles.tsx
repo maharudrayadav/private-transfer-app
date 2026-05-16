@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import styles from './Vehicles.module.css';
+import { Users, Luggage } from 'lucide-react';
 
 interface FleetItem {
   id: number;
@@ -158,11 +159,11 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                     <h3>{v.heading}</h3>
                     <div className={styles.features}>
                       <div className={styles.feature}>
-                        <span>👥</span>
+                        <Users size={18} />
                         <p>{typeof displayPassengers === 'number' ? `${displayPassengers} Passengers` : displayPassengers}</p>
                       </div>
                       <div className={styles.feature}>
-                        <span>🧳</span>
+                        <Luggage size={18} />
                         <p>{typeof displayBags === 'number' ? `${displayBags} Large Bags` : displayBags}</p>
                       </div>
                     </div>
