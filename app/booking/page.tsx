@@ -69,9 +69,12 @@ export default function BookingPage() {
 
   // ── Route Info state ──────────────────────────────────────
   const [routeInfo, setRouteInfo] = useState<{ distance_km: number; time_minutes: number } | null>(null);
+  const [returnRouteInfo, setReturnRouteInfo] = useState<{ distance_km: number; time_minutes: number } | null>(null);
   const [routeData, setRouteData] = useState<any>(null);
   const [routeLoading, setRouteLoading] = useState(false);
   const [showRouteMap, setShowRouteMap] = useState(false);
+  const [returnCalculatedPrice, setReturnCalculatedPrice] = useState<number | null>(null);
+  const [isCalculatingReturnPrice, setIsCalculatingReturnPrice] = useState(false);
 
   const [form, setForm] = useState({
     firstName: '', lastName: '',
@@ -140,6 +143,22 @@ export default function BookingPage() {
     }
   }, [search?.pickup, search?.dropoff]);
 
+  // Fetch Return Trip Info
+  useEffect(() => {
+    if (tripType === 'return' && returnPickup && returnDropoff) {
+      const from = encodeURIComponent(returnPickup);
+      const to = encodeURIComponent(returnDropoff);
+
+      fetch(`/api/routes/place-distance?from=${from}&to=${to}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => setReturnRouteInfo(data))
+        .catch(() => setReturnRouteInfo(null));
+    } else {
+      setReturnRouteInfo(null);
+    }
+  }, [tripType, returnPickup, returnDropoff]);
+
+  // Calculate Outbound Price
   useEffect(() => {
     if (selectedVehicle?.price && routeInfo?.distance_km) {
       setIsCalculatingPrice(true);
@@ -167,6 +186,35 @@ export default function BookingPage() {
       setCalculatedPrice(null);
     }
   }, [selectedVehicle?.price, routeInfo?.distance_km]);
+
+  // Calculate Return Price
+  useEffect(() => {
+    if (tripType === 'return' && selectedVehicle?.price && returnRouteInfo?.distance_km) {
+      setIsCalculatingReturnPrice(true);
+      const km = returnRouteInfo.distance_km;
+      const rate = selectedVehicle.price;
+      fetch(`https://privateproject-r0ry.onrender.com/api/admin/caldata?km=${km}&rate=${rate}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.text())
+      .then(text => {
+        const parsed = parseFloat(text);
+        if (!isNaN(parsed)) {
+          setReturnCalculatedPrice(parsed);
+        } else {
+          setReturnCalculatedPrice(null);
+        }
+      })
+      .catch(err => {
+        console.error('Error calculating return price:', err);
+        setReturnCalculatedPrice(null);
+      })
+      .finally(() => setIsCalculatingReturnPrice(false));
+    } else {
+      setReturnCalculatedPrice(null);
+    }
+  }, [tripType, selectedVehicle?.price, returnRouteInfo?.distance_km]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
@@ -328,10 +376,9 @@ export default function BookingPage() {
   };
 
   const extraTotal = (extras.childSeat ? 10 : 0) + (extras.boosterSeat ? 10 : 0);
-  const vehiclePrice = selectedVehicle?.price || 0;
-  const tripMultiplier = tripType === 'return' ? 2 : 1;
-  const baseTripPrice = calculatedPrice !== null ? calculatedPrice : (vehiclePrice * tripMultiplier);
-  const total = baseTripPrice + extraTotal;
+  const outboundPrice = calculatedPrice !== null ? calculatedPrice : ((selectedVehicle?.price || 0) * 1);
+  const returnPrice = tripType === 'return' ? (returnCalculatedPrice !== null ? returnCalculatedPrice : (selectedVehicle?.price || 0)) : 0;
+  const total = outboundPrice + returnPrice + extraTotal;
 
   // ... (previous logic)
 
@@ -763,9 +810,15 @@ export default function BookingPage() {
 
                 <div className={styles.finalPriceBox}>
                   <div className={styles.finalPriceRow}>
-                    <span>Base Trip Cost ({tripType === 'one-way' ? 'One Way' : 'Return'})</span>
-                    <strong>€{baseTripPrice.toFixed(2)}</strong>
+                    <span>Outbound Journey</span>
+                    <strong>{isCalculatingPrice ? '...' : `€${outboundPrice.toFixed(2)}`}</strong>
                   </div>
+                  {tripType === 'return' && (
+                    <div className={styles.finalPriceRow}>
+                      <span>Return Journey</span>
+                      <strong>{isCalculatingReturnPrice ? '...' : `€${returnPrice.toFixed(2)}`}</strong>
+                    </div>
+                  )}
                   {extraTotal > 0 && (
                     <div className={styles.finalPriceRow}>
                       <span>Additional Options</span>
@@ -854,15 +907,34 @@ export default function BookingPage() {
                   <div className={styles.statItem}>
                     <span className={styles.statIcon}>📏</span>
                     <div>
-                      <label>Distance</label>
+                      <label>Outbound Distance</label>
                       <p>{routeInfo.distance_km} km</p>
                     </div>
                   </div>
                   <div className={styles.statItem}>
                     <span className={styles.statIcon}>⏱️</span>
                     <div>
-                      <label>Est. Time</label>
+                      <label>Outbound Est. Time</label>
                       <p>{routeInfo.time_minutes} min</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {returnRouteInfo && (
+                <div className={styles.summaryRouteStats} style={{marginTop: '-1rem', borderTop: 'none'}}>
+                  <div className={styles.statItem}>
+                    <span className={styles.statIcon}>📏</span>
+                    <div>
+                      <label>Return Distance</label>
+                      <p>{returnRouteInfo.distance_km} km</p>
+                    </div>
+                  </div>
+                  <div className={styles.statItem}>
+                    <span className={styles.statIcon}>⏱️</span>
+                    <div>
+                      <label>Return Est. Time</label>
+                      <p>{returnRouteInfo.time_minutes} min</p>
                     </div>
                   </div>
                 </div>
@@ -870,16 +942,22 @@ export default function BookingPage() {
 
               <div className={styles.summaryPricing}>
                 <div className={styles.priceRow}>
-                  <span>Trip Cost {tripType === 'return' && '(Return)'}</span>
-                  <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${baseTripPrice.toFixed(2)}` : '—')}</span>
+                  <span>Outbound Journey</span>
+                  <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${outboundPrice.toFixed(2)}` : '—')}</span>
                 </div>
+                {tripType === 'return' && (
+                  <div className={styles.priceRow}>
+                    <span>Return Journey</span>
+                    <span>{isCalculatingReturnPrice ? 'Calculating...' : (selectedVehicle ? `€${returnPrice.toFixed(2)}` : '—')}</span>
+                  </div>
+                )}
                 <div className={styles.priceRow}>
                   <span>Extra options</span>
                   <span>{extraTotal > 0 ? `€${extraTotal.toFixed(2)}` : '€0.00'}</span>
                 </div>
                 <div className={styles.totalRow}>
                   <span>Total</span>
-                  <strong>{isCalculatingPrice ? '...' : (selectedVehicle ? `€${total.toFixed(2)}` : '—')}</strong>
+                  <strong>{(isCalculatingPrice || isCalculatingReturnPrice) ? '...' : (selectedVehicle ? `€${total.toFixed(2)}` : '—')}</strong>
                 </div>
               </div>
 
