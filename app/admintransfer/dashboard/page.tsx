@@ -7,12 +7,14 @@ import {
   Filter, X, Download, RotateCcw, 
   Calendar as CalendarIcon, User, 
   Tag, ArrowUpDown, ChevronDown,
-  Search, Clock, LayoutDashboard
+  Search, Clock, LayoutDashboard, Pencil
 } from 'lucide-react';
 
 interface Booking {
   id: number;
   customerName: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   phone: string;
   pickupLocation: string;
@@ -21,14 +23,18 @@ interface Booking {
   bookingDate?: string;
   status: string;
   vehicleType: string;
+  passengers?: number;
   amount: number;
   driverName?: string;
   bookingCode?: string;
   notes?: string;
+  driverNote?: string;
   returndriverName?: string;
   returnDriverName?: string;
   returnDate?: string;
   returnTime?: string;
+  returnPickupLocation?: string;
+  returnDropoffLocation?: string;
 }
 
 export default function AdminDashboard() {
@@ -41,10 +47,13 @@ export default function AdminDashboard() {
 
   // Modal State
   const [showApproveModal, setShowApproveModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
+  const [editingBooking, setEditingBooking] = useState<Partial<Booking>>({});
   const [driverNameInput, setDriverNameInput] = useState('');
   const [returnDriverNameInput, setReturnDriverNameInput] = useState('');
   const [approveLoading, setApproveLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
@@ -183,8 +192,54 @@ export default function AdminDashboard() {
       console.error('Failed to approve:', err);
       alert(err instanceof Error ? err.message : 'Error approving booking. Please try again.');
     } finally {
-      setApproveLoading(true); // Keep loading state until modal closes
       setApproveLoading(false);
+    }
+  };
+
+  const openEditModal = (booking: Booking) => {
+    // Split customerName into firstName/lastName if they are missing
+    let fName = booking.firstName || '';
+    let lName = booking.lastName || '';
+    
+    if (!fName && booking.customerName) {
+      const parts = booking.customerName.trim().split(' ');
+      fName = parts[0];
+      lName = parts.slice(1).join(' ');
+    }
+
+    setEditingBooking({
+      ...booking,
+      firstName: fName,
+      lastName: lName,
+      returnDriverName: booking.returnDriverName || booking.returndriverName || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleUpdateBooking = async () => {
+    if (!editingBooking.id) return;
+    
+    setUpdateLoading(true);
+    try {
+      const res = await fetch(`/api/bookings/${editingBooking.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingBooking)
+      });
+      
+      if (!res.ok) {
+        throw new Error(`Failed to update booking: ${res.status}`);
+      }
+
+      setShowEditModal(false);
+      fetchBookings(); // Refresh
+    } catch (err) {
+      console.error('Update error:', err);
+      alert('Error updating booking.');
+    } finally {
+      setUpdateLoading(false);
     }
   };
   
@@ -528,18 +583,18 @@ export default function AdminDashboard() {
                         🚙 {b.vehicleType || 'Standard'}
                       </div>
                       <div className={styles.driverTags}>
-                        {b.driverName && (
-                          <div className={styles.driverTag} title="Outbound Driver">
-                            <span className={styles.driverIcon}>👤</span> {b.driverName}
-                          </div>
-                        )}
-                        {(b.returndriverName || b.returnDriverName) && (
+                        <div className={styles.driverTag} title="Outbound Driver">
+                          <span className={styles.driverIcon}>👤</span> 
+                          <span className={styles.legLabel}>Outbound:</span> 
+                          {b.driverName || <span className={styles.unassignedText}>Unassigned</span>}
+                        </div>
+                        
+                        {isReturn && (
                           <div className={`${styles.driverTag} ${styles.returnDriverTag}`} title="Return Driver">
-                            <span className={styles.driverIcon}>↩️</span> {b.returndriverName || b.returnDriverName}
+                            <span className={styles.driverIcon}>↩️</span> 
+                            <span className={styles.legLabel}>Return:</span> 
+                            {b.returndriverName || b.returnDriverName || <span className={styles.unassignedText}>Unassigned</span>}
                           </div>
-                        )}
-                        {!b.driverName && !(b.returndriverName || b.returnDriverName) && (
-                          <div className={styles.unassignedTag}>Unassigned</div>
                         )}
                       </div>
                     </div>
@@ -553,11 +608,20 @@ export default function AdminDashboard() {
                     </span>
                   </td>
                   <td>
-                    {!b.driverName && (b.status?.toUpperCase().includes('PENDING') || !b.status) && (
-                      <button className={styles.approveBtn} onClick={() => openApproveModal(b.id)}>
-                        Approve
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button 
+                        className={styles.editBtn} 
+                        onClick={() => openEditModal(b)}
+                        title="Edit Booking"
+                      >
+                        <Pencil size={16} />
                       </button>
-                    )}
+                      {!b.driverName && (b.status?.toUpperCase().includes('PENDING') || !b.status) && (
+                        <button className={styles.approveBtn} onClick={() => openApproveModal(b.id)}>
+                          Approve
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )
@@ -606,6 +670,135 @@ export default function AdminDashboard() {
           </div>
         </footer>
       </main>
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.editModalContent}>
+            <div className={styles.modalHeader}>
+              <h3>Edit Booking #{editingBooking.id}</h3>
+              <button className={styles.closeBtn} onClick={() => setShowEditModal(false)}><X size={20} /></button>
+            </div>
+            
+            <div className={styles.editFormScroll}>
+              <div className={styles.formGrid}>
+                <div className={styles.formSection}>
+                  <h4>Customer Information</h4>
+                  <div className={styles.formRow}>
+                    <div className={styles.formField}>
+                      <label>First Name</label>
+                      <input type="text" value={editingBooking.firstName || ''} onChange={e => setEditingBooking({...editingBooking, firstName: e.target.value})} />
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Last Name</label>
+                      <input type="text" value={editingBooking.lastName || ''} onChange={e => setEditingBooking({...editingBooking, lastName: e.target.value})} />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formField}>
+                      <label>Email</label>
+                      <input type="email" value={editingBooking.email || ''} onChange={e => setEditingBooking({...editingBooking, email: e.target.value})} />
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Phone</label>
+                      <input type="text" value={editingBooking.phone || ''} onChange={e => setEditingBooking({...editingBooking, phone: e.target.value})} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.formSection}>
+                  <h4>Trip Details</h4>
+                  <div className={styles.formField}>
+                    <label>Pickup Location</label>
+                    <input type="text" value={editingBooking.pickupLocation || ''} onChange={e => setEditingBooking({...editingBooking, pickupLocation: e.target.value})} />
+                  </div>
+                  <div className={styles.formField}>
+                    <label>Dropoff Location</label>
+                    <input type="text" value={editingBooking.dropoffLocation || ''} onChange={e => setEditingBooking({...editingBooking, dropoffLocation: e.target.value})} />
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formField}>
+                      <label>Pickup Date/Time</label>
+                      <input type="datetime-local" value={editingBooking.pickupTime?.substring(0, 16) || ''} onChange={e => setEditingBooking({...editingBooking, pickupTime: e.target.value})} />
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Passengers</label>
+                      <input type="number" value={editingBooking.passengers || 0} onChange={e => setEditingBooking({...editingBooking, passengers: parseInt(e.target.value)})} />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.formField}>
+                      <label>Vehicle Type</label>
+                      <select value={editingBooking.vehicleType || ''} onChange={e => setEditingBooking({...editingBooking, vehicleType: e.target.value})}>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Minivan">Minivan</option>
+                        <option value="Executive">Executive</option>
+                      </select>
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Amount (€)</label>
+                      <input type="number" step="0.01" value={editingBooking.amount || 0} onChange={e => setEditingBooking({...editingBooking, amount: parseFloat(e.target.value)})} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.formSection}>
+                  <h4>Driver & Notes</h4>
+                  <div className={styles.formRow}>
+                    <div className={styles.formField}>
+                      <label>Outbound Driver</label>
+                      <input type="text" value={editingBooking.driverName || ''} onChange={e => setEditingBooking({...editingBooking, driverName: e.target.value})} />
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Return Driver</label>
+                      <input type="text" value={editingBooking.returnDriverName || ''} onChange={e => setEditingBooking({...editingBooking, returnDriverName: e.target.value})} />
+                    </div>
+                  </div>
+                  <div className={styles.formField}>
+                    <label>Driver Note</label>
+                    <textarea value={editingBooking.driverNote || ''} onChange={e => setEditingBooking({...editingBooking, driverNote: e.target.value})} rows={2} />
+                  </div>
+                </div>
+
+                {(editingBooking.returnDate || editingBooking.notes?.includes('Return Date:')) && (
+                  <div className={styles.formSection}>
+                    <h4>Return Journey Details</h4>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Return Date</label>
+                        <input type="date" value={editingBooking.returnDate || ''} onChange={e => setEditingBooking({...editingBooking, returnDate: e.target.value})} />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Return Time</label>
+                        <input type="time" value={editingBooking.returnTime || ''} onChange={e => setEditingBooking({...editingBooking, returnTime: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Return Pickup Location</label>
+                      <input type="text" value={editingBooking.returnPickupLocation || ''} onChange={e => setEditingBooking({...editingBooking, returnPickupLocation: e.target.value})} />
+                    </div>
+                    <div className={styles.formField}>
+                      <label>Return Dropoff Location</label>
+                      <input type="text" value={editingBooking.returnDropoffLocation || ''} onChange={e => setEditingBooking({...editingBooking, returnDropoffLocation: e.target.value})} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className={styles.modalActions} style={{marginTop: '1.5rem'}}>
+              <button className={styles.cancelBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
+              <button 
+                className={styles.saveBtn} 
+                onClick={handleUpdateBooking}
+                disabled={updateLoading}
+              >
+                {updateLoading ? 'Saving...' : 'Update Booking'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Approval Modal */}
       {showApproveModal && (

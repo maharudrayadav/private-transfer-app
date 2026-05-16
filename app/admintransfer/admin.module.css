@@ -543,34 +543,41 @@
 }
 
 .driverTag {
-  background: #f1f5f9;
-  color: #475569;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
+  background: #f8fafc;
+  color: #1e293b;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   width: fit-content;
   border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.legLabel {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unassignedText {
+  color: #94a3b8;
+  font-style: italic;
+  font-weight: 400;
 }
 
 .returnDriverTag {
-  background: #eff6ff;
+  background: rgba(37, 99, 235, 0.05);
+  border-color: rgba(37, 99, 235, 0.1);
+}
+
+.returnDriverTag .legLabel {
   color: #2563eb;
-  border-color: #dbeafe;
-}
-
-.driverIcon {
-  font-size: 0.85rem;
-}
-
-.unassignedTag {
-  color: #94a3b8;
-  font-size: 0.7rem;
-  font-style: italic;
-  font-weight: 500;
 }
 
 .amountCell {
@@ -613,6 +620,25 @@
 .approveBtn:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 10px 25px rgba(179, 139, 77, 0.4);
+}
+
+.editBtn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 0.7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.editBtn:hover {
+  background: #e2e8f0;
+  color: var(--primary);
+  border-color: var(--primary-light);
 }
 
 .approveBtn:active {
@@ -880,6 +906,122 @@
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--secondary);
+}
+
+.editModalContent {
+  background: #fff;
+  padding: 0;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+.modalHeader {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.editFormScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formSection h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--primary);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formField label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.formField input, .formField select, .formField textarea {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #1e293b;
+  transition: all 0.2s ease;
+}
+
+.formField input:focus, .formField select:focus, .formField textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(179, 139, 77, 0.1);
+}
+
+@media (max-width: 640px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .editModalContent {
+    max-height: 100vh;
+    border-radius: 0;
+  }
 }
 
 .modalField input {
