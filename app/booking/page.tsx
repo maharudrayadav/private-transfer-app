@@ -73,8 +73,6 @@ export default function BookingPage() {
   const [routeData, setRouteData] = useState<any>(null);
   const [routeLoading, setRouteLoading] = useState(false);
   const [showRouteMap, setShowRouteMap] = useState(false);
-  const [returnCalculatedPrice, setReturnCalculatedPrice] = useState<number | null>(null);
-  const [isCalculatingReturnPrice, setIsCalculatingReturnPrice] = useState(false);
 
   const [form, setForm] = useState({
     firstName: '', lastName: '',
@@ -158,13 +156,23 @@ export default function BookingPage() {
     }
   }, [tripType, returnPickup, returnDropoff]);
 
-  // Calculate Outbound Price
+  // Calculate Combined Journey Price
   useEffect(() => {
     if (selectedVehicle?.price && routeInfo?.distance_km) {
-      setIsCalculatingPrice(true);
       const km = routeInfo.distance_km;
       const rate = selectedVehicle.price;
-      fetch(`https://privateproject-r0ry.onrender.com/api/admin/caldata?km=${km}&rate=${rate}`, {
+      let returnKm = 0;
+
+      if (tripType === 'return') {
+        if (!returnRouteInfo?.distance_km) {
+          setCalculatedPrice(null);
+          return;
+        }
+        returnKm = returnRouteInfo.distance_km;
+      }
+
+      setIsCalculatingPrice(true);
+      fetch(`https://privateproject-r0ry.onrender.com/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
@@ -185,36 +193,7 @@ export default function BookingPage() {
     } else {
       setCalculatedPrice(null);
     }
-  }, [selectedVehicle?.price, routeInfo?.distance_km]);
-
-  // Calculate Return Price
-  useEffect(() => {
-    if (tripType === 'return' && selectedVehicle?.price && returnRouteInfo?.distance_km) {
-      setIsCalculatingReturnPrice(true);
-      const km = returnRouteInfo.distance_km;
-      const rate = selectedVehicle.price;
-      fetch(`https://privateproject-r0ry.onrender.com/api/admin/caldata?km=${km}&rate=${rate}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(res => res.text())
-      .then(text => {
-        const parsed = parseFloat(text);
-        if (!isNaN(parsed)) {
-          setReturnCalculatedPrice(parsed);
-        } else {
-          setReturnCalculatedPrice(null);
-        }
-      })
-      .catch(err => {
-        console.error('Error calculating return price:', err);
-        setReturnCalculatedPrice(null);
-      })
-      .finally(() => setIsCalculatingReturnPrice(false));
-    } else {
-      setReturnCalculatedPrice(null);
-    }
-  }, [tripType, selectedVehicle?.price, returnRouteInfo?.distance_km]);
+  }, [selectedVehicle?.price, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
@@ -306,6 +285,12 @@ export default function BookingPage() {
         vehicleType: selectedVehicle.heading,
         amount: total,
         driverNote: form.notes,
+        ...(tripType === 'return' ? {
+          returnDate: form.returnDate,
+          returnTime: form.returnTime,
+          returnPickupLocation: returnPickup || search.dropoff,
+          returnDropoffLocation: returnDropoff || search.pickup
+        } : {}),
         notes: `
           Trip Type: ${tripType.toUpperCase()}
           Luggage: ${form.luggage}
@@ -376,9 +361,8 @@ export default function BookingPage() {
   };
 
   const extraTotal = (extras.childSeat ? 10 : 0) + (extras.boosterSeat ? 10 : 0);
-  const outboundPrice = calculatedPrice !== null ? calculatedPrice : ((selectedVehicle?.price || 0) * 1);
-  const returnPrice = tripType === 'return' ? (returnCalculatedPrice !== null ? returnCalculatedPrice : (selectedVehicle?.price || 0)) : 0;
-  const total = outboundPrice + returnPrice + extraTotal;
+  const journeyFare = calculatedPrice !== null ? calculatedPrice : ((selectedVehicle?.price || 0) * (tripType === 'return' ? 2 : 1));
+  const total = journeyFare + extraTotal;
 
   // ... (previous logic)
 
@@ -810,15 +794,9 @@ export default function BookingPage() {
 
                 <div className={styles.finalPriceBox}>
                   <div className={styles.finalPriceRow}>
-                    <span>Outbound Journey</span>
-                    <strong>{isCalculatingPrice ? '...' : `€${outboundPrice.toFixed(2)}`}</strong>
+                    <span>{tripType === 'return' ? 'Journey Fare (Outbound & Return)' : 'Outbound Journey'}</span>
+                    <strong>{isCalculatingPrice ? '...' : `€${journeyFare.toFixed(2)}`}</strong>
                   </div>
-                  {tripType === 'return' && (
-                    <div className={styles.finalPriceRow}>
-                      <span>Return Journey</span>
-                      <strong>{isCalculatingReturnPrice ? '...' : `€${returnPrice.toFixed(2)}`}</strong>
-                    </div>
-                  )}
                   {extraTotal > 0 && (
                     <div className={styles.finalPriceRow}>
                       <span>Additional Options</span>
@@ -942,22 +920,16 @@ export default function BookingPage() {
 
               <div className={styles.summaryPricing}>
                 <div className={styles.priceRow}>
-                  <span>Outbound Journey</span>
-                  <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${outboundPrice.toFixed(2)}` : '—')}</span>
+                  <span>{tripType === 'return' ? 'Journey Fare' : 'Outbound Journey'}</span>
+                  <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${journeyFare.toFixed(2)}` : '—')}</span>
                 </div>
-                {tripType === 'return' && (
-                  <div className={styles.priceRow}>
-                    <span>Return Journey</span>
-                    <span>{isCalculatingReturnPrice ? 'Calculating...' : (selectedVehicle ? `€${returnPrice.toFixed(2)}` : '—')}</span>
-                  </div>
-                )}
                 <div className={styles.priceRow}>
                   <span>Extra options</span>
                   <span>{extraTotal > 0 ? `€${extraTotal.toFixed(2)}` : '€0.00'}</span>
                 </div>
                 <div className={styles.totalRow}>
                   <span>Total</span>
-                  <strong>{(isCalculatingPrice || isCalculatingReturnPrice) ? '...' : (selectedVehicle ? `€${total.toFixed(2)}` : '—')}</strong>
+                  <strong>{isCalculatingPrice ? '...' : (selectedVehicle ? `€${total.toFixed(2)}` : '—')}</strong>
                 </div>
               </div>
 

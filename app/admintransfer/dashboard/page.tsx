@@ -19,6 +19,9 @@ interface Booking {
   driverName?: string;
   bookingCode?: string;
   notes?: string;
+  returndriverName?: string;
+  returnDate?: string;
+  returnTime?: string;
 }
 
 export default function AdminDashboard() {
@@ -33,6 +36,7 @@ export default function AdminDashboard() {
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
   const [driverNameInput, setDriverNameInput] = useState('');
+  const [returnDriverNameInput, setReturnDriverNameInput] = useState('');
   const [approveLoading, setApproveLoading] = useState(false);
 
   // Filters
@@ -124,14 +128,30 @@ export default function AdminDashboard() {
   const openApproveModal = (id: number) => {
     setSelectedBookingId(id);
     setDriverNameInput('');
+    setReturnDriverNameInput('');
     setShowApproveModal(true);
   };
 
   const handleConfirmApproval = async () => {
     if (!selectedBookingId || !driverNameInput) return;
+    
+    const booking = bookings.find(b => b.id === selectedBookingId);
+    const isReturn = !!booking?.returnDate;
+    
+    // If it's a return trip, we also need a return driver
+    if (isReturn && !returnDriverNameInput) {
+      alert('Please assign a driver for the return trip.');
+      return;
+    }
+
     setApproveLoading(true);
     try {
-      console.log('Confirming booking:', { bookingId: selectedBookingId, driverName: driverNameInput });
+      console.log('Confirming booking:', { 
+        bookingId: selectedBookingId, 
+        driverName: driverNameInput,
+        returnDriverName: isReturn ? returnDriverNameInput : undefined
+      });
+
       const res = await fetch(`/api/admin/confirm-booking`, {
         method: 'POST',
         headers: {
@@ -139,7 +159,8 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify({
           bookingId: selectedBookingId,
-          driverName: driverNameInput
+          driverName: driverNameInput,
+          ...(isReturn ? { returnDriverName: returnDriverNameInput } : {})
         })
       });
       
@@ -167,7 +188,7 @@ export default function AdminDashboard() {
     }
     
     // Define headers
-    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver'];
+    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Return Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver', 'Return Driver'];
     
     // Create CSV rows
     const rows = bookings.map(b => [
@@ -178,10 +199,12 @@ export default function AdminDashboard() {
       `"${(b.pickupLocation || '').replace(/"/g, '""')}"`,
       `"${(b.dropoffLocation || '').replace(/"/g, '""')}"`,
       `"${b.pickupTime || b.bookingDate || ''}"`,
+      `"${b.returnDate ? b.returnDate + ' ' + (b.returnTime || '') : ''}"`,
       `"${b.status || ''}"`,
       `"${b.vehicleType || ''}"`,
       b.amount || 0,
-      `"${b.driverName || ''}"`
+      `"${b.driverName || ''}"`,
+      `"${b.returndriverName || ''}"`
     ]);
     
     const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -396,11 +419,11 @@ export default function AdminDashboard() {
                           : (b.bookingDate ? new Date(b.bookingDate).toLocaleTimeString('en-IE', { timeZone: 'Europe/Dublin', hour: '2-digit', minute:'2-digit' }) : '—')}
                       </div>
 
-                      {b.notes?.includes('Return Date:') && (
+                      {b.returnDate && (
                         <div className={styles.returnInfo}>
                           <span className={styles.returnBadge}>↩ Return</span>
                           <span className={styles.returnTime}>
-                            {b.notes.match(/Return Date:\s*([\d-]+)/)?.[1]} {b.notes.match(/Return Time:\s*([\d:]+)/)?.[1]}
+                            {b.returnDate} {b.returnTime}
                           </span>
                         </div>
                       )}
@@ -412,6 +435,7 @@ export default function AdminDashboard() {
                         🚙 {b.vehicleType || 'Standard'}
                       </div>
                       {b.driverName && <div className={styles.driverTag}>👤 {b.driverName}</div>}
+                      {b.returndriverName && <div className={styles.driverTag} style={{marginTop: '4px', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '4px'}}>👤 {b.returndriverName} (Return)</div>}
                     </div>
                   </td>
                   <td className={styles.amountCell}>
@@ -481,10 +505,13 @@ export default function AdminDashboard() {
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <h3>Confirm Booking</h3>
-            <p>Please assign a driver to confirm this booking (ID: {selectedBookingId})</p>
+            <p>
+              Please assign {bookings.find(b => b.id === selectedBookingId)?.returnDate ? 'drivers' : 'a driver'} 
+              to confirm this booking (ID: {selectedBookingId})
+            </p>
             
             <div className={styles.modalField}>
-              <label>Driver Name</label>
+              <label>{bookings.find(b => b.id === selectedBookingId)?.returnDate ? 'Outbound Driver Name' : 'Driver Name'}</label>
               <input 
                 type="text" 
                 value={driverNameInput} 
@@ -494,12 +521,24 @@ export default function AdminDashboard() {
               />
             </div>
 
+            {bookings.find(b => b.id === selectedBookingId)?.returnDate && (
+              <div className={styles.modalField}>
+                <label>Return Driver Name</label>
+                <input 
+                  type="text" 
+                  value={returnDriverNameInput} 
+                  onChange={(e) => setReturnDriverNameInput(e.target.value)}
+                  placeholder="e.g. Sarah Johnson"
+                />
+              </div>
+            )}
+
             <div className={styles.modalActions}>
               <button className={styles.cancelBtn} onClick={() => setShowApproveModal(false)}>Cancel</button>
               <button 
                 className={styles.saveBtn} 
                 onClick={handleConfirmApproval}
-                disabled={approveLoading || !driverNameInput}
+                disabled={approveLoading || !driverNameInput || (!!bookings.find(b => b.id === selectedBookingId)?.returnDate && !returnDriverNameInput)}
               >
                 {approveLoading ? 'Saving...' : 'Save & Confirm'}
               </button>
