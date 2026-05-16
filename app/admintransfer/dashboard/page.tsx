@@ -9,7 +9,7 @@ import {
   Tag, ArrowUpDown, ChevronDown,
   Search, Clock, LayoutDashboard, Pencil,
   MapPin, CreditCard, ArrowRight, CheckCircle2,
-  FileText, Phone
+  FileText, Phone, Car, Bus
 } from 'lucide-react';
 
 interface Booking {
@@ -653,20 +653,25 @@ export default function AdminDashboard() {
                   </td>
                   <td data-label="Vehicle/Drivers">
                     <div className={styles.vehicleCell}>
-                      <div className={styles.vehicleName}>
-                        🚙 {b.vehicleType || 'Standard'}
+                      <div className={styles.vehicleInfo}>
+                        {b.vehicleType?.toLowerCase().includes('minivan') ? (
+                          <Bus size={16} className={styles.vehicleIcon} />
+                        ) : (
+                          <Car size={16} className={styles.vehicleIcon} />
+                        )}
+                        <span className={styles.vehicleName}>{b.vehicleType || 'Standard'}</span>
                       </div>
                       <div className={styles.driverTags}>
                         <div className={styles.driverTag} title="Outbound Driver">
-                          <span className={styles.driverIcon}>👤</span> 
-                          <span className={styles.legLabel}>Outbound:</span> 
+                          <User size={12} className={styles.driverIconSmall} />
+                          <span className={styles.legLabel}>OUT:</span> 
                           {b.driverName || <span className={styles.unassignedText}>Unassigned</span>}
                         </div>
                         
                         {isReturn && (
                           <div className={`${styles.driverTag} ${styles.returnDriverTag}`} title="Return Driver">
-                            <span className={styles.driverIcon}>↩️</span> 
-                            <span className={styles.legLabel}>Return:</span> 
+                            <RotateCcw size={12} className={styles.driverIconSmall} />
+                            <span className={styles.legLabel}>RET:</span> 
                             {b.returndriverName || b.returnDriverName || <span className={styles.unassignedText}>Unassigned</span>}
                           </div>
                         )}
