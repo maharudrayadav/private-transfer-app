@@ -81,13 +81,15 @@ export default function AdminDashboard() {
     
     // 1. Direct field checks (ordered by commonality)
     const directFields = [
+      b.returndriverName,
       b.returnDriverName, 
-      b.returndriverName, 
       b.return_driver_name, 
+      b.returndrivername,
       b.returnDriver, 
       b.returndriver, 
       b.driverNameReturn,
-      b.driver_name_return
+      b.driver_name_return,
+      b.return_dr
     ];
     for (const val of directFields) {
       if (val && typeof val === 'string' && val.trim().length > 0) return val.trim();
@@ -256,7 +258,8 @@ export default function AdminDashboard() {
         body: JSON.stringify({
           bookingId: selectedBookingId,
           driverName: driverNameInput,
-          returnDriverName: isReturn ? returnDriverNameInput : null
+          returnDriverName: isReturn ? returnDriverNameInput : null,
+          returndriverName: isReturn ? returnDriverNameInput : null
         })
       });
       
@@ -344,7 +347,8 @@ export default function AdminDashboard() {
         returnDropoffLocation: editingBooking.returnDropoffLocation,
         status: editingBooking.status,
         driverName: editingBooking.driverName,
-        returnDriverName: editingBooking.returnDriverName
+        returnDriverName: editingBooking.returnDriverName,
+        returndriverName: editingBooking.returnDriverName
       };
 
       console.log('Sending update payload:', payload);
