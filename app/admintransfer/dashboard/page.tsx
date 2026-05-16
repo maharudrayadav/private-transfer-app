@@ -274,13 +274,10 @@ export default function AdminDashboard() {
         vehicleType: editingBooking.vehicleType,
         amount: Number(editingBooking.amount) || 0,
         driverNote: editingBooking.driverNote,
-        driverName: editingBooking.driverName,
-        returnDriverName: editingBooking.returnDriverName,
         returnDate: editingBooking.returnDate,
         returnTime: editingBooking.returnTime,
         returnPickupLocation: editingBooking.returnPickupLocation,
-        returnDropoffLocation: editingBooking.returnDropoffLocation,
-        status: editingBooking.status
+        returnDropoffLocation: editingBooking.returnDropoffLocation
       };
 
       console.log('Sending update payload:', payload);
