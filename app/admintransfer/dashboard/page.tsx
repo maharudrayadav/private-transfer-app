@@ -33,6 +33,10 @@ interface Booking {
   driverNote?: string;
   returndriverName?: string;
   returnDriverName?: string;
+  return_driver_name?: string;
+  returnDriver?: string;
+  returndriver?: string;
+  driverNameReturn?: string;
   returnDate?: string;
   returnTime?: string;
   returnPickupLocation?: string;
@@ -178,6 +182,11 @@ export default function AdminDashboard() {
       booking?.returnTime || 
       booking?.returnPickupLocation || 
       booking?.returnDropoffLocation || 
+      booking?.returnDriverName ||
+      booking?.returndriverName ||
+      booking?.returnDriver ||
+      booking?.returndriver ||
+      booking?.driverNameReturn ||
       booking?.notes?.toLowerCase().includes('return date') || 
       booking?.notes?.toLowerCase().includes('return time') ||
       booking?.notes?.toLowerCase().includes('return journey')
@@ -251,7 +260,7 @@ export default function AdminDashboard() {
         firstName: fName,
         lastName: lName,
         pickupTime: formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate),
-        returnDriverName: latestData.returnDriverName || latestData.returndriverName || '',
+        returnDriverName: latestData.returnDriverName || latestData.returndriverName || latestData.return_driver_name || latestData.returnDriver || latestData.returndriver || latestData.driverNameReturn || '',
         passengers: latestData.passengers || 0,
         amount: latestData.amount || 0
       });
@@ -348,7 +357,7 @@ export default function AdminDashboard() {
       `"${b.vehicleType || ''}"`,
       b.amount || 0,
       `"${b.driverName || ''}"`,
-      `"${b.returnDriverName || b.returndriverName || ''}"`
+      `"${b.returnDriverName || b.returndriverName || b.return_driver_name || b.returnDriver || b.returndriver || b.driverNameReturn || ''}"`
     ]);
     
     const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -599,6 +608,11 @@ export default function AdminDashboard() {
                   b.returnTime || 
                   b.returnPickupLocation || 
                   b.returnDropoffLocation || 
+                  b.returnDriverName ||
+                  b.returndriverName ||
+                  b.returnDriver ||
+                  b.returndriver ||
+                  b.driverNameReturn ||
                   b.notes?.toLowerCase().includes('return date') || 
                   b.notes?.toLowerCase().includes('return time') ||
                   b.notes?.toLowerCase().includes('return journey')
@@ -688,7 +702,7 @@ export default function AdminDashboard() {
                           <div className={`${styles.driverTag} ${styles.returnDriverTag}`} title="Return Driver">
                             <RotateCcw size={12} className={styles.driverIconSmall} />
                             <span className={styles.legLabel}>RET:</span> 
-                            {b.returndriverName || b.returnDriverName || <span className={styles.unassignedText}>Unassigned</span>}
+                            {b.returnDriverName || b.returndriverName || b.return_driver_name || b.returnDriver || b.returndriver || b.driverNameReturn || <span className={styles.unassignedText}>Unassigned</span>}
                           </div>
                         )}
                       </div>
