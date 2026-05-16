@@ -1022,6 +1022,23 @@
   padding: 2rem;
 }
 
+.editFormScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.editFormScroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.editFormScroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.editFormScroll::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
 .formGrid {
   display: flex;
   flex-direction: column;
@@ -1031,29 +1048,53 @@
 .formBox {
   background: #fff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 1.5rem;
+  border-radius: 20px;
+  padding: 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
 }
 
-.formBox h4 {
-  margin: 0;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.formBox:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border-color: var(--primary-light);
+}
+
+.boxHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 0.25rem;
   color: var(--primary);
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f8fafc;
+}
+
+.boxHeader h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 800;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .readOnlyInput {
-  background: #f8fafc;
+  background: #f1f5f9;
   color: #64748b;
   cursor: not-allowed;
-  border-style: dashed !important;
+  border: 1.5px dashed #cbd5e1 !important;
+  font-style: italic;
+}
+
+.note {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #94a3b8;
+  margin-left: 0.5rem;
 }
 
 .modalLoader {
@@ -1077,6 +1118,31 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+.successState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem;
+  text-align: center;
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.successState h4 {
+  font-size: 1.5rem;
+  color: var(--secondary);
+  margin: 1.5rem 0 0.5rem;
+}
+
+.successState p {
+  color: var(--text-muted);
 }
 
 .formRow {

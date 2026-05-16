@@ -7,7 +7,9 @@ import {
   Filter, X, Download, RotateCcw, 
   Calendar as CalendarIcon, User, 
   Tag, ArrowUpDown, ChevronDown,
-  Search, Clock, LayoutDashboard, Pencil
+  Search, Clock, LayoutDashboard, Pencil,
+  MapPin, CreditCard, ArrowRight, CheckCircle2,
+  FileText, Phone
 } from 'lucide-react';
 
 interface Booking {
@@ -55,6 +57,7 @@ export default function AdminDashboard() {
   const [approveLoading, setApproveLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [fetchingBooking, setFetchingBooking] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   // Filters
   const [statusFilter, setStatusFilter] = useState('');
@@ -216,9 +219,11 @@ export default function AdminDashboard() {
 
   const openEditModal = async (booking: Booking) => {
     setShowEditModal(true);
+    setUpdateSuccess(false);
     setFetchingBooking(true);
     try {
-      const res = await fetch(`/api/bookings/${booking.id}`);
+      // Direct call to backend as specified
+      const res = await fetch(`https://privateproject-r0ry.onrender.com/api/bookings/${booking.id}`);
       if (!res.ok) throw new Error('Failed to fetch latest booking data');
       const latestData = await res.json();
       console.log('Fetched latest data for edit:', latestData);
@@ -282,6 +287,7 @@ export default function AdminDashboard() {
 
       console.log('Sending update payload:', payload);
 
+      // Explicitly call the proxy API as requested
       const res = await fetch(`/api/bookings/${editingBooking.id}`, {
         method: 'PUT',
         headers: {
@@ -294,7 +300,11 @@ export default function AdminDashboard() {
         throw new Error(`Failed to update booking: ${res.status}`);
       }
 
-      setShowEditModal(false);
+      setUpdateSuccess(true);
+      setTimeout(() => {
+        setShowEditModal(false);
+        setUpdateSuccess(false);
+      }, 2000);
       fetchBookings(); // Refresh
     } catch (err) {
       console.error('Update error:', err);
@@ -745,12 +755,21 @@ export default function AdminDashboard() {
               {fetchingBooking ? (
                 <div className={styles.modalLoader}>
                   <div className={styles.spinner}></div>
-                  <p>Fetching latest booking details...</p>
+                  <p>Fetching latest booking details from server...</p>
+                </div>
+              ) : updateSuccess ? (
+                <div className={styles.successState}>
+                  <CheckCircle2 size={64} color="#10b981" />
+                  <h4>Booking Updated Successfully!</h4>
+                  <p>Redirecting to dashboard...</p>
                 </div>
               ) : (
                 <div className={styles.formGrid}>
                   <div className={styles.formBox}>
-                    <h4>Customer Information</h4>
+                    <div className={styles.boxHeader}>
+                      <User size={18} />
+                      <h4>Customer Information</h4>
+                    </div>
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>First Name</label>
@@ -774,20 +793,18 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className={styles.formBox}>
-                    <h4>Trip Details</h4>
+                    <div className={styles.boxHeader}>
+                      <MapPin size={18} />
+                      <h4>Trip Details</h4>
+                    </div>
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>Booking Code</label>
                         <input type="text" value={editingBooking.bookingCode || ''} readOnly className={styles.readOnlyInput} />
                       </div>
                       <div className={styles.formField}>
-                        <label>Status</label>
-                        <select value={editingBooking.status || ''} onChange={e => setEditingBooking({...editingBooking, status: e.target.value})}>
-                          <option value="CONFIRMED">CONFIRMED</option>
-                          <option value="PENDING_ADMIN">PENDING_ADMIN</option>
-                          <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
-                          <option value="CANCELLED">CANCELLED</option>
-                        </select>
+                        <label>Status <span className={styles.note}>(Read Only here)</span></label>
+                        <input type="text" value={editingBooking.status || ''} readOnly className={styles.readOnlyInput} />
                       </div>
                     </div>
                     <div className={styles.formField}>
@@ -825,15 +842,18 @@ export default function AdminDashboard() {
                   </div>
 
                   <div className={styles.formBox}>
-                    <h4>Driver & Notes</h4>
+                    <div className={styles.boxHeader}>
+                      <FileText size={18} />
+                      <h4>Driver & Notes</h4>
+                    </div>
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>Outbound Driver</label>
-                        <input type="text" value={editingBooking.driverName || ''} onChange={e => setEditingBooking({...editingBooking, driverName: e.target.value})} />
+                        <input type="text" value={editingBooking.driverName || ''} readOnly className={styles.readOnlyInput} placeholder="Assign via Approve button" />
                       </div>
                       <div className={styles.formField}>
                         <label>Return Driver</label>
-                        <input type="text" value={editingBooking.returnDriverName || ''} onChange={e => setEditingBooking({...editingBooking, returnDriverName: e.target.value})} />
+                        <input type="text" value={editingBooking.returnDriverName || ''} readOnly className={styles.readOnlyInput} placeholder="Assign via Approve button" />
                       </div>
                     </div>
                     <div className={styles.formField}>
@@ -844,7 +864,10 @@ export default function AdminDashboard() {
 
                   {(editingBooking.returnDate || editingBooking.notes?.includes('Return Date:')) && (
                     <div className={styles.formBox}>
-                      <h4 style={{color: '#2563eb'}}>Return Journey Details</h4>
+                      <div className={styles.boxHeader} style={{color: '#2563eb'}}>
+                        <RotateCcw size={18} />
+                        <h4>Return Journey Details</h4>
+                      </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
                           <label>Return Date</label>
