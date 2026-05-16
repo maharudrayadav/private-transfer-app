@@ -589,7 +589,7 @@ export default function AdminDashboard() {
                 const isReturn = !!(b.returnDate || b.notes?.includes('Return Date:'));
                 return (
                   <tr key={b.id} className={isReturn ? styles.returnTripRow : ''}>
-                  <td>
+                  <td data-label="Customer">
                     <div className={styles.customerCell}>
                       <span className={styles.customerAvatar}>
                         {(b.customerName || 'U').charAt(0).toUpperCase()}
@@ -616,7 +616,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td data-label="Route">
                     <div className={styles.routeCell}>
                       <div className={styles.routeRow}>
                         <span className={styles.dotStart}></span>
@@ -628,7 +628,7 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td data-label="Date/Time">
                     <div className={styles.dateCell}>
                       <div className={styles.mainDate}>
                         {b.pickupTime 
@@ -651,7 +651,7 @@ export default function AdminDashboard() {
                       )}
                     </div>
                   </td>
-                  <td>
+                  <td data-label="Vehicle/Drivers">
                     <div className={styles.vehicleCell}>
                       <div className={styles.vehicleName}>
                         🚙 {b.vehicleType || 'Standard'}
@@ -673,15 +673,15 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   </td>
-                  <td className={styles.amountCell}>
+                  <td data-label="Amount" className={styles.amountCell}>
                     €{b.amount?.toFixed(2)}
                   </td>
-                  <td>
+                  <td data-label="Status">
                     <span className={`${styles.statusBadge} ${styles['status' + (b.status?.toUpperCase() === 'CONFIRMED' || b.driverName ? 'APPROVED' : b.status?.toUpperCase().replace(/\s+/g, ''))] || ''}`}>
                       {b.status?.toUpperCase() === 'CONFIRMED' || b.driverName ? 'APPROVED' : b.status?.replace(/_/g, ' ') || 'PENDING'}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Actions">
                     <div className={styles.actionsContainer}>
                       <button 
                         className={styles.editBtn} 
