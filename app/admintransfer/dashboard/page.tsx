@@ -815,11 +815,11 @@ export default function AdminDashboard() {
                     </div>
                     <div className={styles.formField}>
                       <label>Pickup Location</label>
-                      <input type="text" value={editingBooking.pickupLocation || ''} onChange={e => setEditingBooking({...editingBooking, pickupLocation: e.target.value})} />
+                      <input type="text" value={editingBooking.pickupLocation || ''} readOnly className={styles.readOnlyInput} />
                     </div>
                     <div className={styles.formField}>
                       <label>Dropoff Location</label>
-                      <input type="text" value={editingBooking.dropoffLocation || ''} onChange={e => setEditingBooking({...editingBooking, dropoffLocation: e.target.value})} />
+                      <input type="text" value={editingBooking.dropoffLocation || ''} readOnly className={styles.readOnlyInput} />
                     </div>
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
@@ -886,11 +886,11 @@ export default function AdminDashboard() {
                       </div>
                       <div className={styles.formField}>
                         <label>Return Pickup Location</label>
-                        <input type="text" value={editingBooking.returnPickupLocation || ''} onChange={e => setEditingBooking({...editingBooking, returnPickupLocation: e.target.value})} />
+                        <input type="text" value={editingBooking.returnPickupLocation || ''} readOnly className={styles.readOnlyInput} />
                       </div>
                       <div className={styles.formField}>
                         <label>Return Dropoff Location</label>
-                        <input type="text" value={editingBooking.returnDropoffLocation || ''} onChange={e => setEditingBooking({...editingBooking, returnDropoffLocation: e.target.value})} />
+                        <input type="text" value={editingBooking.returnDropoffLocation || ''} readOnly className={styles.readOnlyInput} />
                       </div>
                     </div>
                   )}
