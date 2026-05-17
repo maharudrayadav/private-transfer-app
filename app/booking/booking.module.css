@@ -1178,11 +1178,7 @@
   .searchBar { order: 2; }
   .routeMapSection { order: 3; }
   .rightCol { 
-    order: 4; 
-    margin-top: 0; 
-    position: static; 
-    width: 100%;
-    z-index: 1;
+    display: none;
   }
   .leftCol { order: 5; width: 100%; } /* Vehicles/Form last */
 
@@ -1344,6 +1340,9 @@
   }
   .priceNote { margin-bottom: 0; }
   .formRow { grid-template-columns: 1fr; }
+  .modifyGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .successFullWidth {
