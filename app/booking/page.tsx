@@ -174,7 +174,7 @@ export default function BookingPage() {
       const pricePromises = fleet.map(v => {
         if (!v.price) return Promise.resolve({ id: v.id, price: null });
         
-        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}&passger=${form.passengers}`, {
+        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}&passgener=${form.passengers}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         })
