@@ -555,53 +555,71 @@ export default function BookingPage() {
           </div>
 
           <div className={styles.vehicleList}>
-            {fleet.map(v => {
-              const isSelected = selectedVehicle?.id === v.id;
-              return (
-                <div key={v.id} className={`${styles.vehicleCard} ${isSelected ? styles.vehicleCardActive : ''}`}>
-                  <div className={styles.vehicleImg}>
-                    <Image src={v.imageUrl} alt={v.heading} fill sizes="300px" className={styles.vImg} />
-                  </div>
-                  <div className={styles.vehicleDetails}>
-                    <h3>{v.heading}</h3>
-                    <p className={styles.vDesc}>Professional chauffeur service with all-inclusive pricing for your comfort and convenience.</p>
-                    <div className={styles.vSpecs}>
-                      <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Users size={14} /> Passengers {v.passengers ?? '—'}</span>
-                      <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Luggage size={14} /> Luggage {v.bags ?? '—'}</span>
+            {fleet.length > 0 ? (
+              fleet.map(v => {
+                const isSelected = selectedVehicle?.id === v.id;
+                return (
+                  <div key={v.id} className={`${styles.vehicleCard} ${isSelected ? styles.vehicleCardActive : ''}`}>
+                    <div className={styles.vehicleImg}>
+                      <Image src={v.imageUrl} alt={v.heading} fill sizes="300px" className={styles.vImg} />
                     </div>
-                    <div className={styles.vFeatures}>
-                      <span>✓ Welcome service</span>
-                      <span>✓ Flexible cancellation</span>
-                      <span>✓ Inclusive waiting time</span>
-                      <span>✓ Safe &amp; secure travel</span>
-                    </div>
-                  </div>
-                  <div className={styles.vehiclePricing}>
-                    {fleetPrices[v.id] ? (
-                      <>
-                        <div className={styles.price}>€{fleetPrices[v.id].toFixed(2)}</div>
-                        <div className={styles.priceNote}>All-inclusive price</div>
-                      </>
-                    ) : (
-                      <div className={styles.priceOnRequest}>
-                        {isCalculatingPrice ? 'Calculating...' : (v.price ? `€${v.price.toFixed(2)}/km` : 'Price on request')}
+                    <div className={styles.vehicleDetails}>
+                      <h3>{v.heading}</h3>
+                      <p className={styles.vDesc}>Professional chauffeur service with all-inclusive pricing for your comfort and convenience.</p>
+                      <div className={styles.vSpecs}>
+                        <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Users size={14} /> Passengers {v.passengers ?? '—'}</span>
+                        <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px'}}><Luggage size={14} /> Luggage {v.bags ?? '—'}</span>
                       </div>
-                    )}
-                    <button
-                      className={`${styles.selectBtn} ${isSelected ? styles.selectedBtn : ''}`}
-                      onClick={() => handleSelect(v)}
-                    >
-                      {isSelected ? 'Selected ✓' : 'Select ↗'}
-                    </button>
+                      <div className={styles.vFeatures}>
+                        <span>✓ Welcome service</span>
+                        <span>✓ Flexible cancellation</span>
+                        <span>✓ Inclusive waiting time</span>
+                        <span>✓ Safe &amp; secure travel</span>
+                      </div>
+                    </div>
+                    <div className={styles.vehiclePricing}>
+                      {fleetPrices[v.id] ? (
+                        <>
+                          <div className={styles.price}>€{fleetPrices[v.id].toFixed(2)}</div>
+                          <div className={styles.priceNote}>All-inclusive price</div>
+                        </>
+                      ) : (
+                        <div className={styles.priceOnRequest}>
+                          {isCalculatingPrice ? 'Calculating...' : (v.price ? `€${v.price.toFixed(2)}/km` : 'Price on request')}
+                        </div>
+                      )}
+                      <button
+                        className={`${styles.selectBtn} ${isSelected ? styles.selectedBtn : ''}`}
+                        onClick={() => handleSelect(v)}
+                      >
+                        {isSelected ? 'Selected ✓' : 'Select ↗'}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-
-            {fleet.length === 0 && (
-              <div className={styles.noFleet}>
-                <p>Fleet data is loading. Please ensure the backend is running.</p>
-              </div>
+                );
+              })
+            ) : (
+              // Premium Shimmer skeleton loaders matching the exact visual card layout
+              <>
+                {[1, 2, 3].map(i => (
+                  <div key={i} className={`${styles.vehicleCard} ${styles.shimmerCard}`}>
+                    <div className={`${styles.vehicleImg} ${styles.shimmerImg}`}></div>
+                    <div className={styles.vehicleDetails}>
+                      <div className={styles.shimmerLine} style={{ width: '50%', height: '22px', marginBottom: '14px' }}></div>
+                      <div className={styles.shimmerLine} style={{ width: '85%', height: '14px', marginBottom: '8px' }}></div>
+                      <div className={styles.shimmerLine} style={{ width: '40%', height: '14px', marginBottom: '20px' }}></div>
+                      <div style={{ display: 'flex', gap: '12px' }}>
+                        <div className={styles.shimmerLine} style={{ width: '90px', height: '24px', borderRadius: '12px' }}></div>
+                        <div className={styles.shimmerLine} style={{ width: '90px', height: '24px', borderRadius: '12px' }}></div>
+                      </div>
+                    </div>
+                    <div className={styles.vehiclePricing}>
+                      <div className={styles.shimmerLine} style={{ width: '80px', height: '28px', marginBottom: '12px', alignSelf: 'flex-end' }}></div>
+                      <div className={styles.shimmerLine} style={{ width: '110px', height: '42px', borderRadius: '8px', alignSelf: 'flex-end' }}></div>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
           </div>
 
