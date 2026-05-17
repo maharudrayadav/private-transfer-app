@@ -174,7 +174,7 @@ export default function BookingPage() {
       const pricePromises = fleet.map(v => {
         if (!v.price) return Promise.resolve({ id: v.id, price: null });
         
-        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}`, {
+        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}&passger=${form.passengers}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         })
@@ -199,7 +199,7 @@ export default function BookingPage() {
     } else {
       setFleetPrices({});
     }
-  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km]);
+  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km, form.passengers]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
