@@ -100,12 +100,30 @@ export default function BookingPage() {
       setModifyOpen(true);
     }
 
-    fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
-      .then(r => r.ok ? r.json() : [])
-      .then(data => {
-        setFleet(data);
-      })
-      .catch(() => { });
+    const cachedStr = sessionStorage.getItem('fleetCache');
+    let useCache = false;
+    if (cachedStr) {
+      try {
+        const cached = JSON.parse(cachedStr);
+        // Expiration limit: 2 minutes (120,000 ms) to avoid duplicate API load while navigating
+        if (cached && cached.data && Date.now() - cached.timestamp < 120000) {
+          setFleet(cached.data);
+          useCache = true;
+        }
+      } catch (e) {
+        // ignore and fallback
+      }
+    }
+
+    if (!useCache) {
+      fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : [])
+        .then(data => {
+          setFleet(data);
+          sessionStorage.setItem('fleetCache', JSON.stringify({ data, timestamp: Date.now() }));
+        })
+        .catch(() => { });
+    }
   }, []);
 
   useEffect(() => {

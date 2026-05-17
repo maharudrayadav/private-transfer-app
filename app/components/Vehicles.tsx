@@ -53,16 +53,34 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
 
   useEffect(() => {
     const fetchFleet = async () => {
-      try {
-        const res = await fetch(`/api/images?service=FLEET&t=${Date.now()}`, {
-          cache: 'no-store'
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setFleetData(data);
+      const cachedStr = sessionStorage.getItem('fleetCache');
+      let useCache = false;
+      if (cachedStr) {
+        try {
+          const cached = JSON.parse(cachedStr);
+          // Expiration limit: 2 minutes to protect backend infrastructure
+          if (cached && cached.data && Date.now() - cached.timestamp < 120000) {
+            setFleetData(cached.data);
+            useCache = true;
+          }
+        } catch (e) {
+          // fallback to fetch
         }
-      } catch (error) {
-        console.error('Error fetching fleet on client:', error);
+      }
+
+      if (!useCache) {
+        try {
+          const res = await fetch(`/api/images?service=FLEET&t=${Date.now()}`, {
+            cache: 'no-store'
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setFleetData(data);
+            sessionStorage.setItem('fleetCache', JSON.stringify({ data, timestamp: Date.now() }));
+          }
+        } catch (error) {
+          console.error('Error fetching fleet on client:', error);
+        }
       }
     };
     
