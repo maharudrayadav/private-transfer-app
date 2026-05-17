@@ -9,7 +9,7 @@ import {
   Tag, ArrowUpDown, ChevronDown,
   Search, Clock, LayoutDashboard, Pencil,
   MapPin, CreditCard, ArrowRight, CheckCircle2,
-  FileText, Phone, Car, Bus, Mail
+  FileText, Phone, Car, Bus, Mail, Users, Luggage
 } from 'lucide-react';
 
 interface Booking {
@@ -26,6 +26,7 @@ interface Booking {
   status: string;
   vehicleType: string;
   passengers?: number;
+  luggage?: number;
   amount: number;
   driverName?: string;
   bookingCode?: string;
@@ -365,6 +366,7 @@ export default function AdminDashboard() {
         pickupTime: formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate),
         returnDriverName: getReturnDriver(latestData),
         passengers: latestData.passengers || 0,
+        luggage: latestData.luggage || 0,
         amount: latestData.amount || 0
       });
     } catch (err) {
@@ -396,6 +398,7 @@ export default function AdminDashboard() {
         dropoffLocation: editingBooking.dropoffLocation,
         pickupTime: formattedTime,
         passengers: Number(editingBooking.passengers) || 0,
+        luggage: Number(editingBooking.luggage) || 0,
         vehicleType: editingBooking.vehicleType,
         amount: Number(editingBooking.amount) || 0,
         driverNote: editingBooking.driverNote,
@@ -750,9 +753,6 @@ export default function AdminDashboard() {
                   <tr key={b.id} className={isReturn ? styles.returnTripRow : ''}>
                   <td data-label="Customer">
                     <div className={styles.customerCell}>
-                      <span className={styles.customerAvatar}>
-                        {(b.customerName || 'U').charAt(0).toUpperCase()}
-                      </span>
                       <div>
                         <strong>{b.customerName || 'Unknown Customer'}</strong>
                         <div className={styles.subText}>{b.phone}</div>
@@ -822,19 +822,20 @@ export default function AdminDashboard() {
                         )}
                         <span className={styles.vehicleName}>{b.vehicleType || 'Standard'}</span>
                       </div>
-                      <div className={styles.driverTags}>
-                        <div className={styles.driverTag} title="Outbound Driver">
-                          <User size={12} className={styles.driverIconSmall} />
-                          <span className={styles.legLabel}>OUT:</span> 
-                          {b.driverName || <span className={styles.unassignedText}>Unassigned</span>}
-                        </div>
-                        
+                      
+                      <div className={styles.vSpecsMini}>
+                        <span className={styles.specMini} title="Passengers">
+                          <Users size={12} /> {b.passengers || 0}
+                        </span>
+                        <span className={styles.specMini} title="Luggage">
+                          <Luggage size={12} /> {b.luggage || 0}
+                        </span>
+                      </div>
+
+                      <div className={styles.driverInfoSimple}>
+                        <div>Outbound: <strong>{b.driverName || 'Unassigned'}</strong></div>
                         {isReturn && (
-                          <div className={`${styles.driverTag} ${styles.returnDriverTag}`} title="Return Driver">
-                            <RotateCcw size={12} className={styles.driverIconSmall} />
-                            <span className={styles.legLabel}>RET:</span> 
-                            {retDr || <span className={styles.unassignedText}>Unassigned</span>}
-                          </div>
+                          <div>Return: <strong>{retDr || 'Unassigned'}</strong></div>
                         )}
                       </div>
                     </div>
@@ -996,7 +997,11 @@ export default function AdminDashboard() {
                       </div>
                       <div className={styles.formField}>
                         <label>Passengers</label>
-                        <input type="number" value={editingBooking.passengers || 0} onChange={e => setEditingBooking({...editingBooking, passengers: parseInt(e.target.value)})} />
+                        <input type="number" value={editingBooking.passengers || 0} onChange={e => setEditingBooking({...editingBooking, passengers: parseInt(e.target.value) || 0})} />
+                      </div>
+                      <div className={styles.formField}>
+                        <label>Luggage</label>
+                        <input type="number" value={editingBooking.luggage || 0} onChange={e => setEditingBooking({...editingBooking, luggage: parseInt(e.target.value) || 0})} />
                       </div>
                     </div>
                     <div className={styles.formRow}>
