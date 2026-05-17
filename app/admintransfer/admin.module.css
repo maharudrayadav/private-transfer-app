@@ -26,7 +26,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 3rem;
   border-radius: 24px;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
 }
 
 .loginHeader {
@@ -126,9 +126,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.pageControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .sizeSelector select {
+    width: 100%;
+  }
+
+  .sizeSelector {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .sizeSelector label {
+    margin-bottom: 0.25rem;
+  }
+
+  .pageBtn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
 }
 
 .adminInfo {
@@ -154,7 +182,7 @@
   padding: 0.4rem 1.2rem;
   border-radius: 50px;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .clockIcon {
@@ -184,14 +212,25 @@
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .logoutBtn {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -200,7 +239,7 @@
 }
 
 .logoutBtn:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .content {
@@ -242,7 +281,7 @@
   font-weight: 600;
   color: #475569;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
@@ -262,7 +301,7 @@
   padding: 1.5rem;
   border-radius: 20px;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.5);
   align-items: flex-end;
 }
@@ -296,7 +335,8 @@
   width: 100%;
 }
 
-.filterInputWrap input, .filterInputWrap select {
+.filterInputWrap input,
+.filterInputWrap select {
   width: 100%;
   padding: 1rem 1.2rem;
   border: 1.5px solid #f1f5f9;
@@ -329,7 +369,8 @@
   display: none;
 }
 
-.filterInputWrap input:focus, .filterInputWrap select:focus {
+.filterInputWrap input:focus,
+.filterInputWrap select:focus {
   outline: none;
   border-color: var(--primary-light);
   background: #fff;
@@ -387,7 +428,7 @@
   border-radius: 16px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border);
 }
 
@@ -420,7 +461,8 @@
 }
 
 .returnTripRow td {
-  background-color: rgba(37, 99, 235, 0.03); /* Faint blue for return trips */
+  background-color: rgba(37, 99, 235, 0.03);
+  /* Faint blue for return trips */
 }
 
 .returnTripRow:hover td {
@@ -500,15 +542,21 @@
   margin: 0;
 }
 
-.dotStart, .dotEnd {
+.dotStart,
+.dotEnd {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.dotStart { background: #10b981; }
-.dotEnd { background: #ef4444; }
+.dotStart {
+  background: #10b981;
+}
+
+.dotEnd {
+  background: #ef4444;
+}
 
 .dateCell .mainDate {
   font-weight: 700;
@@ -567,7 +615,7 @@
   gap: 0.5rem;
   width: fit-content;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .legLabel {
@@ -609,11 +657,31 @@
   letter-spacing: 0.5px;
 }
 
-.statusCONFIRMED, .statusAPPROVED { background: #dcfce7; color: #15803d; }
-.statusPENDINGADMIN { background: #fef3c7; color: #b45309; }
-.statusPENDINGPAYMENT { background: #e0f2fe; color: #0369a1; }
-.statusCANCELLED { background: #fee2e2; color: #b91c1c; }
-.statusPENDING { background: #f1f5f9; color: #475569; }
+.statusCONFIRMED,
+.statusAPPROVED {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.statusPENDINGADMIN {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.statusPENDINGPAYMENT {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.statusCANCELLED {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.statusPENDING {
+  background: #f1f5f9;
+  color: #475569;
+}
 
 .approveBtn {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -677,35 +745,12 @@
   padding: 1rem 2rem;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-  border: 1.5px solid var(--primary-light); /* Prominent Goldy Border */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid var(--primary-light);
+  /* Prominent Goldy Border */
 }
 
-.pageInfo {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 600;
-}
 
-.pageControls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.pageBtn {
-  background: var(--bg-light);
-  border: 1px solid var(--border);
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: var(--secondary);
-}
 
 .pageBtn:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -727,7 +772,8 @@
   background: var(--bg-light);
   padding: 0.5rem 1.2rem;
   border-radius: 50px;
-  border: 1px solid var(--primary-light); /* Added Goldy indicator border */
+  border: 1px solid var(--primary-light);
+  /* Added Goldy indicator border */
 }
 
 .sizeSelector {
@@ -736,8 +782,53 @@
   gap: 1rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted);
 }
+
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .pageInfo {
+    width: 100%;
+    text-align: center;
+    order: 1;
+  }
+  
+  .pageControls {
+    width: 100%;
+    justify-content: center;
+    order: 2;
+  }
+  
+  .sizeSelector {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    order: 3;
+    margin-top: 0.5rem;
+  }
+
+  .sizeSelector label {
+    margin: 0;
+  }
+
+  .sizeSelector select {
+    width: auto;
+  }
+}
+
+.pageInfo {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
 
 .sizeSelector select {
   padding: 0.5rem 1rem;
@@ -768,7 +859,8 @@
   }
 
   .adminInfo span:not(.adminBadge) {
-    display: none; /* Hide 'Private Transfer Dashboard' text on mobile */
+    display: none;
+    /* Hide 'Private Transfer Dashboard' text on mobile */
   }
 
   .liveClock {
@@ -781,7 +873,8 @@
   }
 
   .dateStr {
-    display: none; /* Hide date string on mobile to save space */
+    display: none;
+    /* Hide date string on mobile to save space */
   }
 
   .mobileFilterBtn {
@@ -789,7 +882,8 @@
   }
 
   .filters {
-    display: none; /* Hide standard filters on mobile */
+    display: none;
+    /* Hide standard filters on mobile */
   }
 
   .dashboardHeader {
@@ -822,7 +916,8 @@
   }
 
   .table thead {
-    display: none; /* Hide headers on mobile */
+    display: none;
+    /* Hide headers on mobile */
   }
 
   .table tbody {
@@ -837,7 +932,7 @@
     border-radius: 20px;
     padding: 1.25rem;
     margin-bottom: 1.25rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     position: relative;
     transition: transform 0.2s ease;
   }
@@ -942,7 +1037,9 @@
     width: 100%;
   }
 
-  .routeCell, .dateCell, .vehicleCell {
+  .routeCell,
+  .dateCell,
+  .vehicleCell {
     width: 100%;
     max-width: 100%;
   }
@@ -956,7 +1053,7 @@
   .topBar {
     justify-content: center;
   }
-  
+
   .liveClock {
     order: 3;
     width: 100%;
@@ -966,7 +1063,7 @@
   .logoutBtn {
     order: 2;
   }
-  
+
   .adminInfo {
     order: 1;
     flex: 1;
@@ -995,7 +1092,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
   animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1051,13 +1148,23 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 480px) {
@@ -1088,7 +1195,7 @@
   border-radius: 24px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 50px 100px rgba(0,0,0,0.3);
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3);
 }
 
 .modalContent h3 {
@@ -1124,7 +1231,7 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 50px 100px rgba(0,0,0,0.3);
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
@@ -1260,7 +1367,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .successState {
@@ -1274,8 +1383,15 @@
 }
 
 @keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .successState h4 {
@@ -1306,7 +1422,9 @@
   color: #475569;
 }
 
-.formField input, .formField select, .formField textarea {
+.formField input,
+.formField select,
+.formField textarea {
   padding: 0.75rem 1rem;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
@@ -1315,7 +1433,9 @@
   transition: all 0.2s ease;
 }
 
-.formField input:focus, .formField select:focus, .formField textarea:focus {
+.formField input:focus,
+.formField select:focus,
+.formField textarea:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(179, 139, 77, 0.1);
@@ -1325,7 +1445,7 @@
   .formRow {
     grid-template-columns: 1fr;
   }
-  
+
   .editModalContent {
     max-height: 100vh;
     border-radius: 0;
@@ -1349,7 +1469,7 @@
   .modalActions {
     flex-direction: column-reverse;
   }
-  
+
   .modalActions button {
     width: 100%;
   }

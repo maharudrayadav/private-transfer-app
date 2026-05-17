@@ -221,33 +221,7 @@ export default function AdminDashboard() {
         setBookings([]);
       }
 
-      // Asynchronously fetch return trip details in parallel to populate the correct returnDriverName
-      const returnTrips = bookingsList.filter((b) => {
-        return !!(
-          b.returnDate || 
-          b.returnTime || 
-          b.returnPickupLocation || 
-          b.returnDropoffLocation || 
-          b.notes?.toLowerCase().includes('return')
-        );
-      });
 
-      returnTrips.forEach(async (b) => {
-        try {
-          const detailsRes = await fetch(`/api/bookings/${b.id}`);
-          if (detailsRes.ok) {
-            const latest = await detailsRes.json();
-            if (latest.returnDriverName) {
-              setReturnDriversCache(prev => ({
-                ...prev,
-                [b.id]: latest.returnDriverName
-              }));
-            }
-          }
-        } catch (err) {
-          console.error(`Error fetching return driver for booking ${b.id}:`, err);
-        }
-      });
 
     } catch (err) {
       console.error('Fetch error:', err);
