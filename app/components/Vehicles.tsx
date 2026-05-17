@@ -53,14 +53,6 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
 
   useEffect(() => {
     const fetchFleet = async () => {
-      // Check if we already have the data in this session
-      const cachedStr = sessionStorage.getItem('fleetCache');
-      if (cachedStr) {
-        const cached = JSON.parse(cachedStr);
-        setFleetData(cached.data);
-        return; // Use session cache on refresh
-      }
-
       try {
         const res = await fetch(`/api/images?service=FLEET&t=${Date.now()}`, {
           cache: 'no-store'
@@ -68,10 +60,6 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
         if (res.ok) {
           const data = await res.json();
           setFleetData(data);
-          // Store data for the current session (persists on refresh)
-          sessionStorage.setItem('fleetCache', JSON.stringify({
-            data: data
-          }));
         }
       } catch (error) {
         console.error('Error fetching fleet on client:', error);

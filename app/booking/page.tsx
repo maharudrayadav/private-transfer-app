@@ -100,18 +100,12 @@ export default function BookingPage() {
       setModifyOpen(true);
     }
 
-    const cachedFleet = sessionStorage.getItem('fleetCache');
-    if (cachedFleet) {
-      setFleet(JSON.parse(cachedFleet).data);
-    } else {
-      fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
-        .then(r => r.ok ? r.json() : [])
-        .then(data => {
-          setFleet(data);
-          sessionStorage.setItem('fleetCache', JSON.stringify({ data }));
-        })
-        .catch(() => { });
-    }
+    fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        setFleet(data);
+      })
+      .catch(() => { });
   }, []);
 
   useEffect(() => {
