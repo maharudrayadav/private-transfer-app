@@ -14,6 +14,7 @@ interface FleetItem {
   passengers?: number | null;
   bags?: number | null;
   price?: number | null;
+  languagePrice?: number | null;
 }
 
 interface VehiclesProps {

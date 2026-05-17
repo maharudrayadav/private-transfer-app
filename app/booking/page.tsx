@@ -21,6 +21,7 @@ interface FleetItem {
   passengers?: number | null;
   bags?: number | null;
   price?: number | null;
+  languagePrice?: number | null;
 }
 
 const COUNTRY_CODES = [
@@ -174,7 +175,7 @@ export default function BookingPage() {
       const pricePromises = fleet.map(v => {
         if (!v.price) return Promise.resolve({ id: v.id, price: null });
         
-        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}&passgener=${form.passengers}`, {
+        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}&passgener=${form.passengers}&language=${form.luggage}&languagePrice=${v.languagePrice || 0}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         })
@@ -199,7 +200,7 @@ export default function BookingPage() {
     } else {
       setFleetPrices({});
     }
-  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km, form.passengers]);
+  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km, form.passengers, form.luggage]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
@@ -288,6 +289,7 @@ export default function BookingPage() {
         dropoffLocation: search.dropoff,
         pickupTime: pickupTime,
         passengers: parseInt(form.passengers),
+        luggage: parseInt(form.luggage),
         vehicleType: selectedVehicle.heading,
         amount: total,
         driverNote: form.notes,
