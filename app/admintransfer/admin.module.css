@@ -160,6 +160,11 @@
   animation: pulse 2s infinite;
 }
 
+.clockIconSvg {
+  animation: pulse 2s infinite;
+  flex-shrink: 0;
+}
+
 .timeStr {
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.1rem;
@@ -838,11 +843,11 @@
 
   .table td {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: flex-start;
     padding: 0.75rem 0;
     border-bottom: 1px solid #f8fafc;
-    text-align: right;
+    text-align: left;
   }
 
   .table td:last-child {
@@ -860,11 +865,27 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: left;
-    padding-right: 1rem;
+    margin-bottom: 0.40rem;
     flex-shrink: 0;
   }
 
-  /* Special handling for certain cells to make them look better in cards */
+  /* Keep simple status and amount elements compact and side-by-side */
+  .table td[data-label="Amount"],
+  .table td[data-label="Status"] {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    width: 100%;
+  }
+
+  .table td[data-label="Amount"]::before,
+  .table td[data-label="Status"]::before {
+    margin-bottom: 0;
+    padding-right: 1rem;
+  }
+
+  /* Special handling for customer card headers */
   .table td[data-label="Customer"] {
     flex-direction: column;
     align-items: flex-start;
@@ -884,9 +905,10 @@
     padding: 1.25rem;
     border-radius: 0 0 20px 20px;
     justify-content: center;
-    width: auto; /* Let it be contained by tr padding if we change approach */
+    width: auto;
     border-top: 1px solid #e2e8f0;
     box-sizing: border-box;
+    flex-direction: row;
   }
 
   .actionsContainer {
@@ -894,7 +916,7 @@
     display: flex;
     justify-content: center;
     gap: 0.75rem;
-    flex-wrap: wrap; /* Ensure buttons wrap if too narrow */
+    flex-wrap: wrap;
   }
 
   .approveBtn {
@@ -915,9 +937,13 @@
     width: 100%;
   }
 
-  .routeCell, .dateCell, .vehicleCell, .amountCell {
+  .routeCell, .dateCell, .vehicleCell {
     width: 100%;
-    max-width: 65%; /* Prevent overlapping with label */
+    max-width: 100%;
+  }
+
+  .amountCell {
+    width: auto;
   }
 }
 
