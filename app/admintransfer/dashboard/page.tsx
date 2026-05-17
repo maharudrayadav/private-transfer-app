@@ -9,7 +9,7 @@ import {
   Tag, ArrowUpDown, ChevronDown,
   Search, Clock, LayoutDashboard, Pencil,
   MapPin, CreditCard, ArrowRight, CheckCircle2,
-  FileText, Phone, Car, Bus
+  FileText, Phone, Car, Bus, Mail
 } from 'lucide-react';
 
 interface Booking {
@@ -34,9 +34,16 @@ interface Booking {
   returndriverName?: string;
   returnDriverName?: string;
   return_driver_name?: string;
-  returnDriver?: string;
+  return_driver?: string;
   returndriver?: string;
+  returnDriver?: string;
+  returndrivername?: string;
   driverNameReturn?: string;
+  driver_name_return?: string;
+  driverReturn?: string;
+  driver_return?: string;
+  return_dr?: string;
+  ret_driver?: string;
   returnDate?: string;
   returnTime?: string;
   returnPickupLocation?: string;
@@ -69,9 +76,11 @@ export default function AdminDashboard() {
   const [customerFilter, setCustomerFilter] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [tripTypeFilter, setTripTypeFilter] = useState('');
   const [sortBy, setSortBy] = useState('bookingDate');
   const [sortDirection, setSortDirection] = useState('desc');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [returnDriversCache, setReturnDriversCache] = useState<Record<number, string>>({});
 
   const router = useRouter();
 
@@ -79,17 +88,26 @@ export default function AdminDashboard() {
   const getReturnDriver = (b: any) => {
     if (!b) return '';
     
+    // Check local cache first (e.g. background fetched)
+    if (returnDriversCache[b.id]) {
+      return returnDriversCache[b.id];
+    }
+    
     // 1. Direct field checks (ordered by commonality)
     const directFields = [
-      b.returndriverName,
       b.returnDriverName, 
+      b.returndriverName, 
       b.return_driver_name, 
       b.returndrivername,
-      b.returnDriver, 
-      b.returndriver, 
+      b.return_driver,
+      b.returndriver,
+      b.returnDriver,
       b.driverNameReturn,
       b.driver_name_return,
-      b.return_dr
+      b.driverReturn,
+      b.driver_return,
+      b.return_dr,
+      b.ret_driver
     ];
     for (const val of directFields) {
       if (val && typeof val === 'string' && val.trim().length > 0) return val.trim();
@@ -163,6 +181,7 @@ export default function AdminDashboard() {
       
       if (startDate) params.append('startDate', `${startDate}T00:00:00`);
       if (endDate) params.append('endDate', `${endDate}T23:59:59`);
+      if (tripTypeFilter) params.append('tripType', tripTypeFilter);
 
       const res = await fetch(`/api/bookings?${params.toString()}`);
       console.log('Fetching bookings from:', `/api/bookings?${params.toString()}`);
@@ -176,19 +195,23 @@ export default function AdminDashboard() {
       console.log('Bookings Data received:', data);
       
       // Handle different response formats
+      let bookingsList: Booking[] = [];
       if (data && typeof data === 'object') {
         if (Array.isArray(data.bookings)) {
           setBookings(data.bookings);
           setTotalElements(data.totalCount || data.bookings.length);
           setTotalPages(data.totalPages || Math.ceil((data.totalCount || data.bookings.length) / size) || 1);
+          bookingsList = data.bookings;
         } else if (Array.isArray(data.content)) {
           setBookings(data.content);
           setTotalElements(data.totalElements || data.content.length);
           setTotalPages(data.totalPages || 1);
+          bookingsList = data.content;
         } else if (Array.isArray(data)) {
           setBookings(data);
           setTotalElements(data.length);
           setTotalPages(1);
+          bookingsList = data;
         } else {
           console.warn('Unexpected data format:', data);
           setBookings([]);
@@ -196,13 +219,42 @@ export default function AdminDashboard() {
       } else {
         setBookings([]);
       }
+
+      // Asynchronously fetch return trip details in parallel to populate the correct returnDriverName
+      const returnTrips = bookingsList.filter((b) => {
+        return !!(
+          b.returnDate || 
+          b.returnTime || 
+          b.returnPickupLocation || 
+          b.returnDropoffLocation || 
+          b.notes?.toLowerCase().includes('return')
+        );
+      });
+
+      returnTrips.forEach(async (b) => {
+        try {
+          const detailsRes = await fetch(`/api/bookings/${b.id}`);
+          if (detailsRes.ok) {
+            const latest = await detailsRes.json();
+            if (latest.returnDriverName) {
+              setReturnDriversCache(prev => ({
+                ...prev,
+                [b.id]: latest.returnDriverName
+              }));
+            }
+          }
+        } catch (err) {
+          console.error(`Error fetching return driver for booking ${b.id}:`, err);
+        }
+      });
+
     } catch (err) {
       console.error('Fetch error:', err);
       setBookings([]);
     } finally {
       setLoading(false);
     }
-  }, [page, size, statusFilter, driverFilter, customerFilter, startDate, endDate, sortBy, sortDirection]);
+  }, [page, size, statusFilter, driverFilter, customerFilter, startDate, endDate, tripTypeFilter, sortBy, sortDirection]);
 
   useEffect(() => {
     fetchBookings();
@@ -270,6 +322,12 @@ export default function AdminDashboard() {
       }
 
       setShowApproveModal(false);
+      if (selectedBookingId && returnDriverNameInput) {
+        setReturnDriversCache(prev => ({
+          ...prev,
+          [selectedBookingId]: returnDriverNameInput
+        }));
+      }
       fetchBookings(); // Refresh
     } catch (err) {
       console.error('Failed to approve:', err);
@@ -367,6 +425,12 @@ export default function AdminDashboard() {
       }
 
       setUpdateSuccess(true);
+      if (editingBooking.id && editingBooking.returnDriverName) {
+        setReturnDriversCache(prev => ({
+          ...prev,
+          [editingBooking.id!]: editingBooking.returnDriverName!
+        }));
+      }
       setTimeout(() => {
         setShowEditModal(false);
         setUpdateSuccess(false);
@@ -439,7 +503,7 @@ export default function AdminDashboard() {
           <span>Private Transfer Dashboard</span>
         </div>
         <div className={styles.liveClock}>
-          <span className={styles.clockIcon}>⏰</span>
+          <Clock size={16} className={styles.clockIconSvg} style={{ marginRight: '6px', color: 'var(--primary)' }} />
           <span className={styles.timeStr}>
             {currentTime.toLocaleTimeString('en-IE', { timeZone: 'Europe/Dublin', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </span>
@@ -481,6 +545,16 @@ export default function AdminDashboard() {
                 <option value="PENDING_ADMIN">Pending Admin</option>
                 <option value="PENDING_PAYMENT">Pending Payment</option>
                 <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div className={styles.filterGroup}>
+            <label><RotateCcw size={14} className={styles.filterIcon} /> Trip Type</label>
+            <div className={styles.filterInputWrap}>
+              <select value={tripTypeFilter} onChange={(e) => { setTripTypeFilter(e.target.value); setPage(0); }}>
+                <option value="">All Trips</option>
+                <option value="oneway">One Way</option>
+                <option value="return">Return Journey</option>
               </select>
             </div>
           </div>
@@ -550,6 +624,7 @@ export default function AdminDashboard() {
                 setCustomerFilter('');
                 setStartDate('');
                 setEndDate('');
+                setTripTypeFilter('');
                 setSortBy('bookingDate');
                 setSortDirection('desc');
                 setPage(0);
@@ -581,6 +656,16 @@ export default function AdminDashboard() {
                       <option value="PENDING_ADMIN">Pending Admin</option>
                       <option value="PENDING_PAYMENT">Pending Payment</option>
                       <option value="CANCELLED">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+                <div className={styles.filterGroup}>
+                  <label><RotateCcw size={14} /> Trip Type</label>
+                  <div className={styles.filterInputWrap}>
+                    <select value={tripTypeFilter} onChange={(e) => { setTripTypeFilter(e.target.value); setPage(0); }}>
+                      <option value="">All Trips</option>
+                      <option value="oneway">One Way</option>
+                      <option value="return">Return Journey</option>
                     </select>
                   </div>
                 </div>
@@ -627,6 +712,7 @@ export default function AdminDashboard() {
                   setCustomerFilter('');
                   setStartDate('');
                   setEndDate('');
+                  setTripTypeFilter('');
                 }}>Reset</button>
                 <button className={styles.applyBtn} onClick={() => setIsFilterDrawerOpen(false)}>Apply</button>
               </div>
@@ -671,13 +757,13 @@ export default function AdminDashboard() {
                         <strong>{b.customerName || 'Unknown Customer'}</strong>
                         <div className={styles.subText}>{b.phone}</div>
                         {b.email && (
-                          <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px' }}>
-                            ✉️ {b.email}
+                          <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Mail size={14} /> {b.email}
                           </div>
                         )}
                         {!b.email && b.notes?.match(/Email:\s*([^\s\n]+)/) && (
-                          <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px' }}>
-                            ✉️ {b.notes.match(/Email:\s*([^\s\n]+)/)?.[1]}
+                          <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Mail size={14} /> {b.notes.match(/Email:\s*([^\s\n]+)/)?.[1]}
                           </div>
                         )}
                         {b.bookingCode && <span className={styles.codeBadge}>#{b.bookingCode}</span>}
@@ -716,7 +802,9 @@ export default function AdminDashboard() {
 
                       {(b.returnDate || b.returnTime || b.notes?.toLowerCase().includes('return')) && (
                         <div className={styles.returnInfo}>
-                          <span className={styles.returnBadge}>↩ Return</span>
+                          <span className={styles.returnBadge}>
+                            <RotateCcw size={10} style={{ display: 'inline-block', marginRight: '4px' }} /> Return
+                          </span>
                           <span className={styles.returnTime}>
                             {b.returnDate || b.notes?.match(/Return Date:\s*([\d-]+)/i)?.[1] || ''} {b.returnTime || b.notes?.match(/Return Time:\s*([\d:]+)/i)?.[1] || ''}
                           </span>
@@ -1034,7 +1122,12 @@ export default function AdminDashboard() {
               <button 
                 className={styles.saveBtn} 
                 onClick={handleConfirmApproval}
-                disabled={approveLoading || !driverNameInput || (!!(bookings.find(b => b.id === selectedBookingId)?.returnDate || bookings.find(b => b.id === selectedBookingId)?.notes?.includes('Return Date:')) && !returnDriverNameInput)}
+                disabled={approveLoading || !driverNameInput || (!!(
+                  getReturnDriver(bookings.find(b => b.id === selectedBookingId)) ||
+                  bookings.find(b => b.id === selectedBookingId)?.returnDate || 
+                  bookings.find(b => b.id === selectedBookingId)?.returnTime ||
+                  bookings.find(b => b.id === selectedBookingId)?.notes?.toLowerCase().includes('return')
+                ) && !returnDriverNameInput)}
               >
                 {approveLoading ? 'Saving...' : 'Save & Confirm'}
               </button>
