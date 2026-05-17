@@ -33,7 +33,6 @@ export default function BookingPage() {
   const [selectedVehicle, setSelectedVehicle] = useState<FleetItem | null>(null);
   const [tripType, setTripType] = useState<'one-way' | 'return'>('one-way');
   const [countryCode, setCountryCode] = useState('+353');
-  const [extras, setExtras] = useState({ childSeat: false, boosterSeat: false });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -301,7 +300,6 @@ export default function BookingPage() {
         notes: `
           Trip Type: ${tripType.toUpperCase()}
           Luggage: ${form.luggage}
-          Extras: ${extras.childSeat ? 'Child Seat' : ''} ${extras.boosterSeat ? 'Booster Seat' : ''}
           ${tripType === 'return' ? `
           Return Date: ${form.returnDate}, Return Time: ${form.returnTime}
           Return Pickup: ${returnPickup || search.dropoff}
@@ -367,11 +365,10 @@ export default function BookingPage() {
     setSelectedVehicle(null);
   };
 
-  const extraTotal = (extras.childSeat ? 10 : 0) + (extras.boosterSeat ? 10 : 0);
   const journeyFare = (selectedVehicle && fleetPrices[selectedVehicle.id]) 
     ? fleetPrices[selectedVehicle.id] 
     : ((selectedVehicle?.price || 0) * (tripType === 'return' ? 2 : 1));
-  const total = journeyFare + extraTotal;
+  const total = journeyFare;
 
   // ... (previous logic)
 
@@ -791,37 +788,13 @@ export default function BookingPage() {
                   <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} placeholder="Any special instructions..." />
                 </div>
 
-                <div className={styles.extrasSection}>
-                  <h4>Additional Options</h4>
-                  <div className={styles.extrasGrid}>
-                    <label className={styles.extraOption}>
-                      <input type="checkbox" checked={extras.childSeat} onChange={e => setExtras({ ...extras, childSeat: e.target.checked })} />
-                      <div>
-                        <strong>Child Seat</strong>
-                        <span>+€10.00</span>
-                      </div>
-                    </label>
-                    <label className={styles.extraOption}>
-                      <input type="checkbox" checked={extras.boosterSeat} onChange={e => setExtras({ ...extras, boosterSeat: e.target.checked })} />
-                      <div>
-                        <strong>Booster Seat</strong>
-                        <span>+€10.00</span>
-                      </div>
-                    </label>
-                  </div>
-                </div>
 
                 <div className={styles.finalPriceBox}>
                   <div className={styles.finalPriceRow}>
                     <span>{tripType === 'return' ? 'Journey Fare (Outbound & Return)' : 'Outbound Journey'}</span>
                     <strong>{isCalculatingPrice ? '...' : `€${journeyFare.toFixed(2)}`}</strong>
                   </div>
-                  {extraTotal > 0 && (
-                    <div className={styles.finalPriceRow}>
-                      <span>Additional Options</span>
-                      <strong>€{extraTotal.toFixed(2)}</strong>
-                    </div>
-                  )}
+
                   <div className={`${styles.finalPriceRow} ${styles.finalTotalRow}`}>
                     <span>Total Amount</span>
                     <strong>€{total.toFixed(2)}</strong>
@@ -942,10 +915,7 @@ export default function BookingPage() {
                   <span>{tripType === 'return' ? 'Journey Fare' : 'Outbound Journey'}</span>
                   <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${journeyFare.toFixed(2)}` : '—')}</span>
                 </div>
-                <div className={styles.priceRow}>
-                  <span>Extra options</span>
-                  <span>{extraTotal > 0 ? `€${extraTotal.toFixed(2)}` : '€0.00'}</span>
-                </div>
+
                 <div className={styles.totalRow}>
                   <span>Total</span>
                   <strong>{isCalculatingPrice ? '...' : (selectedVehicle ? `€${total.toFixed(2)}` : '—')}</strong>
