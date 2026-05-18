@@ -1,4 +1,4 @@
-import Gallery from '../components/Gallery';
+import Gallery from '../components/gallery/Gallery';
 
 export const metadata = {
   title: 'Our Gallery | Private Transfer',

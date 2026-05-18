@@ -1,8 +1,8 @@
-import Hero from './components/Hero';
-import ServicesSection from './components/ServicesSection';
-import Features from './components/Features';
-import WhyUs from './components/WhyUs';
-import Vehicles from './components/Vehicles';
+import Hero from './components/home/Hero';
+import ServicesSection from './components/service/ServicesSection';
+import Features from './components/home/Features';
+import WhyUs from './components/home/WhyUs';
+import Vehicles from './components/home/Vehicles';
 
 export default async function HomePage() {
   return (
