@@ -61,6 +61,7 @@
 .title span {
   font-style: italic;
   font-weight: 400;
+  color: var(--primary);
 }
 
 .subtitle {
