@@ -157,11 +157,11 @@ img {
 
 /* ── Section titles ────────────────────────────── */
 .section-title {
-  font-size: 3.5rem;
-  font-weight: 900;
+  font-size: 3rem;
+  font-weight: 700;
   color: var(--secondary);
-  margin-bottom: 1.5rem;
-  line-height: 1;
+  margin-bottom: 1rem;
+  line-height: 1.1;
 }
 
 .section-subtitle {

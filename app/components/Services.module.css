@@ -43,7 +43,7 @@
 .sliderBtn {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
+  border-radius: 4px;
   background: #fff;
   border: 1px solid var(--border);
   display: flex;
@@ -53,15 +53,14 @@
   color: var(--secondary);
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .sliderBtn:hover {
   background: var(--primary);
   color: #fff;
   border-color: var(--primary);
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(179, 139, 77, 0.3);
+  box-shadow: 0 8px 20px rgba(179, 139, 77, 0.2);
 }
 
 /* Horizontal Carousel Grid */
@@ -87,7 +86,7 @@
 .card {
   flex: 0 0 380px;
   position: relative;
-  border-radius: 24px;
+  border-radius: 4px;
   overflow: hidden;
   text-decoration: none;
   background: #fff;
@@ -95,13 +94,13 @@
   display: flex;
   flex-direction: column;
   height: 520px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   border: 1px solid var(--border);
 }
 
 .card:hover {
-  transform: translateY(-12px);
-  box-shadow: 0 40px 80px -15px rgba(15, 23, 42, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px -8px rgba(15, 23, 42, 0.1);
   border-color: var(--primary-light);
 }
 
@@ -153,13 +152,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(179, 139, 77, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(179, 139, 77, 0.2);
   transition: all 0.4s ease;
 }
 
 .card:hover .cardIcon {
-  transform: translateY(-5px) rotate(-10deg);
+  transform: translateY(-2px);
   background: var(--secondary);
 }
 
@@ -239,7 +238,7 @@
 .ctaCard {
   flex: 0 0 380px;
   background: var(--secondary);
-  border-radius: 24px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -271,7 +270,7 @@
 .sliderBtn {
   width: 50px;
   height: 50px;
-  border-radius: 50%;
+  border-radius: 4px;
   border: 1px solid var(--border);
   background: #fff;
   display: flex;
@@ -287,7 +286,6 @@
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
-  transform: translateY(-2px);
 }
 
 /* Responsive */
