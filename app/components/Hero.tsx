@@ -52,7 +52,7 @@ export default function Hero() {
 
           <h1 className={styles.title}>
             Bespoke Private <br />
-            <span>Transfers</span> Ireland
+            Transfers Ireland
           </h1>
           <p className={styles.description}>
             Experience luxury travel with Ireland's premier chauffeur service. 

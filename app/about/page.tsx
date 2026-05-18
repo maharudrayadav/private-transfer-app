@@ -11,7 +11,7 @@ export default function AboutPage() {
     <div className={styles.page}>
       <div className={styles.banner}>
         <div className="container">
-          <h1>About <span>Us</span></h1>
+          <h1>About Us</h1>
           <p>The Standard of Excellence in Irish Chauffeur Services</p>
         </div>
       </div>

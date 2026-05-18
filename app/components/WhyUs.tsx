@@ -10,7 +10,7 @@ export default function WhyUs() {
           {/* Text */}
           <div className={styles.text}>
             <h2 className={styles.heading}>
-              Luxury <span>Private</span> Transfers across Ireland
+              Luxury Private Transfers across Ireland
             </h2>
             <p className={styles.sub}>Professional chauffeur services &amp; custom itineraries</p>
             <ul className={styles.list}>

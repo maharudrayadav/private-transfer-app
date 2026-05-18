@@ -87,7 +87,7 @@ export default function ServicesSection({ initialServices = [] }: ServicesSectio
         <div className={styles.header}>
           <div className={styles.headerText}>
             <p className={styles.eyebrow}>EXCLUSIVITY & COMFORT</p>
-            <h2 className={styles.title}>Bespoke <span>Chauffeur</span> Services</h2>
+            <h2 className={styles.title}>Bespoke Chauffeur Services</h2>
           </div>
           <div className={styles.navArea}>
             <button className={styles.sliderBtn} onClick={() => scroll('left')}>‹</button>
