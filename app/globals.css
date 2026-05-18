@@ -14,7 +14,7 @@
   --text-muted:    #64748b;
   --text-light:    #f1f5f9;
   --border:        #e2e8f0;
-  --card-shadow:   0 20px 50px -15px rgba(0,0,0,0.1);
+  --card-shadow:   0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -101,23 +101,21 @@ img {
 /* ── Buttons (Premium Redesign) ────────────────── */
 .btn-primary {
   display: inline-block;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background: var(--primary);
   color: #fff;
   padding: 1rem 2.8rem;
   font-weight: 700;
   font-size: 0.95rem;
-  border-radius: 12px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 4px;
+  transition: all 0.3s ease;
   cursor: pointer;
   border: none;
   text-transform: uppercase;
   letter-spacing: 2px;
-  box-shadow: 0 10px 20px -5px rgba(179, 139, 77, 0.3);
 }
 
 .btn-primary:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 20px 30px -8px rgba(179, 139, 77, 0.5);
+  background: var(--primary-dark);
 }
 
 .btn-outline {
@@ -127,9 +125,8 @@ img {
   padding: 1rem 2.8rem;
   font-weight: 700;
   font-size: 0.95rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(5px);
+  border-radius: 4px;
+  border: 1px solid #fff;
   transition: all 0.3s ease;
   cursor: pointer;
   text-transform: uppercase;
@@ -137,9 +134,8 @@ img {
 }
 
 .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #fff;
-  transform: translateY(-2px);
+  background: #fff;
+  color: var(--secondary);
 }
 
 .btn-dark {
@@ -149,16 +145,14 @@ img {
   padding: 0.8rem 2.5rem;
   font-weight: 700;
   font-size: 1rem;
-  border-radius: 50px;
+  border-radius: 4px;
   transition: all 0.3s ease;
   cursor: pointer;
   border: none;
 }
 
 .btn-dark:hover {
-  background: #1e293b;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+  background: var(--secondary-light);
 }
 
 /* ── Section titles ────────────────────────────── */
@@ -177,10 +171,9 @@ img {
   max-width: 700px;
 }
 
-/* Glassmorphism Utility */
+/* Glassmorphism Utility (toned down) */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
 }
