@@ -122,8 +122,15 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
         <div className={styles.headerArea}>
           <p className={styles.eyebrow}>{searchDetails ? 'STEP 2: SELECT VEHICLE' : 'EXECUTIVE FLEET'}</p>
           <h2 className={styles.title}>
-            {searchDetails ? 'Select Your ' : 'Our Luxury '}
-            <span>{searchDetails ? 'Chauffeur' : 'Fleet'}</span>
+            {searchDetails ? (
+              <>
+                Select <span>Your</span> Chauffeur
+              </>
+            ) : (
+              <>
+                Our <span>Luxury</span> Fleet
+              </>
+            )}
           </h2>
           {!searchDetails && (
             <p className={styles.subtitle}>

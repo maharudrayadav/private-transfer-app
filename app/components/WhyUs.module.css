@@ -36,6 +36,12 @@
   color: #fff;
 }
 
+.heading span {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--primary);
+}
+
 .sub {
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.85);
