@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import ServicesSection from '../components/service/ServicesSection';
+import ServicesSection from '../components/services/ServicesSection';
 import styles from './services.module.css';
 
 export const metadata: Metadata = {
