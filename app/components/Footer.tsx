@@ -15,7 +15,7 @@ export default function Footer() {
           <p className={styles.desc}>
             Premium chauffeur and private transfer service in Ireland. Your journey, your way.
           </p>
-          <a href="tel:+353876899968" className={styles.phone}>+353 876 899 968</a>
+          {/* <a href="tel:+353876899968" className={styles.phone}>+353 876 899 968</a> */}
         </div>
 
         {/* Company */}

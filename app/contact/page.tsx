@@ -24,7 +24,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className={styles.itemLabel}>Call or WhatsApp</span>
-                  <a href="tel:+353876899968" className={styles.itemValue}>+353 876 899 968</a>
+                  <span className={styles.itemValue}> </span>
                 </div>
               </div>
 
@@ -34,7 +34,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className={styles.itemLabel}>Email Us directly</span>
-                  <a href="mailto:info@privatetransfer.ie" className={styles.itemValue}>info@privatetransfer.ie</a>
+                  <span className={styles.itemValue}> </span>
                 </div>
               </div>
 
