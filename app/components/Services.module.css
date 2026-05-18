@@ -290,7 +290,11 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .card, .ctaCard { flex: 0 0 85vw; }
+  .card, .ctaCard { 
+    flex: 0 0 85vw; 
+    height: auto; 
+    min-height: 420px; 
+  }
   .header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
   .title { font-size: 2.5rem; }
 }
