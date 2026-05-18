@@ -1383,6 +1383,9 @@
     width: 100%;
     height: 200px;
   }
+  .vehicleDetails {
+    padding: 1.25rem 1rem;
+  }
   .vehiclePricing {
     border-left: none;
     border-top: 1px solid #f1f5f9;
@@ -1403,6 +1406,29 @@
   .modifyGrid {
     grid-template-columns: 1fr;
   }
+  
+  /* Squeeze padding for absolute maximum user friendliness on mobile */
+  .searchBar {
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+  }
+  .passengerSection {
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+  }
+  .passengerTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .formReturnSection {
+    padding: 1rem 0.75rem;
+    border-radius: 8px;
+    gap: 1.25rem;
+  }
+  .formReturnFields {
+    gap: 1.25rem;
+  }
+  
   .successActions {
     flex-direction: column;
     gap: 1rem;
