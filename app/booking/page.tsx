@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import LocationAutocomplete from '../components/booking/LocationAutocomplete';
+import LocationAutocomplete from './LocationAutocomplete';
 import styles from './booking.module.css';
 import dynamic from 'next/dynamic';
 import { 
@@ -11,7 +11,7 @@ import {
   Info, AlertTriangle 
 } from 'lucide-react';
 
-const RouteMap = dynamic(() => import('../components/booking/RouteMap'), { ssr: false });
+const RouteMap = dynamic(() => import('./RouteMap'), { ssr: false });
 
 interface FleetItem {
   id: number;

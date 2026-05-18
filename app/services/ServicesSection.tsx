@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Building, Plane, Heart, Map, Briefcase, Sparkles } from 'lucide-react';
 
-import styles from './Services.module.css';
+import styles from './ServicesSection.module.css';
 
 interface ServiceItem {
   id: number | string;

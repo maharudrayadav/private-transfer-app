@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import AboutContent from '../components/about/AboutContent';
+import AboutContent from './AboutContent';
 
 export const metadata: Metadata = {
   title: 'About Us | Private Transfer Ireland',

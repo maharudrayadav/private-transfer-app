@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import PaymentForm from '../components/payment/PaymentForm';
+import PaymentForm from './PaymentForm';
 
 export const metadata: Metadata = {
   title: 'Secure Payment | Private Transfer Ireland',

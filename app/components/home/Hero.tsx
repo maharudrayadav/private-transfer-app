@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Hero.module.css';
-import LocationAutocomplete from '../booking/LocationAutocomplete';
+import LocationAutocomplete from '../../booking/LocationAutocomplete';
 
 export default function Hero() {
   const router = useRouter();
