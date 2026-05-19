@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Building, Plane, Heart, Map, Briefcase, Sparkles } from 'lucide-react';
 
 import styles from './ServicesSection.module.css';
+import { ServicesSectionService } from './ServicesSectionService';
 
 interface ServiceItem {
   id: number | string;
@@ -37,17 +38,12 @@ export default function ServicesSection({ initialServices = [] }: ServicesSectio
       }
 
       try {
-        const res = await fetch(`/api/images?service=services&t=${Date.now()}`, {
-          cache: 'no-store'
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setDisplayServices(data);
-          // Store data for the current session (persists on refresh)
-          sessionStorage.setItem('servicesCache', JSON.stringify({
-            data: data
-          }));
-        }
+        const data = await ServicesSectionService.fetchServices();
+        setDisplayServices(data);
+        // Store data for the current session (persists on refresh)
+        sessionStorage.setItem('servicesCache', JSON.stringify({
+          data: data
+        }));
       } catch (error) {
         console.error('Error fetching services on client:', error);
       }

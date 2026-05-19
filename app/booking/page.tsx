@@ -10,6 +10,7 @@ import {
   Hourglass, Map, Users, Luggage, 
   Info, AlertTriangle 
 } from 'lucide-react';
+import { BookingService } from './BookingService';
 
 const RouteMap = dynamic(() => import('./RouteMap'), { ssr: false });
 
@@ -116,8 +117,7 @@ export default function BookingPage() {
     }
 
     if (!useCache) {
-      fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
-        .then(r => r.ok ? r.json() : [])
+      BookingService.fetchFleet()
         .then(data => {
           setFleet(data);
           sessionStorage.setItem('fleetCache', JSON.stringify({ data, timestamp: Date.now() }));
@@ -128,20 +128,15 @@ export default function BookingPage() {
 
   useEffect(() => {
     if (search?.pickup && search?.dropoff) {
-      const from = encodeURIComponent(search.pickup);
-      const to = encodeURIComponent(search.dropoff);
-
       setRouteLoading(true);
 
       // Fetch Distance/Time
-      fetch(`/api/routes/place-distance?from=${from}&to=${to}`)
-        .then(r => r.ok ? r.json() : null)
+      BookingService.fetchDistance(search.pickup, search.dropoff)
         .then(data => setRouteInfo(data))
         .catch(() => setRouteInfo(null));
 
       // Fetch Full Route Data (GeoJSON)
-      fetch(`/api/routes/calculate?from=${from}&to=${to}`)
-        .then(r => r.ok ? r.json() : null)
+      BookingService.fetchRoute(search.pickup, search.dropoff)
         .then(data => {
           setRouteData(data);
           setRouteLoading(false);
@@ -153,14 +148,9 @@ export default function BookingPage() {
     }
   }, [search?.pickup, search?.dropoff]);
 
-  // Fetch Return Trip Info
   useEffect(() => {
     if (tripType === 'return' && returnPickup && returnDropoff) {
-      const from = encodeURIComponent(returnPickup);
-      const to = encodeURIComponent(returnDropoff);
-
-      fetch(`/api/routes/place-distance?from=${from}&to=${to}`)
-        .then(r => r.ok ? r.json() : null)
+      BookingService.fetchDistance(returnPickup, returnDropoff)
         .then(data => setReturnRouteInfo(data))
         .catch(() => setReturnRouteInfo(null));
     } else {
@@ -187,12 +177,8 @@ export default function BookingPage() {
       const pricePromises = fleet.map(v => {
         if (!v.price) return Promise.resolve({ id: v.id, price: null });
         
-        return fetch(`/api/admin/caldata?km=${km}&rate=${v.price}&returnkm=${returnKm}&passgener=${form.passengers}&language=${form.luggage}&languagePrice=${v.languagePrice || 0}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .then(res => res.text())
-        .then(text => ({ id: v.id, price: parseFloat(text) }))
+        return BookingService.calculatePrice(km, v.price, returnKm, form.passengers, form.luggage, v.languagePrice || 0)
+        .then(price => ({ id: v.id, price }))
         .catch(err => {
           console.error(`Error calculating price for ${v.heading}:`, err);
           return { id: v.id, price: null };
@@ -322,17 +308,7 @@ export default function BookingPage() {
         `.trim()
       };
 
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to submit booking');
-      }
+      await BookingService.createBooking(payload);
 
       setSubmitted(true);
       // The useEffect will handle the scrolling

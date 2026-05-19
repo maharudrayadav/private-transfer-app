@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { MapPin } from 'lucide-react';
 import styles from './LocationAutocomplete.module.css';
+import { LocationService } from './LocationService';
 
 interface LocationAutocompleteProps {
   label: string;
@@ -42,43 +43,8 @@ export default function LocationAutocomplete({ label, placeholder, id, onSelect,
 
     setLoading(true);
     try {
-      const url = `/api/places/autocomplete?query=${encodeURIComponent(val)}`;
-      
-      const res = await fetch(url, {
-        method: 'GET'
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        console.log('Autocomplete response:', data);
-        
-        let formattedResults: string[] = [];
-
-        // Handle Structure 1: { results: [ { formatted: "..." } ] }
-        if (data && Array.isArray(data.results)) {
-          formattedResults = data.results.map((item: any) => item.formatted).filter(Boolean);
-        } 
-        // Handle Structure 2: { features: [ { properties: { name: "...", county: "...", country: "..." } } ] } (GeoJSON)
-        else if (data && Array.isArray(data.features)) {
-          formattedResults = data.features.map((feature: any) => {
-            const props = feature.properties;
-            if (!props) return null;
-            
-            // Try to build a clean string from properties
-            const parts = [
-              props.name || props.label,
-              props.county || props.city || props.district,
-              props.country || props.countrycode
-            ].filter(Boolean);
-            
-            return parts.join(', ');
-          }).filter(Boolean);
-        }
-
-        setSuggestions(formattedResults);
-      } else {
-        console.error('Autocomplete API error:', res.status);
-      }
+      const suggestions = await LocationService.fetchSuggestions(val);
+      setSuggestions(suggestions);
     } catch (error) {
       console.error('Autocomplete fetch error:', error);
     } finally {

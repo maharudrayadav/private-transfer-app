@@ -11,6 +11,7 @@ import {
   MapPin, CreditCard, ArrowRight, CheckCircle2,
   FileText, Phone, Car, Bus, Mail, Users, Luggage
 } from 'lucide-react';
+import { DashboardService } from './DashboardService';
 
 interface Booking {
   id: number;
@@ -184,15 +185,8 @@ export default function AdminDashboard() {
       if (endDate) params.append('endDate', `${endDate}T23:59:59`);
       if (tripTypeFilter) params.append('tripType', tripTypeFilter);
 
-      const res = await fetch(`/api/bookings?${params.toString()}`);
-      console.log('Fetching bookings from:', `/api/bookings?${params.toString()}`);
-      
-      if (!res.ok) {
-        console.error('API Error:', res.status, res.statusText);
-        throw new Error(`Failed to fetch bookings: ${res.status}`);
-      }
-      
-      const data = await res.json();
+      console.log('Fetching bookings from proxy with params:', params.toString());
+      const data = await DashboardService.fetchBookings(params);
       console.log('Bookings Data received:', data);
       
       // Handle different response formats
@@ -277,24 +271,12 @@ export default function AdminDashboard() {
         returnDriverName: isReturn ? returnDriverNameInput : undefined
       });
 
-      const res = await fetch(`/api/admin/confirm-booking`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bookingId: selectedBookingId,
-          driverName: driverNameInput,
-          returnDriverName: isReturn ? returnDriverNameInput : null,
-          returndriverName: isReturn ? returnDriverNameInput : null
-        })
+      await DashboardService.confirmBooking({
+        bookingId: selectedBookingId,
+        driverName: driverNameInput,
+        returnDriverName: isReturn ? returnDriverNameInput : null,
+        returndriverName: isReturn ? returnDriverNameInput : null
       });
-      
-      if (!res.ok) {
-        const errorData = await res.text();
-        console.error('Approval failed:', res.status, errorData);
-        throw new Error(`Failed to confirm booking: ${res.status}`);
-      }
 
       setShowApproveModal(false);
       if (selectedBookingId && returnDriverNameInput) {
@@ -317,10 +299,7 @@ export default function AdminDashboard() {
     setUpdateSuccess(false);
     setFetchingBooking(true);
     try {
-      // Direct call to backend as specified
-      const res = await fetch(`https://privateproject-r0ry.onrender.com/api/bookings/${booking.id}`);
-      if (!res.ok) throw new Error('Failed to fetch latest booking data');
-      const latestData = await res.json();
+      const latestData = await DashboardService.fetchBookingDetails(booking.id);
       console.log('Fetched latest data for edit:', latestData);
       
       let fName = latestData.firstName || '';
@@ -388,18 +367,7 @@ export default function AdminDashboard() {
 
       console.log('Sending update payload:', payload);
 
-      // Explicitly call the proxy API as requested
-      const res = await fetch(`/api/bookings/${editingBooking.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload)
-      });
-      
-      if (!res.ok) {
-        throw new Error(`Failed to update booking: ${res.status}`);
-      }
+      await DashboardService.updateBooking(editingBooking.id, payload);
 
       setUpdateSuccess(true);
       if (editingBooking.id && editingBooking.returnDriverName) {

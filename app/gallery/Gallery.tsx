@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './Gallery.module.css';
+import { GalleryService } from './GalleryService';
 
 interface GalleryItem {
   id: number;
@@ -18,11 +19,8 @@ export default function Gallery() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await fetch('/api/images?service=gallery');
-        if (res.ok) {
-          const data = await res.json();
-          setImages(data);
-        }
+        const data = await GalleryService.getGalleryImages();
+        setImages(data);
       } catch (error) {
         console.error('Error fetching gallery:', error);
       } finally {

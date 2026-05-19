@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import styles from './Vehicles.module.css';
 import { Users, Luggage } from 'lucide-react';
+import { VehiclesService } from './VehiclesService';
 
 interface FleetItem {
   id: number;
@@ -70,14 +71,9 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
 
       if (!useCache) {
         try {
-          const res = await fetch(`/api/images?service=FLEET&t=${Date.now()}`, {
-            cache: 'no-store'
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setFleetData(data);
-            sessionStorage.setItem('fleetCache', JSON.stringify({ data, timestamp: Date.now() }));
-          }
+          const data = await VehiclesService.fetchFleet();
+          setFleetData(data);
+          sessionStorage.setItem('fleetCache', JSON.stringify({ data, timestamp: Date.now() }));
         } catch (error) {
           console.error('Error fetching fleet on client:', error);
         }

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import styles from './serviceType.module.css';
+import { ServiceTypeService } from './ServiceTypeService';
 import { 
   Castle, Sparkles, UserCheck, Clock, Car, 
   PlaneLanding, Timer, Luggage, Route, 
@@ -46,34 +47,16 @@ export default function ServiceDetailsPage() {
       }
 
       try {
-        const [servicesRes, fleetRes] = await Promise.all([
-          fetch(`/api/images?service=services&t=${Date.now()}`, { cache: 'no-store' }),
-          fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
-        ]);
-        
-        if (servicesRes.ok && fleetRes.ok) {
-          const allServices: ServiceItem[] = await servicesRes.json();
-          const allFleet: ServiceItem[] = await fleetRes.json();
+        const { mainContent: content, fleetImages: images } = await ServiceTypeService.fetchServiceDetails(serviceType);
 
-          const matchingServices = allServices.filter(item => 
-            item.mainService?.toLowerCase() === serviceType.toLowerCase() || 
-            item.heading?.toLowerCase().replace(/ /g, '-') === serviceType.toLowerCase()
-          );
-          
-          const content = matchingServices.length > 0 ? matchingServices[0] : null;
-          const images = allFleet.filter(item => 
-            item.mainService?.toLowerCase() === serviceType.toLowerCase()
-          );
+        setMainContent(content);
+        setFleetImages(images);
 
-          setMainContent(content);
-          setFleetImages(images);
-
-          // Store in session cache
-          sessionStorage.setItem(cacheKey, JSON.stringify({
-            mainContent: content,
-            fleetImages: images
-          }));
-        }
+        // Store in session cache
+        sessionStorage.setItem(cacheKey, JSON.stringify({
+          mainContent: content,
+          fleetImages: images
+        }));
       } catch (error) {
         console.error('Failed to fetch service details:', error);
       } finally {

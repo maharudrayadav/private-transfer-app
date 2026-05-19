@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './PaymentForm.module.css';
+import { PaymentService } from './PaymentService';
 
 interface BookingDetails {
   id: number;
@@ -27,13 +28,7 @@ export default function PaymentForm() {
     setBooking(null);
 
     try {
-      const res = await fetch(`/api/bookings/code/${code.toUpperCase()}`);
-      
-      if (!res.ok) {
-        throw new Error('Reservation not found. Please check your code.');
-      }
-
-      const data = await res.json();
+      const data = await PaymentService.getBookingByCode(code);
       const mappedBooking = {
         id: data.id,
         customerName: data.firstName ? `${data.firstName} ${data.lastName}` : data.customerName,
