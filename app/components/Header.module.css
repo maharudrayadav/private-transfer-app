@@ -17,33 +17,16 @@
 }
 
 /* Logo */
-.logo {
+.logoContainer {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--secondary);
-  font-family: var(--font-playfair), serif;
+  height: 48px;
 }
 
-.logoMark {
-  width: 42px;
-  height: 42px;
-  background: var(--primary);
-  color: #fff;
-  border-radius: 8px; /* Match new button radius instead of full circle */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  font-weight: 800;
-  flex-shrink: 0;
-  box-shadow: 0 4px 6px -1px rgba(197, 160, 89, 0.3);
-}
-
-.logoText span {
-  color: var(--primary);
+.logoImg {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Nav */

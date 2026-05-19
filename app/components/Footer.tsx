@@ -8,9 +8,8 @@ export default function Footer() {
 
         {/* Brand */}
         <div className={styles.col}>
-          <div className={styles.logo}>
-            <span className={styles.logoMark}>P</span>
-            <span><span className={styles.blue}>Private</span>Transfer</span>
+          <div className={styles.logoContainer}>
+            <img src="/logo-white.svg" alt="Private Transfers" className={styles.logoImg} />
           </div>
           <p className={styles.desc}>
             Premium chauffeur and private transfer service in Ireland. Your journey, your way.
