@@ -1,0 +1,44 @@
+<svg width="100%" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b8952a"/>
+      <stop offset="50%" stop-color="#f0d060"/>
+      <stop offset="100%" stop-color="#b8952a"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e2644"/>
+      <stop offset="100%" stop-color="#0c1120"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8952a"/>
+      <stop offset="100%" stop-color="#e8c84a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="340" cy="340" r="295" fill="none" stroke="url(#g1)" stroke-width="1.2" opacity="0.3"/>
+  <circle cx="340" cy="340" r="278" fill="url(#g2)"/>
+  <circle cx="340" cy="340" r="278" fill="none" stroke="url(#g1)" stroke-width="7"/>
+  <circle cx="340" cy="340" r="256" fill="none" stroke="url(#g1)" stroke-width="1.2" opacity="0.5"/>
+  <!-- Shamrock -->
+  <ellipse cx="315" cy="118" rx="22" ry="28" fill="#2a7a3a" transform="rotate(-30 315 118)"/>
+  <ellipse cx="365" cy="118" rx="22" ry="28" fill="#2a7a3a" transform="rotate(30 365 118)"/>
+  <ellipse cx="340" cy="92" rx="22" ry="28" fill="#2a7a3a"/>
+  <line x1="340" y1="130" x2="340" y2="158" stroke="#2a7a3a" stroke-width="5" stroke-linecap="round"/>
+  <!-- Steering wheel -->
+  <circle cx="340" cy="360" r="148" fill="none" stroke="url(#g1)" stroke-width="18"/>
+  <circle cx="340" cy="360" r="44" fill="url(#g1)"/>
+  <circle cx="340" cy="360" r="30" fill="url(#g2)"/>
+  <circle cx="340" cy="360" r="18" fill="none" stroke="url(#g1)" stroke-width="2.5"/>
+  <circle cx="340" cy="360" r="6" fill="url(#g1)"/>
+  <line x1="340" y1="316" x2="340" y2="212" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+  <line x1="302" y1="382" x2="221" y2="424" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+  <line x1="378" y1="382" x2="459" y2="424" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+  <!-- Road ribbon -->
+  <path d="M180 550 Q220 510 340 505 Q460 510 500 550 L520 580 Q460 540 340 535 Q220 540 160 580 Z" fill="url(#g3)" opacity="0.9"/>
+  <rect x="325" y="516" width="30" height="7" rx="3" fill="#1e2644" opacity="0.6"/>
+  <rect x="325" y="534" width="30" height="7" rx="3" fill="#1e2644" opacity="0.6"/>
+  <!-- Diamond markers -->
+  <polygon points="340,82 344,90 340,98 336,90" fill="url(#g1)"/>
+  <polygon points="598,340 590,344 582,340 590,336" fill="url(#g1)"/>
+  <polygon points="340,598 344,590 340,582 336,590" fill="url(#g1)"/>
+  <polygon points="82,340 90,344 98,340 90,336" fill="url(#g1)"/>
+</svg>

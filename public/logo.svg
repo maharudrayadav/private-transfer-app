@@ -9,43 +9,65 @@
       <stop offset="0%" style="stop-color:#1c2340"/>
       <stop offset="100%" style="stop-color:#0d1220"/>
     </linearGradient>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b8952a"/>
+      <stop offset="50%" stop-color="#f0d060"/>
+      <stop offset="100%" stop-color="#b8952a"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e2644"/>
+      <stop offset="100%" stop-color="#0c1120"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b8952a"/>
+      <stop offset="100%" stop-color="#e8c84a"/>
+    </linearGradient>
   </defs>
 
-  <!-- Shield badge -->
-  <path d="M110 28 L170 28 L170 135 L140 155 L110 135 Z" fill="url(#navyGrad)"/>
-  <path d="M110 28 L170 28 L170 135 L140 155 L110 135 Z" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
-  <path d="M116 35 L164 35 L164 131 L140 148 L116 131 Z" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" opacity="0.5"/>
-
-  <!-- Steering wheel -->
-  <circle cx="140" cy="88" r="28" fill="none" stroke="url(#goldGrad)" stroke-width="2.2"/>
-  <circle cx="140" cy="88" r="10" fill="none" stroke="url(#goldGrad)" stroke-width="2"/>
-  <line x1="140" y1="60" x2="140" y2="78" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
-  <line x1="140" y1="98" x2="140" y2="116" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
-  <line x1="112" y1="88" x2="130" y2="88" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
-  <line x1="150" y1="88" x2="168" y2="88" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
-  <line x1="120" y1="68" x2="132" y2="80" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="148" y1="96" x2="160" y2="108" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="160" y1="68" x2="148" y2="80" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="120" y1="108" x2="132" y2="96" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round"/>
-
-  <!-- Three dots at shield base -->
-  <circle cx="133" cy="143" r="3.5" fill="url(#goldGrad)"/>
-  <circle cx="140" cy="143" r="3.5" fill="url(#goldGrad)"/>
-  <circle cx="147" cy="143" r="3.5" fill="url(#goldGrad)"/>
+  <!-- Circular steering wheel + shamrock emblem (Scaled & Transformed) -->
+  <g transform="translate(110, 110) scale(0.25) translate(-340, -340)">
+    <circle cx="340" cy="340" r="295" fill="none" stroke="url(#g1)" stroke-width="1.2" opacity="0.3"/>
+    <circle cx="340" cy="340" r="278" fill="url(#g2)"/>
+    <circle cx="340" cy="340" r="278" fill="none" stroke="url(#g1)" stroke-width="7"/>
+    <circle cx="340" cy="340" r="256" fill="none" stroke="url(#g1)" stroke-width="1.2" opacity="0.5"/>
+    <!-- Shamrock -->
+    <ellipse cx="315" cy="118" rx="22" ry="28" fill="#2a7a3a" transform="rotate(-30 315 118)"/>
+    <ellipse cx="365" cy="118" rx="22" ry="28" fill="#2a7a3a" transform="rotate(30 365 118)"/>
+    <ellipse cx="340" cy="92" rx="22" ry="28" fill="#2a7a3a"/>
+    <line x1="340" y1="130" x2="340" y2="158" stroke="#2a7a3a" stroke-width="5" stroke-linecap="round"/>
+    <!-- Steering wheel -->
+    <circle cx="340" cy="360" r="148" fill="none" stroke="url(#g1)" stroke-width="18"/>
+    <circle cx="340" cy="360" r="44" fill="url(#g1)"/>
+    <circle cx="340" cy="360" r="30" fill="url(#g2)"/>
+    <circle cx="340" cy="360" r="18" fill="none" stroke="url(#g1)" stroke-width="2.5"/>
+    <circle cx="340" cy="360" r="6" fill="url(#g1)"/>
+    <line x1="340" y1="316" x2="340" y2="212" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="302" y1="382" x2="221" y2="424" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="378" y1="382" x2="459" y2="424" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+    <!-- Road ribbon -->
+    <path d="M180 550 Q220 510 340 505 Q460 510 500 550 L520 580 Q460 540 340 535 Q220 540 160 580 Z" fill="url(#g3)" opacity="0.9"/>
+    <rect x="325" y="516" width="30" height="7" rx="3" fill="#1e2644" opacity="0.6"/>
+    <rect x="325" y="534" width="30" height="7" rx="3" fill="#1e2644" opacity="0.6"/>
+    <!-- Diamond markers -->
+    <polygon points="340,82 344,90 340,98 336,90" fill="url(#g1)"/>
+    <polygon points="598,340 590,344 582,340 590,336" fill="url(#g1)"/>
+    <polygon points="340,598 344,590 340,582 336,590" fill="url(#g1)"/>
+    <polygon points="82,340 90,344 98,340 90,336" fill="url(#g1)"/>
+  </g>
 
   <!-- Wordmark -->
-  <text x="192" y="90"
+  <text x="210" y="90"
     font-family="'Palatino Linotype', Palatino, Georgia, serif"
     font-size="46" font-weight="700" letter-spacing="1" fill="#1c2340">Private</text>
 
-  <text x="192" y="138"
+  <text x="210" y="138"
     font-family="'Palatino Linotype', Palatino, Georgia, serif"
     font-size="46" font-weight="700" letter-spacing="1" fill="#1c2340">Transfers<tspan fill="url(#goldGrad)" font-weight="400">.ie</tspan></text>
 
   <!-- Divider lines + tagline -->
-  <line x1="192" y1="153" x2="300" y2="153" stroke="url(#goldGrad)" stroke-width="0.8"/>
+  <line x1="210" y1="153" x2="310" y2="153" stroke="url(#goldGrad)" stroke-width="0.8"/>
   <line x1="490" y1="153" x2="598" y2="153" stroke="url(#goldGrad)" stroke-width="0.8"/>
-  <text x="395" y="157"
+  <text x="400" y="157"
     font-family="Arial, Helvetica, sans-serif"
     font-size="11" letter-spacing="4.5" text-anchor="middle" fill="#8a7a45">PREMIUM CHAUFFEUR · IRELAND</text>
 </svg>
