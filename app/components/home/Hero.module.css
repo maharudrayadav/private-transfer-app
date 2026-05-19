@@ -103,12 +103,14 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  z-index: 1;
 }
 
 .barField:hover {
   border-color: var(--primary-light);
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+  z-index: 5;
 }
 
 .barField:focus-within {
@@ -116,6 +118,7 @@
   background: #ffffff;
   box-shadow: 0 12px 24px rgba(179, 139, 77, 0.12);
   transform: translateY(-2px);
+  z-index: 15; /* Establish higher stacking priority so suggestions render on top of subsequent cards */
 }
 
 .barField label {
@@ -144,14 +147,17 @@
   cursor: pointer;
 }
 
-/* Overriding child component input for this specific bar */
-.barField :global(input) {
+/* Overriding child component input for this specific bar (Specifying more specific selectors to override !important) */
+.barField :global(input),
+.barField :global(.inputLight) {
   background: transparent !important;
   color: var(--secondary) !important;
   padding: 0.15rem 0 !important;
   border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   font-weight: 700 !important;
-  font-size: 0.9rem !important;
+  font-size: 0.95rem !important;
   cursor: pointer;
 }
 
