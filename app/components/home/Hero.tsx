@@ -67,6 +67,7 @@ export default function Hero() {
                   label="From"
                   placeholder="Pickup"
                   onSelect={setPickup}
+                  variant="light"
                 />
               </div>
 
@@ -76,6 +77,7 @@ export default function Hero() {
                   label="To"
                   placeholder="Dropoff"
                   onSelect={setDropoff}
+                  variant="light"
                 />
               </div>
 

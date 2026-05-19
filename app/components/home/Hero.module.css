@@ -72,76 +72,64 @@
 
 /* ── Horizontal Booking Bar ───────────────────────────────── */
 .bookingBar {
-  background: #fff;
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
   max-width: 1100px;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   position: relative;
   z-index: 50;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.bookingBar:focus-within {
-  border-color: var(--primary-light);
-  box-shadow: 0 24px 48px rgba(179, 139, 77, 0.18);
-  transform: translateY(-2px);
 }
 
 .barFields {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 1.25fr 1.25fr 1fr 1fr auto;
+  align-items: stretch;
+  gap: 0.75rem;
   width: 100%;
   position: relative;
 }
 
 .barField {
-  flex: 1;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  padding: 0.6rem 1.1rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   position: relative;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 
 .barField:hover {
-  background-color: var(--bg-light);
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+}
+
+.barField:focus-within {
+  border-color: var(--primary);
+  background: #ffffff;
+  box-shadow: 0 12px 24px rgba(179, 139, 77, 0.12);
+  transform: translateY(-2px);
+}
+
+.barField label {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: color 0.2s ease;
+  margin-bottom: 0.1rem;
 }
 
 .barField:hover label {
   color: var(--primary);
-}
-
-/* Vertical Divider */
-.barField:not(:last-child):not(:nth-last-child(2))::after {
-  content: '';
-  position: absolute;
-  right: -0.5rem;
-  top: 25%;
-  height: 50%;
-  width: 1px;
-  background: var(--border);
-  transition: opacity 0.2s ease;
-}
-
-.barField:hover::after,
-.barField:hover + .barField::after {
-  opacity: 0; /* Smoothly hide divider line on hover */
-}
-
-.barField label {
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  transition: color 0.2s ease;
 }
 
 .barField input,
@@ -149,9 +137,9 @@
   background: transparent;
   border: none;
   color: var(--secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  padding: 0.2rem 0;
+  padding: 0.1rem 0;
   width: 100%;
   cursor: pointer;
 }
@@ -160,9 +148,10 @@
 .barField :global(input) {
   background: transparent !important;
   color: var(--secondary) !important;
-  padding: 0.2rem 0 !important;
+  padding: 0.15rem 0 !important;
   border: none !important;
   font-weight: 700 !important;
+  font-size: 0.9rem !important;
   cursor: pointer;
 }
 
@@ -174,6 +163,8 @@
 
 .inputWithFormat {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .hiddenDateInput {
@@ -188,33 +179,37 @@
 
 .timeInput {
   cursor: pointer;
+  height: 24px;
 }
 
 .barAction {
-  flex: 0 0 auto;
-  padding-left: 0.5rem;
+  display: flex;
+  align-items: stretch;
 }
 
 .searchBtn {
   background: var(--primary);
   color: #fff;
-  padding: 1.1rem 2.4rem;
+  padding: 0 2.5rem;
   border-radius: 6px;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(179, 139, 77, 0.25);
+  box-shadow: 0 6px 16px rgba(179, 139, 77, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .searchBtn:hover {
   background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(179, 139, 77, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(179, 139, 77, 0.3);
 }
 
 .searchBtn:active {
@@ -228,13 +223,8 @@
   }
 
   .barFields {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .barField::after {
-    display: none !important;
+    gap: 0.75rem;
   }
 
   .barAction {
@@ -243,6 +233,7 @@
 
   .searchBtn {
     width: 100%;
+    padding: 1.1rem 2.4rem;
   }
 }
 
