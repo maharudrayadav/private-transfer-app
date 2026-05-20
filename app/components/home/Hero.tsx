@@ -29,21 +29,29 @@ export default function Hero() {
 
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
+  
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMsg, setPopupMsg] = useState('');
+
+  const triggerPopup = (msg: string) => {
+    setPopupMsg(msg);
+    setShowPopup(true);
+  };
 
   const handleSearch = () => {
     if (!pickup || !dropoff) {
-      alert('Please enter both pickup and drop-off locations');
+      triggerPopup('Please enter both pickup and drop-off locations');
       return;
     }
 
     if (!dateDisplay) {
-      alert('Please select a journey date');
+      triggerPopup('Please select a journey date');
       return;
     }
 
     const timeVal = timeInputRef.current?.value;
     if (!timeVal) {
-      alert('Please select a journey time');
+      triggerPopup('Please select a journey time');
       return;
     }
     
@@ -146,6 +154,15 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
+      {showPopup && (
+        <div className={styles.customAlertOverlay}>
+          <div className={styles.customAlertBox}>
+            <p>{popupMsg}</p>
+            <button onClick={() => setShowPopup(false)}>OK</button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

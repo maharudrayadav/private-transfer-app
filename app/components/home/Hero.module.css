@@ -252,3 +252,53 @@
     grid-column: span 1;
   }
 }
+
+/* Custom Alert Popup (Replaces Native Alert) */
+.customAlertOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.customAlertBox {
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.customAlertBox p {
+  color: #1e293b;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.customAlertBox button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: center;
+  min-width: 100px;
+  transition: background 0.2s ease;
+}
+
+.customAlertBox button:hover {
+  background: #1d4ed8;
+}
