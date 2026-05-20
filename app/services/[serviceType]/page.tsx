@@ -35,7 +35,7 @@ const container = {
   }
 };
 
-const item = {
+const fadeInItem = {
   hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
@@ -125,7 +125,7 @@ export default function ServiceDetailsPage() {
     <div className={styles.page}>
       <motion.div 
         className={styles.heroBanner}
-        variants={item}
+        variants={fadeInItem}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
@@ -154,7 +154,7 @@ export default function ServiceDetailsPage() {
                   <motion.div 
                     key={item.id || idx} 
                     className={styles.galleryItem}
-                    variants={item}
+                    variants={fadeInItem}
                     whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(0,0,0,0.1)' }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
@@ -228,7 +228,7 @@ export default function ServiceDetailsPage() {
                     <motion.div 
                       key={i} 
                       className={styles.stylishPointCard}
-                      variants={item}
+                      variants={fadeInItem}
                       whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(0,0,0,0.08)' }}
                       transition={{ type: 'spring', stiffness: 300 }}
                     >
