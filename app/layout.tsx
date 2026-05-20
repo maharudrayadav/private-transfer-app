@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "./components/LayoutWrapper";
 
-const outfit = DM_Sans({
+const outfit = Inter({
   variable: "--font-outfit",
   subsets: ["latin"],
 });
 
-const playfair = DM_Sans({
+const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
 });

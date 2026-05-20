@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --primary:       #b38b4d;      /* Deep Bronze / Antique Gold */
-  --primary-light: #d4b483;
-  --primary-dark:  #8e6e3d;
-  --secondary:     #0f172a;      /* Midnight Navy */
-  --secondary-light: #1e293b;
-  --accent:        #b38b4d;
-  --bg:            #ffffff;
-  --bg-light:      #f8fafc;
-  --bg-dark:       #0f172a;
-  --text:          #1e293b;
-  --text-muted:    #64748b;
-  --text-light:    #f1f5f9;
-  --border:        #e2e8f0;
-  --card-shadow:   0 4px 12px rgba(0, 0, 0, 0.05);
+  --primary:       #D4AF37;      /* Muted Metallic Gold */
+  --primary-light: #E8CA7D;
+  --primary-dark:  #B5952F;
+  --secondary:     #0B0C10;      /* Deep Obsidian Black */
+  --secondary-light: #1F2833;    /* Midnight Charcoal */
+  --accent:        #C5A059;
+  --bg:            #0B0C10;      /* Rich dark background */
+  --bg-light:      #15171E;      /* Slight lift for panels */
+  --bg-dark:       #060709;
+  --text:          #FDFBF7;      /* Rich off-white for body text */
+  --text-muted:    #8E96A4;      /* Refined gray for secondary text */
+  --text-light:    #FFFFFF;
+  --border:        rgba(255, 255, 255, 0.08); /* Incredibly subtle, thin borders */
+  --card-shadow:   0 8px 32px rgba(0, 0, 0, 0.5); /* Deep premium shadow */
 }
 
 * {
@@ -35,28 +35,28 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   overflow-y: auto;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em; /* Slightly adjusted tracking for luxury feel */
 }
 
 /* Custom Selection Color */
 ::selection {
   background: var(--primary);
-  color: #fff;
+  color: #0B0C10;
 }
 
 /* Ensure scrollbars are visible */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   display: block !important;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-light);
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 5px;
+  background: var(--secondary-light);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -65,15 +65,16 @@ body {
 
 h1, h2, h3, h4, h5 {
   font-family: var(--font-playfair), serif;
-  font-weight: 800;
-  line-height: 1.1;
-  color: var(--secondary);
+  font-weight: 400; /* Soften weight for more elegant serif appearance */
+  line-height: 1.2;
+  color: var(--text); /* Titles in off-white */
+  letter-spacing: 0.02em;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease; /* Smoother transitions */
 }
 
 ul {
@@ -84,6 +85,29 @@ ul {
 
 img {
   max-width: 100%;
+}
+
+/* ── Global Form Elements (Sleek Dark Look) ────────────────────── */
+input, select, textarea {
+  background: rgba(255, 255, 255, 0.03) !important; /* Dark semi-transparent */
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important; /* Subtle inner shadow */
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(4px);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(212, 175, 55, 0.4) !important; /* Gold accent on focus */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 175, 55, 0.2) !important;
+  outline: none !important;
+}
+
+/* Make placeholders elegant */
+::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
 }
 
 /* ── Layout ────────────────────────────────────── */
@@ -102,85 +126,112 @@ img {
 .btn-primary {
   display: inline-block;
   background: var(--primary);
-  color: #fff;
-  padding: 1rem 2.8rem;
-  font-weight: 700;
-  font-size: 0.95rem;
+  color: #0B0C10; /* Dark text for contrast against gold */
+  padding: 1rem 3rem;
+  font-weight: 600;
+  font-size: 0.9rem;
   border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  border: none;
+  border: 1px solid transparent;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px; /* Wider spacing for luxury feel */
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background: transparent;
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15); /* Slight opacity glow */
 }
 
 .btn-outline {
   display: inline-block;
   background: transparent;
-  color: #fff;
-  padding: 1rem 2.8rem;
-  font-weight: 700;
-  font-size: 0.95rem;
+  color: var(--text);
+  padding: 1rem 3rem;
+  font-weight: 600;
+  font-size: 0.9rem;
   border-radius: 4px;
-  border: 1px solid #fff;
-  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
 }
 
 .btn-outline:hover {
-  background: #fff;
-  color: var(--secondary);
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(212, 175, 55, 0.05);
 }
 
 .btn-dark {
   display: inline-block;
-  background: var(--secondary);
-  color: #fff;
-  padding: 0.8rem 2.5rem;
-  font-weight: 700;
-  font-size: 1rem;
+  background: var(--secondary-light);
+  color: var(--text);
+  padding: 0.9rem 2.8rem;
+  font-weight: 600;
+  font-size: 0.9rem;
   border-radius: 4px;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   cursor: pointer;
-  border: none;
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .btn-dark:hover {
-  background: var(--secondary-light);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 /* ── Section titles ────────────────────────────── */
 .section-title {
   font-size: 3rem;
-  font-weight: 700;
-  color: var(--secondary);
+  font-weight: 400;
+  color: var(--primary);
   margin-bottom: 1rem;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .section-subtitle {
   color: var(--text-muted);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-bottom: 4rem;
   max-width: 700px;
+  font-weight: 300;
 }
 
-/* Glassmorphism Utility (toned down) */
+/* Glassmorphism Utility (toned down for dark mode) */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
+  background: rgba(11, 12, 16, 0.7); /* Deep obsidian semi-transparent */
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Specific overrides for light sections if they exist */
+.light-theme, .light-section {
+  --bg: #FDFBF7;
+  --text: #0B0C10;
+  --secondary: #FDFBF7;
+  --text-muted: #64748B;
+  --border: rgba(0, 0, 0, 0.1);
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.light-theme .section-title, .light-section .section-title {
+  color: #0B0C10;
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 0 1rem;
+        padding: 0 1.5rem;
     }
     .section-title {
         font-size: 2.2rem;
