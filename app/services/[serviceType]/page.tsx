@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import styles from './serviceType.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ServiceTypeService } from './ServiceTypeService';
 import { 
   Castle, Sparkles, UserCheck, Clock, Car, 
   PlaneLanding, Timer, Luggage, Route, 
