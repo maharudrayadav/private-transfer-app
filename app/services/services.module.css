@@ -57,3 +57,12 @@
 .cta a:hover {
   opacity: 0.9;
 }
+
+@media (max-width: 500px) {
+  .banner h1 {
+    font-size: 2.2rem;
+  }
+  .cta h2 {
+    font-size: 1.8rem;
+  }
+}

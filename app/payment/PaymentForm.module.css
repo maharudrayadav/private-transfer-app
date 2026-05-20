@@ -202,10 +202,4 @@
   .card {
     padding: 1.5rem;
   }
-  .inputWrapper {
-    flex-direction: column;
-  }
-  .searchBtn {
-    padding: 1rem;
-  }
 }

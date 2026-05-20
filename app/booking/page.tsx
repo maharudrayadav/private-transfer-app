@@ -339,7 +339,15 @@ export default function BookingPage() {
 
   const handleApplyModify = () => {
     if (!modPickup || !modDropoff) {
-      alert('Please enter both pickup and dropoff locations');
+      alert('Please enter both pickup and drop-off locations');
+      return;
+    }
+    if (!modDateDisplay) {
+      alert('Please select a journey date');
+      return;
+    }
+    if (!modTime) {
+      alert('Please select a journey time');
       return;
     }
     const updated = {

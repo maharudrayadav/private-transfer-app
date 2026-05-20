@@ -1234,6 +1234,9 @@
   .vehicleCard {
     grid-template-columns: 200px 1fr auto;
   }
+  .vehicleImg {
+    width: 200px;
+  }
   .returnDetailsGrid {
     grid-template-columns: 1fr;
   }

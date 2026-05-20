@@ -27,7 +27,18 @@ export default function Hero() {
 
   const handleSearch = () => {
     if (!pickup || !dropoff) {
-      alert('Please enter pickup and dropoff locations');
+      alert('Please enter both pickup and drop-off locations');
+      return;
+    }
+
+    if (!dateDisplay) {
+      alert('Please select a journey date');
+      return;
+    }
+
+    const timeVal = timeInputRef.current?.value;
+    if (!timeVal) {
+      alert('Please select a journey time');
       return;
     }
     
@@ -36,7 +47,7 @@ export default function Hero() {
       pickup,
       dropoff,
       date: dateDisplay,
-      time: timeInputRef.current?.value || ''
+      time: timeVal
     };
     sessionStorage.setItem('lastSearch', JSON.stringify(searchParams));
 

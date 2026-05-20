@@ -134,3 +134,18 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 500px) {
+  .heroBanner h1 {
+    font-size: 2.2rem;
+  }
+  .heroBanner {
+    padding: 120px 0 60px;
+  }
+  .gallerySection {
+    padding: 60px 0;
+  }
+  .galleryItem {
+    height: 200px;
+  }
+}
