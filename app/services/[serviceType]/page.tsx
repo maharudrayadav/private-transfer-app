@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import styles from './serviceType.module.css';
-import { ServiceTypeService } from './ServiceTypeService';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Castle, Sparkles, UserCheck, Clock, Car, 
   PlaneLanding, Timer, Luggage, Route, 
@@ -21,6 +21,30 @@ interface ServiceItem {
   imageUrl: string;
   mainService: string;
 }
+const container = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.1,
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
 
 export default function ServiceDetailsPage() {
   const params = useParams();
@@ -70,7 +94,16 @@ export default function ServiceDetailsPage() {
   if (loading) {
     return (
       <div className="container" style={{ padding: '180px 0 100px', textAlign: 'center', minHeight: '60vh' }}>
-        <p style={{ color: 'var(--primary)', fontSize: '1.2rem' }}>Loading service details...</p>
+        <motion.div 
+          animate={{ opacity: [0.4, 0.8, 0.4] }} 
+          transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          style={{ width: '60%', height: '40px', background: 'rgba(0,0,0,0.05)', margin: '0 auto', borderRadius: '8px' }}
+        />
+        <motion.div 
+          animate={{ opacity: [0.4, 0.8, 0.4] }} 
+          transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: 0.2 }}
+          style={{ width: '40%', height: '20px', background: 'rgba(0,0,0,0.05)', margin: '20px auto 0', borderRadius: '4px' }}
+        />
       </div>
     );
   }
@@ -80,32 +113,50 @@ export default function ServiceDetailsPage() {
       <div className="container" style={{ padding: '180px 0 100px', textAlign: 'center', minHeight: '60vh' }}>
         <h1 style={{ fontSize: '3rem', color: 'var(--secondary)', marginBottom: '1rem' }}>Service Unavailable</h1>
         <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)' }}>We are currently updating our fleet and service details for this category.</p>
-        <Link href="/services" className="btn-primary" style={{ marginTop: '2rem' }}>Back to Services</Link>
+        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ display: 'inline-block', marginTop: '2rem' }}>
+          <Link href="/services" className="btn-primary">Back to Services</Link>
+        </motion.div>
       </div>
     );
   }
 
   return (
     <div className={styles.page}>
-      <div className={styles.heroBanner}>
+      <motion.div 
+        className={styles.heroBanner}
+        variants={item}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="container">
           <p className={styles.eyebrow}>{mainContent.subHeading}</p>
           <h1>{(mainContent.heading || '').trim()}</h1>
           <p className={styles.description}>{mainContent.description}</p>
         </div>
-      </div>
+      </motion.div>
 
-      <div 
+      <motion.div 
         className={styles.gallerySection}
         style={{ paddingTop: fleetImages.length > 0 ? '100px' : '20px', paddingBottom: '60px' }}
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
       >
         <div className="container">
           {fleetImages.length > 0 ? (
             <>
               <h2>Our Vehicles</h2>
-              <div className={styles.galleryGrid}>
+              <motion.div className={styles.galleryGrid} variants={container}>
                 {fleetImages.map((item, idx) => (
-                  <div key={item.id || idx} className={styles.galleryItem}>
+                  <motion.div 
+                    key={item.id || idx} 
+                    className={styles.galleryItem}
+                    variants={item}
+                    whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(0,0,0,0.1)' }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
                     <Image 
                       src={item.imageUrl} 
                       alt={`${item.heading || 'Fleet Vehicle'} option ${idx + 1}`} 
@@ -116,9 +167,9 @@ export default function ServiceDetailsPage() {
                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '15px', background: 'linear-gradient(to top, rgba(15,23,42,0.8), transparent)', color: 'white', fontWeight: 'bold' }}>
                       {item.heading}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </>
           ) : null}
           
@@ -163,24 +214,36 @@ export default function ServiceDetailsPage() {
             if (points.length === 0) return null;
             
             return (
-              <div style={{ marginTop: fleetImages.length > 0 ? '6rem' : '0' }}>
+              <motion.div 
+                style={{ marginTop: fleetImages.length > 0 ? '6rem' : '0' }}
+                variants={container}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+              >
                 <h2>Our Features</h2>
-                <div className={styles.stylishPointsGrid}>
+                <motion.div className={styles.stylishPointsGrid} variants={container}>
                   {points.map((pt, i) => (
-                    <div key={i} className={styles.stylishPointCard}>
+                    <motion.div 
+                      key={i} 
+                      className={styles.stylishPointCard}
+                      variants={item}
+                      whileHover={{ y: -6, boxShadow: '0 12px 30px rgba(0,0,0,0.08)' }}
+                      transition={{ type: 'spring', stiffness: 300 }}
+                    >
                       <div className={styles.spIcon}>{pt.icon}</div>
                       <div className={styles.spContent}>
                         <h4>{pt.title}</h4>
                         <p>{pt.desc}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             );
           })()}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
