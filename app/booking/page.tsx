@@ -481,14 +481,25 @@ export default function BookingPage() {
                 </div>
                 <div className={styles.modifyField}>
                   <label className={styles.modLabel}>Time</label>
-                  <input
-                    type="time"
-                    className={styles.modTimeInput}
-                    ref={modTimeRef}
-                    value={modTime}
-                    onChange={e => setModTime(e.target.value)}
-                    onClick={() => modTimeRef.current?.showPicker()}
-                  />
+                  <div
+                    className={styles.modDateWrap}
+                    onClick={() => { try { modTimeRef.current?.showPicker(); } catch(e){} }}
+                  >
+                    <input
+                      type="text"
+                      readOnly
+                      placeholder="HH : MM"
+                      value={modTime}
+                      className={styles.modDateDisplay}
+                    />
+                    <input
+                      type="time"
+                      ref={modTimeRef}
+                      className={styles.hiddenDateInput}
+                      value={modTime}
+                      onChange={e => setModTime(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
               <button className={styles.applyModifyBtn} onClick={handleApplyModify}>

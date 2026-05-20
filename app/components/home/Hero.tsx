@@ -11,6 +11,11 @@ export default function Hero() {
   const [dateDisplay, setDateDisplay] = useState('');
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
+  const [timeDisplay, setTimeDisplay] = useState('');
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTimeDisplay(e.target.value);
+  };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value; // YYYY-MM-DD
@@ -110,9 +115,22 @@ export default function Hero() {
                 </div>
               </div>
 
-              <div className={styles.barField} onClick={() => timeInputRef.current?.showPicker()}>
+              <div className={styles.barField} onClick={() => { try { timeInputRef.current?.showPicker(); } catch(e){} }}>
                 <label>Time</label>
-                <input type="time" ref={timeInputRef} className={styles.timeInput} />
+                <div className={styles.inputWithFormat}>
+                  <input 
+                    type="text" 
+                    readOnly 
+                    placeholder="HH:MM" 
+                    value={timeDisplay}
+                  />
+                  <input 
+                    type="time" 
+                    ref={timeInputRef} 
+                    className={styles.hiddenDateInput} 
+                    onChange={handleTimeChange}
+                  />
+                </div>
               </div>
 
               <div className={styles.barAction}>
