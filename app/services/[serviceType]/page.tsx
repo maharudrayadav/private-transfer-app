@@ -95,7 +95,10 @@ export default function ServiceDetailsPage() {
         </div>
       </div>
 
-      <div className={styles.gallerySection}>
+      <div 
+        className={styles.gallerySection}
+        style={{ paddingTop: fleetImages.length > 0 ? '100px' : '20px', paddingBottom: '60px' }}
+      >
         <div className="container">
           {fleetImages.length > 0 ? (
             <>
@@ -160,7 +163,7 @@ export default function ServiceDetailsPage() {
             if (points.length === 0) return null;
             
             return (
-              <div style={{ marginTop: '6rem' }}>
+              <div style={{ marginTop: fleetImages.length > 0 ? '6rem' : '0' }}>
                 <h2>Our Features</h2>
                 <div className={styles.stylishPointsGrid}>
                   {points.map((pt, i) => (
