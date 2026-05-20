@@ -21,9 +21,10 @@ interface ServiceItem {
 
 interface ServicesSectionProps {
   initialServices?: ServiceItem[];
+  showMoreServicesLink?: boolean;
 }
 
-export default function ServicesSection({ initialServices = [] }: ServicesSectionProps) {
+export default function ServicesSection({ initialServices = [], showMoreServicesLink = false }: ServicesSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [displayServices, setDisplayServices] = useState<ServiceItem[]>(initialServices);
 
@@ -86,9 +87,11 @@ export default function ServicesSection({ initialServices = [] }: ServicesSectio
             <h2 className={styles.title}>Bespoke Chauffeur Services</h2>
           </div>
           <div className={styles.navArea}>
-            <Link href="/services" className={styles.moreServicesLink}>
-              More Services ↗
-            </Link>
+            {showMoreServicesLink && (
+              <Link href="/services" className={styles.moreServicesLink}>
+                More Services ↗
+              </Link>
+            )}
             <button className={styles.sliderBtn} onClick={() => scroll('left')}>‹</button>
             <button className={styles.sliderBtn} onClick={() => scroll('right')}>›</button>
           </div>

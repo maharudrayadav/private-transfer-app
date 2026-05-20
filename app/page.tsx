@@ -8,7 +8,7 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <ServicesSection />
+      <ServicesSection showMoreServicesLink={true} />
       <WhyUs />
       <Vehicles />
       <Features />
