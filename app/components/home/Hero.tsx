@@ -29,21 +29,23 @@ export default function Hero() {
 
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSearch = () => {
+    setErrorMsg('');
     if (!pickup || !dropoff) {
-      alert('Please enter both pickup and drop-off locations');
+      setErrorMsg('Please enter both pickup and drop-off locations');
       return;
     }
 
     if (!dateDisplay) {
-      alert('Please select a journey date');
+      setErrorMsg('Please select a journey date');
       return;
     }
 
     const timeVal = timeInputRef.current?.value;
     if (!timeVal) {
-      alert('Please select a journey time');
+      setErrorMsg('Please select a journey time');
       return;
     }
     
@@ -140,6 +142,22 @@ export default function Hero() {
               </div>
             </div>
           </div>
+
+          {errorMsg && (
+            <div style={{ 
+              color: '#ef4444', 
+              marginTop: '1.5rem', 
+              fontWeight: '500', 
+              padding: '0.75rem 1.5rem', 
+              background: 'rgba(239, 68, 68, 0.1)', 
+              border: '1px solid rgba(239, 68, 68, 0.2)',
+              borderRadius: '8px', 
+              display: 'inline-block',
+              backdropFilter: 'blur(4px)'
+            }}>
+              {errorMsg}
+            </div>
+          )}
 
           <div className={styles.heroActions}>
             <Link href="/services" className="btn-primary">View Services</Link>
