@@ -1,20 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --primary:       #D4AF37;      /* Muted Metallic Gold */
-  --primary-light: #E8CA7D;
-  --primary-dark:  #B5952F;
-  --secondary:     #0B0C10;      /* Deep Obsidian Black */
-  --secondary-light: #1F2833;    /* Midnight Charcoal */
-  --accent:        #C5A059;
-  --bg:            #0B0C10;      /* Rich dark background */
-  --bg-light:      #15171E;      /* Slight lift for panels */
-  --bg-dark:       #060709;
-  --text:          #FDFBF7;      /* Rich off-white for body text */
-  --text-muted:    #8E96A4;      /* Refined gray for secondary text */
-  --text-light:    #FFFFFF;
-  --border:        rgba(255, 255, 255, 0.08); /* Incredibly subtle, thin borders */
-  --card-shadow:   0 8px 32px rgba(0, 0, 0, 0.5); /* Deep premium shadow */
+  --primary:       #C5A059;      /* The Chauffeur Gold */
+  --primary-hover: #B38F48;      /* Deeper Gold for Hover */
+  
+  --bg:            #FDFBF7;      /* Warm high-end off-white cream */
+  --bg-dark:       #0D0E12;      /* Deep obsidian midnight charcoal */
+  
+  --secondary:     #0D0E12;      /* Obsidian Charcoal for Dark Areas */
+  --secondary-light: #16171D;    /* Slightly lighter slate-obsidian for dark cards */
+  
+  --text:          #1A1A1A;      /* Solid charcoal for light areas */
+  --text-muted:    #5A5A5A;      /* Softened secondary text */
+  --text-light:    #FFFFFF;      /* Pure crisp white for dark areas */
+  --text-muted-dark: #9CA3AF;    /* gray-400 for dark secondary text */
+  
+  --border:        #EAE6DF;      /* Clean light gray border for light cards */
+  --border-input:  #DCD7CD;      /* Input box border */
+  --border-dark:   rgba(255, 255, 255, 0.05); /* faint border-white/5 for dark cards */
+  
+  --card-bg:       #FFFFFF;      /* Clean white background for light cards */
+  --card-bg-dark:  #16171D;
+  
+  --card-shadow:   0 8px 32px rgba(0, 0, 0, 0.05); /* Premium soft shadow */
 }
 
 * {
@@ -35,13 +43,13 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   overflow-y: auto;
-  letter-spacing: 0.01em; /* Slightly adjusted tracking for luxury feel */
+  letter-spacing: 0.01em;
 }
 
 /* Custom Selection Color */
 ::selection {
   background: var(--primary);
-  color: #0B0C10;
+  color: #FFFFFF;
 }
 
 /* Ensure scrollbars are visible */
@@ -55,7 +63,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--secondary-light);
+  background: #DCD7CD;
   border-radius: 4px;
 }
 
@@ -65,16 +73,16 @@ body {
 
 h1, h2, h3, h4, h5 {
   font-family: var(--font-playfair), serif;
-  font-weight: 400; /* Soften weight for more elegant serif appearance */
+  font-weight: 400;
   line-height: 1.2;
-  color: var(--text); /* Titles in off-white */
+  color: var(--text);
   letter-spacing: 0.02em;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  transition: all 0.4s ease; /* Smoother transitions */
+  transition: all 0.4s ease;
 }
 
 ul {
@@ -87,24 +95,22 @@ img {
   max-width: 100%;
 }
 
-/* ── Global Form Elements (Sleek Dark Look) ────────────────────── */
+/* ── Global Form Elements ────────────────────── */
+/* Light Mode Defaults */
 input, select, textarea {
-  background: rgba(255, 255, 255, 0.03) !important; /* Dark semi-transparent */
-  border: 1px solid var(--border) !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-input) !important;
   color: var(--text) !important;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important; /* Subtle inner shadow */
   border-radius: 6px !important;
   transition: all 0.3s ease !important;
-  backdrop-filter: blur(4px);
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: rgba(212, 175, 55, 0.4) !important; /* Gold accent on focus */
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 175, 55, 0.2) !important;
+  border-color: var(--primary) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--primary) !important;
   outline: none !important;
 }
 
-/* Make placeholders elegant */
 ::placeholder {
   color: var(--text-muted) !important;
   opacity: 0.7;
@@ -126,7 +132,7 @@ input:focus, select:focus, textarea:focus {
 .btn-primary {
   display: inline-block;
   background: var(--primary);
-  color: #0B0C10; /* Dark text for contrast against gold */
+  color: #FFFFFF;
   padding: 1rem 3rem;
   font-weight: 600;
   font-size: 0.9rem;
@@ -135,25 +141,23 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
   border: 1px solid transparent;
   text-transform: uppercase;
-  letter-spacing: 2.5px; /* Wider spacing for luxury feel */
+  letter-spacing: 2.5px;
 }
 
 .btn-primary:hover {
-  background: transparent;
-  border-color: var(--primary);
-  color: var(--primary);
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15); /* Slight opacity glow */
+  background: var(--primary-hover);
+  color: #FFFFFF;
 }
 
 .btn-outline {
   display: inline-block;
   background: transparent;
-  color: var(--text);
+  color: var(--primary);
   padding: 1rem 3rem;
   font-weight: 600;
   font-size: 0.9rem;
   border-radius: 4px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--primary);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   text-transform: uppercase;
@@ -161,37 +165,35 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-outline:hover {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: rgba(212, 175, 55, 0.05);
+  background: var(--primary);
+  color: #FFFFFF;
 }
 
 .btn-dark {
   display: inline-block;
-  background: var(--secondary-light);
-  color: var(--text);
+  background: var(--secondary);
+  color: var(--text-light);
   padding: 0.9rem 2.8rem;
   font-weight: 600;
   font-size: 0.9rem;
   border-radius: 4px;
   transition: all 0.4s ease;
   cursor: pointer;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-dark);
   text-transform: uppercase;
   letter-spacing: 2px;
 }
 
 .btn-dark:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--secondary-light);
   border-color: var(--primary);
-  color: var(--primary);
 }
 
 /* ── Section titles ────────────────────────────── */
 .section-title {
   font-size: 3rem;
   font-weight: 400;
-  color: var(--primary);
+  color: var(--text);
   margin-bottom: 1rem;
   line-height: 1.15;
 }
@@ -204,29 +206,50 @@ input:focus, select:focus, textarea:focus {
   font-weight: 300;
 }
 
-/* Glassmorphism Utility (toned down for dark mode) */
-.glass-panel {
-  background: rgba(11, 12, 16, 0.7); /* Deep obsidian semi-transparent */
+/* ── Dark Mode & Dark Sections ─────────────────── */
+.dark-section, .bg-dark, [class*="bg-[#0D0E12]"] {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
+.dark-section .section-title, 
+.bg-dark .section-title {
+  color: var(--text-light);
+}
+
+.dark-section .section-subtitle, 
+.bg-dark .section-subtitle {
+  color: var(--text-muted-dark);
+}
+
+/* Dark mode inputs (Sleek semi-transparent backdrop) */
+.dark-section input, .dark-section select, .dark-section textarea,
+.bg-dark input, .bg-dark select, .bg-dark textarea {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #FFFFFF !important;
+}
+
+.dark-section input:focus, .dark-section select:focus, .dark-section textarea:focus {
+  border-color: var(--primary) !important;
+}
+
+.dark-section ::placeholder, .bg-dark ::placeholder {
+  color: var(--text-muted-dark) !important;
+}
+
+/* Dark mode cards */
+.dark-section .card, .bg-dark .card {
+  background: var(--card-bg-dark);
+  border: 1px solid var(--border-dark);
+}
+
+/* Cards on light background */
+.card, .glass-panel {
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-/* Specific overrides for light sections if they exist */
-.light-theme, .light-section {
-  --bg: #FDFBF7;
-  --text: #0B0C10;
-  --secondary: #FDFBF7;
-  --text-muted: #64748B;
-  --border: rgba(0, 0, 0, 0.1);
-  background-color: var(--bg);
-  color: var(--text);
-}
-
-.light-theme .section-title, .light-section .section-title {
-  color: #0B0C10;
+  box-shadow: var(--card-shadow);
 }
 
 @media (max-width: 768px) {
