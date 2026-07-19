@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import styles from './Header.module.css';
+import { API_BASE_URL } from '@/lib/api';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,8 +39,7 @@ export default function Header() {
               if (services.length === 0 && !isLoadingServices) {
                 setIsLoadingServices(true);
                 try {
-                  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://privateproject-r0ry.onrender.com';
-                  const res = await fetch(`${apiUrl}/api/images?service=services`);
+                  const res = await fetch(`${API_BASE_URL}/api/images?service=services`);
                   if (!res.ok) throw new Error('Network response was not ok');
                   const data = await res.json();
                   setServices(data || []);
