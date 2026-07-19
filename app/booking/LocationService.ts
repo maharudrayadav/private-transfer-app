@@ -1,14 +1,12 @@
+import { API_BASE_URL } from '@/lib/api';
+
 export class LocationService {
   /**
    * Fetches location autocomplete suggestions for a query.
    * @param query The search query (e.g. airport name or street)
    */
   static async fetchSuggestions(query: string): Promise<string[]> {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://privateproject-r0ry.onrender.com';
-    if (!process.env.NEXT_PUBLIC_API_URL) {
-      console.warn('[LocationService] NEXT_PUBLIC_API_URL is not set. Falling back to production backend.');
-    }
-    const url = `${baseUrl}/api/places/autocomplete?query=${encodeURIComponent(query)}`;
+    const url = `${API_BASE_URL}/api/places/autocomplete?query=${encodeURIComponent(query)}`;
     const res = await fetch(url, { method: 'GET' });
 
     if (!res.ok) {

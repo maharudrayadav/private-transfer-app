@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '@/lib/api';
+
 export class ServiceTypeService {
   /**
    * Fetches service type details and matching fleet vehicles.
@@ -5,8 +7,8 @@ export class ServiceTypeService {
    */
   static async fetchServiceDetails(serviceType: string): Promise<{ mainContent: any; fleetImages: any[] }> {
     const [servicesRes, fleetRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=services&t=${Date.now()}`, { cache: 'no-store' }),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
+      fetch(`${API_BASE_URL}/api/images?service=services&t=${Date.now()}`, { cache: 'no-store' }),
+      fetch(`${API_BASE_URL}/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
     ]);
 
     if (!servicesRes.ok || !fleetRes.ok) {

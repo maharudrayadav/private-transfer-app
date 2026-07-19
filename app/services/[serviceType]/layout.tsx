@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '@/lib/api';
+
 export async function generateStaticParams() {
   const defaultServices = [
     { serviceType: 'airport-transfers' },
@@ -8,7 +10,7 @@ export async function generateStaticParams() {
   ];
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=services`);
+    const res = await fetch(`${API_BASE_URL}/api/images?service=services`);
     if (res.ok) {
       const data = await res.json();
       const apiServices = data.map((item: any) => ({

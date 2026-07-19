@@ -1,9 +1,11 @@
+import { API_BASE_URL } from '@/lib/api';
+
 export class BookingService {
   /**
    * Fetches the executive fleet details.
    */
   static async fetchFleet(): Promise<any[]> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=FLEET&t=${Date.now()}`, {
+    const res = await fetch(`${API_BASE_URL}/api/images?service=FLEET&t=${Date.now()}`, {
       cache: 'no-store'
     });
     if (!res.ok) {
@@ -16,7 +18,7 @@ export class BookingService {
    * Fetches distance and estimated time between two locations.
    */
   static async fetchDistance(from: string, to: string): Promise<any> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/routes/place-distance?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+    const res = await fetch(`${API_BASE_URL}/api/routes/place-distance?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
     if (!res.ok) {
       throw new Error('Failed to fetch distance data');
     }
@@ -27,7 +29,7 @@ export class BookingService {
    * Fetches full route calculations (GeoJSON path).
    */
   static async fetchRoute(from: string, to: string): Promise<any> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/routes/calculate?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+    const res = await fetch(`${API_BASE_URL}/api/routes/calculate?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
     if (!res.ok) {
       throw new Error('Failed to fetch route details');
     }
@@ -46,7 +48,7 @@ export class BookingService {
     languagePrice: number
   ): Promise<number> {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}&passgener=${passengers}&language=${luggage}&languagePrice=${languagePrice}`,
+      `${API_BASE_URL}/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}&passgener=${passengers}&language=${luggage}&languagePrice=${languagePrice}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -63,7 +65,7 @@ export class BookingService {
    * Submits a new booking request.
    */
   static async createBooking(payload: any): Promise<any> {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/bookings', {
+    const res = await fetch(API_BASE_URL + '/api/bookings', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
