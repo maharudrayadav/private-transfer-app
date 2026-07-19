@@ -6,6 +6,8 @@ import styles from './Header.module.css';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [services, setServices] = useState<any[]>([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(false);
 
   return (
     <header className={styles.header}>
@@ -29,7 +31,48 @@ export default function Header() {
         {/* Nav */}
         <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ''}`}>
           <Link href="/" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-          <Link href="/services" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Services</Link>
+          
+          <div 
+            className={styles.dropdownContainer}
+            onMouseEnter={async () => {
+              if (services.length === 0 && !isLoadingServices) {
+                setIsLoadingServices(true);
+                try {
+                  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+                  const res = await fetch(`${apiUrl}/api/images?service=services`);
+                  if (!res.ok) throw new Error('Network response was not ok');
+                  const data = await res.json();
+                  setServices(data || []);
+                } catch (error) {
+                  console.error('Failed to fetch services', error);
+                } finally {
+                  setIsLoadingServices(false);
+                }
+              }
+            }}
+          >
+            <Link href="/services" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Services</Link>
+            <div className={styles.dropdownMenu}>
+              {isLoadingServices ? (
+                <div className={styles.dropdownItem}>Loading...</div>
+              ) : services.length > 0 ? (
+                services.map((service, idx) => {
+                  const slug = service.mainService ? service.mainService.toLowerCase() : (service.heading || '').toLowerCase().replace(/\\s+/g, '-');
+                  return (
+                    <Link 
+                      key={service.id || idx} 
+                      href={`/services/${slug}`} 
+                      className={styles.dropdownItem}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {service.heading}
+                    </Link>
+                  );
+                })
+              ) : null}
+            </div>
+          </div>
+
           <Link href="/booking" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Booking</Link>
           <Link href="/payment" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Payment</Link>
           <Link href="/contact" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>

@@ -4,7 +4,7 @@ export class PaymentService {
    * @param code The reservation code (e.g. AB12345)
    */
   static async getBookingByCode(code: string): Promise<any> {
-    const res = await fetch(`/api/bookings/code/${code.toUpperCase()}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/code/${code.toUpperCase()}`);
     if (!res.ok) {
       throw new Error('Reservation not found. Please check your code.');
     }

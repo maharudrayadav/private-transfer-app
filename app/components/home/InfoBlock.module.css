@@ -1,0 +1,115 @@
+.section {
+  position: relative;
+  padding: 6rem 0;
+  background-image: url('/hero_background.png'); /* fallback or whatever */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.1));
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 1000px;
+}
+
+.mainTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.mainSubtitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.3rem;
+  line-height: 1.6;
+  margin-bottom: 4rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  font-weight: 400;
+  color: #FFFFFF;
+}
+
+.glassCard {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 3rem 4rem;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.cardTitle {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #FFFFFF;
+}
+
+.cardDesc {
+  font-family: var(--font-outfit), sans-serif;
+  font-size: 1.15rem;
+  color: #FFFFFF;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: #FFFFFF;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0;
+  }
+  .mainTitle {
+    font-size: 2.2rem;
+  }
+  .glassCard {
+    padding: 2rem;
+  }
+  .cardTitle {
+    font-size: 1.6rem;
+  }
+}

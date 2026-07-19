@@ -11,7 +11,8 @@ import {
   Castle, Sparkles, UserCheck, Clock, Car, 
   PlaneLanding, Timer, Luggage, Route, 
   Camera, Map, Leaf, Utensils,
-  Star, ShieldCheck, Calendar
+  Star, ShieldCheck, Calendar,
+  CalendarCheck, UserRoundCheck, Smile
 } from 'lucide-react';
 
 interface ServiceItem {
@@ -159,7 +160,7 @@ export default function ServiceDetailsPage() {
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
                     <Image 
-                      src={item.imageUrl} 
+                      src={item.imageUrl ? item.imageUrl.replace('/uploadv', '/upload/v') : ''} 
                       alt={`${item.heading || 'Fleet Vehicle'} option ${idx + 1}`} 
                       fill 
                       sizes="(max-width: 768px) 100vw, 350px"
@@ -243,6 +244,54 @@ export default function ServiceDetailsPage() {
               </motion.div>
             );
           })()}
+        </div>
+      </motion.div>
+      {/* ── How It Works Section ─────────────────────── */}
+      <motion.div
+        className={styles.howItWorksSection}
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <div className="container">
+          <motion.h2 className={styles.howTitle} variants={fadeInItem}>How It Works</motion.h2>
+
+          <div className={styles.howStepsGrid}>
+            {[
+              {
+                num: '1',
+                icon: <CalendarCheck size={28} />,
+                title: 'Book your transfer',
+                desc: 'Reserve and pay for your ride using the form at the top of this page. You will get your driver\'s details and instructions a few days before the transfer.',
+              },
+              {
+                num: '2',
+                icon: <UserRoundCheck size={28} />,
+                title: 'Meet your driver',
+                desc: 'Your driver will be waiting for you at the arranged meeting point, at the right time. Even if your arrival is delayed.',
+              },
+              {
+                num: '3',
+                icon: <Smile size={28} />,
+                title: 'Enjoy your ride',
+                desc: 'The driver will escort you to the car, help you with luggage and offer tips about your stay. You can relax and enjoy the ride in our comfortable, air-conditioned car.',
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                className={styles.howStepCard}
+                variants={fadeInItem}
+              >
+                <div className={styles.howStepTop}>
+                  <span className={styles.howStepNum}>{item.num}</span>
+                  <div className={styles.howStepIcon}>{item.icon}</div>
+                </div>
+                <h3 className={styles.howStepTitle}>{item.title}</h3>
+                <p className={styles.howStepDesc}>{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
     </div>

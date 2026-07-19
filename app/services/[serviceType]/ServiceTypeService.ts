@@ -5,8 +5,8 @@ export class ServiceTypeService {
    */
   static async fetchServiceDetails(serviceType: string): Promise<{ mainContent: any; fleetImages: any[] }> {
     const [servicesRes, fleetRes] = await Promise.all([
-      fetch(`/api/images?service=services&t=${Date.now()}`, { cache: 'no-store' }),
-      fetch(`/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=services&t=${Date.now()}`, { cache: 'no-store' }),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=FLEET&t=${Date.now()}`, { cache: 'no-store' })
     ]);
 
     if (!servicesRes.ok || !fleetRes.ok) {

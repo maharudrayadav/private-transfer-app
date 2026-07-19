@@ -64,7 +64,7 @@ export default function Gallery() {
             <div key={img.id || idx} className={styles.imageCard}>
               <div className={styles.imageWrap}>
                 <Image
-                  src={img.imageUrl}
+                  src={img.imageUrl ? img.imageUrl.replace('/uploadv', '/upload/v') : ''}
                   alt={img.heading || 'Gallery Image'}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

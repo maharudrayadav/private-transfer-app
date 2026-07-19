@@ -3,7 +3,7 @@ export class VehiclesService {
    * Fetches the executive fleet details.
    */
   static async fetchFleet(): Promise<any[]> {
-    const res = await fetch(`/api/images?service=FLEET&t=${Date.now()}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=FLEET&t=${Date.now()}`, {
       cache: 'no-store'
     });
     if (!res.ok) {

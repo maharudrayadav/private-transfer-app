@@ -4,7 +4,7 @@ export class DashboardService {
    * @param params URLSearchParams search filter query parameters
    */
   static async fetchBookings(params: URLSearchParams): Promise<any> {
-    const res = await fetch(`/api/bookings?${params.toString()}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings?${params.toString()}`);
     if (!res.ok) {
       throw new Error(`Failed to fetch bookings: ${res.status}`);
     }
@@ -20,7 +20,7 @@ export class DashboardService {
     returnDriverName: string | null;
     returndriverName: string | null;
   }): Promise<any> {
-    const res = await fetch(`/api/admin/confirm-booking`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/confirm-booking`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +37,8 @@ export class DashboardService {
    * Fetches direct booking details from the backend source.
    */
   static async fetchBookingDetails(id: number): Promise<any> {
-    const res = await fetch(`https://privateproject-r0ry.onrender.com/api/bookings/${id}`);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+    const res = await fetch(`${apiUrl}/api/bookings/${id}`);
     if (!res.ok) {
       throw new Error(`Failed to fetch booking details: ${res.status}`);
     }
@@ -48,7 +49,7 @@ export class DashboardService {
    * Updates an existing booking's records.
    */
   static async updateBooking(id: number, payload: any): Promise<any> {
-    const res = await fetch(`/api/bookings/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

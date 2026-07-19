@@ -9,7 +9,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const isAdminPage = pathname?.startsWith('/admintransfer');
 
   return (
-    <body className="flex flex-col">
+    <body className="flex flex-col" suppressHydrationWarning>
       {!isAdminPage && <Header />}
       <main className={isAdminPage ? 'w-full' : ''}>{children}</main>
       {!isAdminPage && <Footer />}

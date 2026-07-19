@@ -59,7 +59,7 @@
   left: 0;
   right: 0;
   background: #1e293b;
-  border: 1px solid rgba(179, 139, 77, 0.3);
+  border: 1px solid rgba(26, 107, 90, 0.3);
   border-radius: 12px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   z-index: 100;
@@ -82,7 +82,7 @@
 }
 
 .suggestions li:hover {
-  background: rgba(179, 139, 77, 0.1);
+  background: rgba(26, 107, 90, 0.1);
   color: var(--primary);
 }
 
@@ -117,7 +117,7 @@
   border-color: var(--primary) !important;
   background: #fff !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(179, 139, 77, 0.12) !important;
+  box-shadow: 0 0 0 3px rgba(26, 107, 90, 0.12) !important;
 }
 
 .inputLight::placeholder {
@@ -140,6 +140,6 @@
 }
 
 .suggestionsLight li:hover {
-  background: rgba(179, 139, 77, 0.08);
+  background: rgba(26, 107, 90, 0.08);
   color: var(--primary);
 }

@@ -107,7 +107,7 @@ export default function ServicesSection({ initialServices = [], showMoreServices
               >
                 <div className={styles.imgWrap}>
                   <Image 
-                    src={s.imageUrl || '/placeholder_service.png'} 
+                    src={s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/placeholder_service.png'}
                     alt={s.heading || 'Service Image'} 
                     fill 
                     sizes="(max-width:768px) 100vw, 400px" 

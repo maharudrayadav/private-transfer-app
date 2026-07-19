@@ -139,7 +139,7 @@ export default function Vehicles({ initialFleet = [] }: VehiclesProps) {
                 <div key={v.id} className={styles.card}>
                   <div className={styles.imageWrap}>
                     <Image
-                      src={v.imageUrl}
+                      src={v.imageUrl ? v.imageUrl.replace('/uploadv', '/upload/v') : ''}
                       alt={v.heading}
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"

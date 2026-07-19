@@ -3,7 +3,7 @@ export class ServicesSectionService {
    * Fetches the list of bespoke chauffeur services.
    */
   static async fetchServices(): Promise<any[]> {
-    const res = await fetch(`/api/images?service=services&t=${Date.now()}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/images?service=services&t=${Date.now()}`, {
       cache: 'no-store'
     });
     if (!res.ok) {

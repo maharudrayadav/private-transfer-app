@@ -27,6 +27,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${outfit.variable} ${playfair.variable} antialiased`}
+      suppressHydrationWarning
     >
       <LayoutWrapper>{children}</LayoutWrapper>
     </html>

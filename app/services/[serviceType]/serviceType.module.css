@@ -82,7 +82,7 @@
 
 .stylishPointCard {
   background: #ffffff;
-  border: 1px solid rgba(179, 139, 77, 0.15);
+  border: 1px solid rgba(26, 107, 90, 0.15);
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
@@ -96,12 +96,12 @@
   background: #ffffff;
   border-color: var(--primary);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(179, 139, 77, 0.1);
+  box-shadow: 0 10px 30px rgba(26, 107, 90, 0.1);
 }
 
 .spIcon {
   font-size: 1.8rem;
-  background: rgba(179, 139, 77, 0.1);
+  background: rgba(26, 107, 90, 0.1);
   width: 50px;
   height: 50px;
   display: flex;
@@ -148,5 +148,138 @@
   }
   .galleryItem {
     height: 200px;
+  }
+}
+
+/* ── How It Works ─────────────────────────────── */
+.howItWorksSection {
+  padding: 90px 0 100px;
+  background: #fff;
+  border-top: 1px solid #f1f5f9;
+}
+
+.howTitle {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin: 0 0 3.5rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.howStepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* connecting line between cards */
+.howStepsGrid::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: calc(16.66% + 14px);
+  right: calc(16.66% + 14px);
+  height: 1px;
+  background: #e2e8f0;
+  z-index: 0;
+}
+
+.howStepCard {
+  padding: 0 2rem 0;
+  text-align: left;
+  position: relative;
+}
+
+.howStepCard:first-child {
+  padding-left: 0;
+}
+
+.howStepCard:last-child {
+  padding-right: 0;
+}
+
+.howStepTop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.howStepNum {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  background: var(--secondary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.howStepIcon {
+  width: 44px;
+  height: 44px;
+  background: rgba(26, 107, 90, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.howStepTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin: 0 0 0.6rem;
+  line-height: 1.4;
+}
+
+.howStepDesc {
+  font-size: 0.92rem;
+  color: #64748b;
+  line-height: 1.8;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .howStepsGrid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    gap: 2.5rem;
+  }
+
+  .howStepsGrid::before {
+    top: 28px;
+    left: 27px;
+    right: auto;
+    width: 1px;
+    height: calc(100% - 56px);
+  }
+
+  .howStepCard {
+    padding: 0;
+  }
+
+  .howTitle {
+    font-size: 1.9rem;
+    text-align: left;
+  }
+}
+
+@media (max-width: 500px) {
+  .howItWorksSection {
+    padding: 60px 0 70px;
   }
 }

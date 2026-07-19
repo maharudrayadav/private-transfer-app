@@ -1,28 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --primary:       #C5A059;      /* The Chauffeur Gold */
-  --primary-hover: #B38F48;      /* Deeper Gold for Hover */
+  --primary:       #C5A059;      /* Elegant Champagne Gold — premium, luxury */
+  --primary-hover: #E3C588;      /* Lighter Gold for Hover */
+  --primary-light: #F4E8D1;      /* Very soft gold for accents */
+  --primary-dark:  #9C7C3E;      /* Deep rich gold */
   
-  --bg:            #FDFBF7;      /* Warm high-end off-white cream */
-  --bg-dark:       #0D0E12;      /* Deep obsidian midnight charcoal */
+  --bg:            #F9F9F9;      /* Extremely subtle off-white for light mode */
+  --bg-dark:       #0A0A0B;      /* True deep luxury black */
   
-  --secondary:     #0D0E12;      /* Obsidian Charcoal for Dark Areas */
-  --secondary-light: #16171D;    /* Slightly lighter slate-obsidian for dark cards */
+  --secondary:     #111111;      /* Almost black charcoal */
+  --secondary-light: #1A1A1A;    /* Slightly lighter dark background */
   
-  --text:          #1A1A1A;      /* Solid charcoal for light areas */
-  --text-muted:    #5A5A5A;      /* Softened secondary text */
-  --text-light:    #FFFFFF;      /* Pure crisp white for dark areas */
-  --text-muted-dark: #9CA3AF;    /* gray-400 for dark secondary text */
+  --text:          #111111;      /* Sharp dark text for light backgrounds */
+  --text-muted:    #737373;      /* Sophisticated gray for muted text */
+  --text-light:    #FFFFFF;      /* Pure white for dark backgrounds */
+  --text-muted-dark: #A1A1AA;    /* Elegant metallic gray for dark secondary text */
   
-  --border:        #EAE6DF;      /* Clean light gray border for light cards */
-  --border-input:  #DCD7CD;      /* Input box border */
-  --border-dark:   rgba(255, 255, 255, 0.05); /* faint border-white/5 for dark cards */
+  --border:        #E5E5E5;      /* Clean subtle border */
+  --border-input:  #D4D4D4;      /* Input border */
+  --border-dark:   rgba(197, 160, 89, 0.2); /* Faint gold border for dark mode cards */
   
-  --card-bg:       #FFFFFF;      /* Clean white background for light cards */
-  --card-bg-dark:  #16171D;
+  --card-bg:       #FFFFFF;      /* Pure white card */
+  --card-bg-dark:  #111111;      /* Deep dark card */
   
-  --card-shadow:   0 8px 32px rgba(0, 0, 0, 0.05); /* Premium soft shadow */
+  --card-shadow:   0 10px 40px rgba(0, 0, 0, 0.08); /* Softer, wider shadow for luxury feel */
 }
 
 * {
@@ -145,8 +147,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
-  color: #FFFFFF;
+  background: #000000;
+  color: var(--primary);
 }
 
 .btn-outline {
@@ -165,8 +167,9 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-outline:hover {
-  background: var(--primary);
-  color: #FFFFFF;
+  background: #000000;
+  color: var(--primary);
+  border-color: #000000;
 }
 
 .btn-dark {

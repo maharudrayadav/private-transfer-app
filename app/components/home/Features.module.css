@@ -41,7 +41,8 @@
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px -4px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 16px -4px rgba(0,0,0,0.2);
+  background: #000000;
 }
 
 .card:hover::before {
@@ -64,7 +65,7 @@
 
 .card:hover .icon {
   background: var(--primary);
-  color: #fff;
+  color: #000000;
 }
 
 .card h3 {
@@ -73,12 +74,22 @@
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--secondary);
+  transition: color 0.4s ease;
+}
+
+.card:hover h3 {
+  color: var(--primary);
 }
 
 .card p {
   font-size: 0.95rem;
   color: var(--text-muted);
   line-height: 1.7;
+  transition: color 0.4s ease;
+}
+
+.card:hover p {
+  color: #FFFFFF;
 }
 
 @media (max-width: 900px) {

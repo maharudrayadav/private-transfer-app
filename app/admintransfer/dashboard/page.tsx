@@ -20,6 +20,7 @@ interface Booking {
   lastName?: string;
   email?: string;
   phone: string;
+  flightNumber?: string;
   pickupLocation: string;
   dropoffLocation: string;
   pickupTime?: string;
@@ -139,6 +140,16 @@ export default function AdminDashboard() {
       }
     }
 
+    return '';
+  };
+
+  const getFlightNumber = (b: any) => {
+    if (!b) return '';
+    if (b.flightNumber) return b.flightNumber;
+    if (b.notes) {
+      const match = b.notes.match(/Flight Number:\s*([^\n,]+)/i);
+      if (match && match[1] && !match[0].toLowerCase().includes('return')) return match[1].trim();
+    }
     return '';
   };
 
@@ -316,6 +327,7 @@ export default function AdminDashboard() {
         ...latestData,
         firstName: fName,
         lastName: lName,
+        flightNumber: getFlightNumber(latestData),
         pickupTime: formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate),
         returnDriverName: getReturnDriver(latestData),
         passengers: latestData.passengers || 0,
@@ -354,6 +366,7 @@ export default function AdminDashboard() {
         luggage: Number(editingBooking.luggage) || 0,
         vehicleType: editingBooking.vehicleType,
         amount: Number(editingBooking.amount) || 0,
+        flightNumber: editingBooking.flightNumber,
         driverNote: editingBooking.driverNote,
         returnDate: editingBooking.returnDate,
         returnTime: editingBooking.returnTime,
@@ -396,7 +409,7 @@ export default function AdminDashboard() {
     }
     
     // Define headers
-    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Return Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver', 'Return Driver'];
+    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Flight Number', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Return Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver', 'Return Driver'];
     
     // Create CSV rows
     const rows = bookings.map(b => [
@@ -404,6 +417,7 @@ export default function AdminDashboard() {
       `"${(b.customerName || '').replace(/"/g, '""')}"`,
       `"${b.phone || ''}"`,
       `"${b.email || b.notes?.match(/Email:\s*([^\s\n]+)/)?.[1] || ''}"`,
+      `"${getFlightNumber(b)}"`,
       `"${(b.pickupLocation || '').replace(/"/g, '""')}"`,
       `"${(b.dropoffLocation || '').replace(/"/g, '""')}"`,
       `"${b.pickupTime || b.bookingDate || ''}"`,
@@ -437,7 +451,14 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading && bookings.length === 0) {
-    return <div className={styles.loading}>Loading Dashboard...</div>;
+    return (
+      <div className={styles.adminPage} style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.modalLoader}>
+          <div className={styles.spinner}></div>
+          <p>Loading Dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -560,7 +581,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', paddingBottom: '0.2rem' }}>
             <button 
               className={styles.resetBtn} 
               onClick={() => {
@@ -577,6 +598,17 @@ export default function AdminDashboard() {
               title="Reset Filters"
             >
               <RotateCcw size={18} />
+            </button>
+            <button
+              className={styles.applyBtn}
+              onClick={() => {
+                setPage(0);
+                fetchBookings();
+              }}
+              title="Apply Filters"
+              style={{ height: '42px', padding: '0 1.5rem' }}
+            >
+              Apply
             </button>
           </div>
         </section>
@@ -706,6 +738,11 @@ export default function AdminDashboard() {
                         {!b.email && b.notes?.match(/Email:\s*([^\s\n]+)/) && (
                           <div className={styles.subText} style={{ color: '#0066cc', fontWeight: '500', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <Mail size={14} /> {b.notes.match(/Email:\s*([^\s\n]+)/)?.[1]}
+                          </div>
+                        )}
+                        {getFlightNumber(b) && (
+                          <div className={styles.subText} style={{ fontWeight: '500', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            ✈️ Flight: {getFlightNumber(b)}
                           </div>
                         )}
                         {b.bookingCode && <span className={styles.codeBadge}>#{b.bookingCode}</span>}
@@ -901,6 +938,13 @@ export default function AdminDashboard() {
                         <label>Phone</label>
                         <input type="text" value={editingBooking.phone || ''} onChange={e => setEditingBooking({...editingBooking, phone: e.target.value})} />
                       </div>
+                    </div>
+                    <div className={styles.formRow}>
+                      <div className={styles.formField}>
+                        <label>Flight Number</label>
+                        <input type="text" value={editingBooking.flightNumber || ''} onChange={e => setEditingBooking({...editingBooking, flightNumber: e.target.value})} placeholder="e.g. FR1234" />
+                      </div>
+                      <div className={styles.formField}></div>
                     </div>
                   </div>
 

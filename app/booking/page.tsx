@@ -77,7 +77,7 @@ export default function BookingPage() {
 
   const [form, setForm] = useState({
     firstName: '', lastName: '',
-    email: '', phone: '',
+    email: '', phone: '', flightNumber: '',
     passengers: '1',
     luggage: '1', notes: '',
     returnDate: '', returnTime: ''
@@ -297,9 +297,11 @@ export default function BookingPage() {
           returnPickupLocation: returnPickup || search.dropoff,
           returnDropoffLocation: returnDropoff || search.pickup
         } : {}),
+        flightNumber: form.flightNumber,
         notes: `
           Trip Type: ${tripType.toUpperCase()}
           Luggage: ${form.luggage}
+          ${form.flightNumber ? `Flight Number: ${form.flightNumber}` : ''}
           ${tripType === 'return' ? `
           Return Date: ${form.returnDate}, Return Time: ${form.returnTime}
           Return Pickup: ${returnPickup || search.dropoff}
@@ -568,7 +570,7 @@ export default function BookingPage() {
                 return (
                   <div key={v.id} className={`${styles.vehicleCard} ${isSelected ? styles.vehicleCardActive : ''}`}>
                     <div className={styles.vehicleImg}>
-                      <Image src={v.imageUrl} alt={v.heading} fill sizes="300px" className={styles.vImg} />
+                      <Image src={v.imageUrl ? v.imageUrl.replace('/uploadv', '/upload/v') : ''} alt={v.heading} fill sizes="300px" className={styles.vImg} />
                     </div>
                     <div className={styles.vehicleDetails}>
                       <h3>{v.heading}</h3>
@@ -672,7 +674,6 @@ export default function BookingPage() {
                       className={errors.email ? styles.inputError : ''} 
                       value={form.email} 
                       onChange={handleChange} 
-                      placeholder="your@email.com" 
                     />
                     {errors.email && <span className={styles.errorText}>{errors.email}</span>}
                   </div>
@@ -695,6 +696,21 @@ export default function BookingPage() {
                     </div>
                     {errors.phone && <span className={styles.errorText}>{errors.phone}</span>}
                   </div>
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.formField}>
+                    <label>Flight Number</label>
+                    <input 
+                      type="text" 
+                      name="flightNumber" 
+                      value={form.flightNumber} 
+                      onChange={handleChange} 
+                      placeholder="e.g. FR1234 (Optional)" 
+                    />
+                  </div>
+                  {/* Empty field to maintain grid layout if needed, or we can just let it flow */}
+                  <div className={styles.formField}></div>
                 </div>
 
                 <div className={styles.formRow}>

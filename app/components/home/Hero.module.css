@@ -116,7 +116,7 @@
 .barField:focus-within {
   border-color: var(--primary);
   background: #ffffff;
-  box-shadow: 0 12px 24px rgba(179, 139, 77, 0.12);
+  box-shadow: 0 12px 24px rgba(26, 107, 90, 0.12);
   transform: translateY(-2px);
   z-index: 15; /* Establish higher stacking priority so suggestions render on top of subsequent cards */
 }
@@ -206,7 +206,7 @@
   text-transform: uppercase;
   letter-spacing: 1.5px;
   white-space: nowrap;
-  box-shadow: 0 6px 16px rgba(179, 139, 77, 0.2);
+  box-shadow: 0 6px 16px rgba(26, 107, 90, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
