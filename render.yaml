@@ -9,3 +9,5 @@ services:
         value: 20
       - key: NODE_ENV
         value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://privateproject-r0ry.onrender.com
