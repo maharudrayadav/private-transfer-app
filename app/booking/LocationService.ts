@@ -4,7 +4,7 @@ export class LocationService {
    * @param query The search query (e.g. airport name or street)
    */
   static async fetchSuggestions(query: string): Promise<string[]> {
-    const url = `/api/places/autocomplete?query=${encodeURIComponent(query)}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/api/places/autocomplete?query=${encodeURIComponent(query)}`;
     const res = await fetch(url, { method: 'GET' });
 
     if (!res.ok) {

@@ -46,7 +46,7 @@ export class BookingService {
     languagePrice: number
   ): Promise<number> {
     const res = await fetch(
-      `/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}&passgener=${passengers}&language=${luggage}&languagePrice=${languagePrice}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}&passgener=${passengers}&language=${luggage}&languagePrice=${languagePrice}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }

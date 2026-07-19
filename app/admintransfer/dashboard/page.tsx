@@ -196,9 +196,7 @@ export default function AdminDashboard() {
       if (endDate) params.append('endDate', `${endDate}T23:59:59`);
       if (tripTypeFilter) params.append('tripType', tripTypeFilter);
 
-      console.log('Fetching bookings from proxy with params:', params.toString());
       const data = await DashboardService.fetchBookings(params);
-      console.log('Bookings Data received:', data);
       
       // Handle different response formats
       let bookingsList: Booking[] = [];
@@ -276,12 +274,6 @@ export default function AdminDashboard() {
 
     setApproveLoading(true);
     try {
-      console.log('Confirming booking:', { 
-        bookingId: selectedBookingId, 
-        driverName: driverNameInput,
-        returnDriverName: isReturn ? returnDriverNameInput : undefined
-      });
-
       await DashboardService.confirmBooking({
         bookingId: selectedBookingId,
         driverName: driverNameInput,
@@ -311,7 +303,6 @@ export default function AdminDashboard() {
     setFetchingBooking(true);
     try {
       const latestData = await DashboardService.fetchBookingDetails(booking.id);
-      console.log('Fetched latest data for edit:', latestData);
       
       let fName = latestData.firstName || '';
       let lName = latestData.lastName || '';
@@ -377,8 +368,6 @@ export default function AdminDashboard() {
         returnDriverName: editingBooking.returnDriverName,
         returndriverName: editingBooking.returnDriverName
       };
-
-      console.log('Sending update payload:', payload);
 
       await DashboardService.updateBooking(editingBooking.id, payload);
 
