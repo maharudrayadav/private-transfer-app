@@ -1,6 +1,6 @@
 .section {
   position: relative;
-  padding: 6rem 0;
+  padding: 4rem 0;
   background: var(--primary-light);
   color: var(--text);
   display: flex;
