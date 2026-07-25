@@ -1,10 +1,7 @@
 .section {
   position: relative;
   padding: 6rem 0;
-  background-image: url('/hero_background.png'); /* fallback or whatever */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1d24 100%);
   color: #fff;
   display: flex;
   align-items: center;
@@ -12,12 +9,6 @@
   min-height: 80vh;
 }
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.1));
-  z-index: 1;
-}
 
 .content {
   position: relative;

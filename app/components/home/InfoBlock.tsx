@@ -4,7 +4,6 @@ import styles from './InfoBlock.module.css';
 export default function InfoBlock() {
   return (
     <section className={styles.section}>
-      <div className={styles.overlay}></div>
       <div className={`container ${styles.content}`}>
         <h2 className={styles.mainTitle}>Private Chauffeur Transfers Across Ireland</h2>
         <p className={styles.mainSubtitle}>
