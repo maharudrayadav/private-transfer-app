@@ -1,8 +1,8 @@
 .section {
   position: relative;
   padding: 6rem 0;
-  background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1d24 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  color: #111;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,9 +22,9 @@
   font-size: 3.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  text-shadow: none;
   line-height: 1.2;
-  color: #FFFFFF;
+  color: #111;
 }
 
 .mainSubtitle {
@@ -32,20 +32,20 @@
   font-size: 1.3rem;
   line-height: 1.6;
   margin-bottom: 4rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  text-shadow: none;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #333;
 }
 
 .glassCard {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 16px;
   padding: 3rem 4rem;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
 .cardTitle {
@@ -53,13 +53,13 @@
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #FFFFFF;
+  color: #111;
 }
 
 .cardDesc {
   font-family: var(--font-outfit), sans-serif;
   font-size: 1.15rem;
-  color: #FFFFFF;
+  color: #333;
   margin-bottom: 3rem;
   line-height: 1.6;
 }
@@ -79,12 +79,12 @@
   gap: 1rem;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #FFFFFF;
+  color: #222;
 }
 
 .icon {
   flex-shrink: 0;
-  color: #FFFFFF;
+  color: var(--primary);
   width: 24px;
   height: 24px;
   margin-top: 2px;
