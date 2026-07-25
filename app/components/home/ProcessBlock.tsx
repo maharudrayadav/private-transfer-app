@@ -1,3 +1,6 @@
+'use client';
+
+import { motion } from 'framer-motion';
 import styles from './ProcessBlock.module.css';
 
 const steps = [
@@ -27,20 +30,33 @@ export default function ProcessBlock() {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <div className={styles.header}>
+        <motion.div 
+          className={styles.header}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className={styles.title}>Private transfers arranged clearly<br />from start to finish</h2>
           <p className={styles.subtitle}>
             From the first enquiry to your arrival, every journey is handled with a clear process, professional communication and a confirmed private chauffeur service.
           </p>
-        </div>
+        </motion.div>
         
         <div className={styles.grid}>
           {steps.map((step, idx) => (
-            <div key={idx} className={styles.card}>
+            <motion.div 
+              key={idx} 
+              className={styles.card}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: idx * 0.15 }}
+            >
               <div className={styles.stepNumber}>{step.num}</div>
               <h3 className={styles.cardTitle}>{step.title}</h3>
               <p className={styles.cardDesc}>{step.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

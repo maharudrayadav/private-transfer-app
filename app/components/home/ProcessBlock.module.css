@@ -1,7 +1,7 @@
 .section {
   background-color: var(--primary-light); 
   color: var(--text);
-  padding: 5rem 0;
+  padding: 8rem 0;
 }
 
 .container {

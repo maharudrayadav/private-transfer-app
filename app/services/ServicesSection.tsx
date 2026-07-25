@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Building, Plane, Heart, Map, Briefcase, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 import styles from './ServicesSection.module.css';
 import { ServicesSectionService } from './ServicesSectionService';
@@ -100,40 +101,48 @@ export default function ServicesSection({ initialServices = [], showMoreServices
         <div className={styles.grid} ref={scrollRef}>
           {servicesList.length > 0 ? (
             servicesList.map((s, idx) => (
-              <Link 
-                href={`/services/${s.mainService ? s.mainService.toLowerCase() : (s.heading || '').toLowerCase().replace(/ /g, '-')}`} 
-                key={s.id || idx} 
-                className={styles.card}
+              <motion.div
+                key={s.id || idx}
+                className={styles.cardWrapper}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: idx * 0.15 }}
               >
-                <div className={styles.imgWrap}>
-                  <Image 
-                    src={s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/placeholder_service.png'}
-                    alt={s.heading || 'Service Image'} 
-                    fill 
-                    sizes="(max-width:768px) 100vw, 400px" 
-                    className={styles.img} 
-                    priority={idx < 2}
-                  />
-                  <div className={styles.imgOverlay}></div>
-                </div>
-                <div className={styles.cardBody}>
-                  <span className={styles.cardIcon}>{getServiceIcon(s.heading || '')}</span>
-                  <span className={styles.cardSubtitle}>{(s.subHeading || '').trim()}</span>
-                  <h3>{(s.heading || '').trim()}</h3>
-                  <p>{s.description}</p>
-                  
-                  {s.passengers && s.passengers > 0 ? (
-                    <div className={styles.cardMeta}>
-                      <span className={styles.metaItem}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        Capacity: {s.passengers}
-                      </span>
-                    </div>
-                  ) : null}
+                <Link 
+                  href={`/services/${s.mainService ? s.mainService.toLowerCase() : (s.heading || '').toLowerCase().replace(/ /g, '-')}`} 
+                  className={styles.card}
+                >
+                  <div className={styles.imgWrap}>
+                    <Image 
+                      src={s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/placeholder_service.png'}
+                      alt={s.heading || 'Service Image'} 
+                      fill 
+                      sizes="(max-width:768px) 100vw, 400px" 
+                      className={styles.img} 
+                      priority={idx < 2}
+                    />
+                    <div className={styles.imgOverlay}></div>
+                  </div>
+                  <div className={styles.cardBody}>
+                    <span className={styles.cardIcon}>{getServiceIcon(s.heading || '')}</span>
+                    <span className={styles.cardSubtitle}>{(s.subHeading || '').trim()}</span>
+                    <h3>{(s.heading || '').trim()}</h3>
+                    <p>{s.description}</p>
+                    
+                    {s.passengers && s.passengers > 0 ? (
+                      <div className={styles.cardMeta}>
+                        <span className={styles.metaItem}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                          Capacity: {s.passengers}
+                        </span>
+                      </div>
+                    ) : null}
 
-                  <div className={styles.learnMore}>Explore Service <span>→</span></div>
-                </div>
-              </Link>
+                    <div className={styles.learnMore}>Explore Service <span>→</span></div>
+                  </div>
+                </Link>
+              </motion.div>
             ))
           ) : (
             <div className={styles.noData}>
@@ -142,13 +151,21 @@ export default function ServicesSection({ initialServices = [], showMoreServices
           )}
           
           {/* Uniform CTA Card */}
-          <div className={styles.ctaCard}>
-            <div className={styles.ctaContent}>
-              <h3>Custom Journey?</h3>
-              <p>Specializing in bespoke itineraries across Ireland.</p>
-              <Link href="/contact" className="btn-primary">Enquire Now</Link>
+          <motion.div 
+            className={styles.cardWrapper}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: servicesList.length * 0.15 }}
+          >
+            <div className={styles.ctaCard}>
+              <div className={styles.ctaContent}>
+                <h3>Custom Journey?</h3>
+                <p>Specializing in bespoke itineraries across Ireland.</p>
+                <Link href="/contact" className="btn-primary">Enquire Now</Link>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

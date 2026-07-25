@@ -84,8 +84,13 @@
   cursor: grabbing;
 }
 
-.card {
+.cardWrapper {
   flex: 0 0 380px;
+  display: flex;
+}
+
+.card {
+  flex: 1;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
@@ -97,7 +102,6 @@
   height: 520px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   border: 1px solid var(--border);
-  group: true;
 }
 
 .card:hover {
@@ -272,11 +276,10 @@
   transform: translateX(8px);
 }
 
-/* CTA Card in Scroll */
 .ctaCard {
-  flex: 0 0 380px;
+  flex: 1;
   background: var(--secondary);
-  border-radius: 4px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
