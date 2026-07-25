@@ -157,11 +157,11 @@ export default function Hero() {
 
         <div className={styles.heroImageContainer}>
           <img 
-            src="/hero_fresh.png" 
+            src="https://www.irishvacationtours.ie/wp-content/uploads/2025/10/314eb1f767f740ff8cd0e8795798a887.jpeg" 
             alt="Private Chauffeur Ireland" 
             className={styles.heroImage}
             onError={(e) => {
-              // Fallback if hero_fresh.png doesn't exist
+              // Fallback
               e.currentTarget.src = 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1200';
             }}
           />
