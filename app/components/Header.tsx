@@ -15,7 +15,7 @@ export default function Header() {
       <div className={`container ${styles.inner}`}>
         {/* Logo */}
         <Link href="/" className={styles.logoContainer}>
-          <img src="/logo.svg" alt="Private Transfers" className={styles.logoImg} />
+          <img src="/logo.png" alt="Private Transfers" className={styles.logoImg} />
         </Link>
 
         {/* Hamburger Icon */}
