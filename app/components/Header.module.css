@@ -13,14 +13,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 76px;
+  height: 100px;
 }
 
 /* Logo */
 .logoContainer {
   display: flex;
   align-items: center;
-  height: 48px;
+  height: 80px;
 }
 
 .logoImg {
@@ -163,7 +163,7 @@
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 76px;
+    top: 100px;
     left: 0;
     width: 100%;
     background: #fff;
