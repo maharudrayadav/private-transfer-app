@@ -1,95 +1,67 @@
 .section {
-  padding: 2rem 0 6rem 0;
-  background: #fff; /* Ensure alternating background colors */
+  padding: 4rem 0;
+  background: #fff;
 }
 
 .center {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .card {
-  background: var(--bg-light);
-  border-radius: 4px;
+  background: var(--card-bg);
+  border-radius: 16px;
   padding: 3rem 2rem;
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 4px;
-  background: var(--primary);
-  border-radius: 0 0 4px 4px;
-  transition: width 0.4s ease;
-}
-
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px -4px rgba(0,0,0,0.2);
-  background: #000000;
-}
-
-.card:hover::before {
-  width: 100%;
+  box-shadow: 0 12px 30px rgba(15, 76, 58, 0.08);
+  border-color: var(--primary-light);
 }
 
 .icon {
-  width: 80px;
-  height: 80px;
-  background: rgba(197, 160, 89, 0.1); /* Light Champagne Gold */
+  width: 72px;
+  height: 72px;
+  background: var(--primary-light);
   color: var(--primary);
-  border-radius: 4px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
   margin: 0 auto 1.5rem;
-  transition: background 0.4s ease, color 0.4s ease;
+  transition: all 0.3s ease;
 }
 
 .card:hover .icon {
   background: var(--primary);
-  color: #000000;
+  color: #FFFFFF;
 }
 
 .card h3 {
-  font-family: var(--font-playfair), serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--secondary);
-  transition: color 0.4s ease;
-}
-
-.card:hover h3 {
-  color: var(--primary);
 }
 
 .card p {
   font-size: 0.95rem;
   color: var(--text-muted);
-  line-height: 1.7;
-  transition: color 0.4s ease;
-}
-
-.card:hover p {
-  color: #FFFFFF;
+  line-height: 1.6;
 }
 
 @media (max-width: 900px) {

@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --primary:       #C5A059;      /* Elegant Champagne Gold — premium, luxury */
-  --primary-hover: #E3C588;      /* Lighter Gold for Hover */
-  --primary-light: #F4E8D1;      /* Very soft gold for accents */
-  --primary-dark:  #9C7C3E;      /* Deep rich gold */
+  --primary:       #0F4C3A;      /* Deep Forest Green */
+  --primary-hover: #166A51;      /* Lighter Forest Green for Hover */
+  --primary-light: #E8F0EA;      /* Very soft green for accents/backgrounds */
+  --primary-dark:  #082E23;      /* Deepest green */
   
-  --bg:            #F9F9F9;      /* Extremely subtle off-white for light mode */
-  --bg-dark:       #0A0A0B;      /* True deep luxury black */
+  --bg:            #FDFCF8;      /* Warm creamy white */
+  --bg-dark:       #F4F1EA;      /* Slightly darker cream for contrast */
   
-  --secondary:     #111111;      /* Almost black charcoal */
-  --secondary-light: #1A1A1A;    /* Slightly lighter dark background */
+  --secondary:     #0F4C3A;      /* Reusing Forest Green as secondary for simplicity */
+  --secondary-light: #E8F0EA;    /* Soft green */
   
-  --text:          #111111;      /* Sharp dark text for light backgrounds */
-  --text-muted:    #737373;      /* Sophisticated gray for muted text */
-  --text-light:    #FFFFFF;      /* Pure white for dark backgrounds */
-  --text-muted-dark: #A1A1AA;    /* Elegant metallic gray for dark secondary text */
+  --text:          #1A1A1A;      /* Very dark gray for readable text */
+  --text-muted:    #555555;      /* Softer gray for muted text */
+  --text-light:    #FFFFFF;      /* Pure white text */
+  --text-muted-dark: #A1A1AA;    
   
-  --border:        #E5E5E5;      /* Clean subtle border */
-  --border-input:  #D4D4D4;      /* Input border */
-  --border-dark:   rgba(197, 160, 89, 0.2); /* Faint gold border for dark mode cards */
+  --border:        #E8E6DF;      /* Soft warm border */
+  --border-input:  #D4D2CB;      /* Input border */
+  --border-dark:   rgba(15, 76, 58, 0.2); 
   
   --card-bg:       #FFFFFF;      /* Pure white card */
-  --card-bg-dark:  #111111;      /* Deep dark card */
+  --card-bg-dark:  #FFFFFF;      /* Keep dark cards white but maybe bordered for this theme */
   
-  --card-shadow:   0 10px 40px rgba(0, 0, 0, 0.08); /* Softer, wider shadow for luxury feel */
+  --card-shadow:   0 8px 30px rgba(0, 0, 0, 0.04); /* Very soft clinic-like shadow */
 }
 
 * {
@@ -147,8 +147,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-primary:hover {
-  background: #000000;
-  color: var(--primary);
+  background: var(--primary-hover);
+  color: #FFFFFF;
 }
 
 .btn-outline {
@@ -167,9 +167,9 @@ input:focus, select:focus, textarea:focus {
 }
 
 .btn-outline:hover {
-  background: #000000;
-  color: var(--primary);
-  border-color: #000000;
+  background: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
 }
 
 .btn-dark {
@@ -251,7 +251,7 @@ input:focus, select:focus, textarea:focus {
 .card, .glass-panel {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 16px;
   box-shadow: var(--card-shadow);
 }
 

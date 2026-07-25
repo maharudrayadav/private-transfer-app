@@ -1,20 +1,8 @@
-/* Navy promo strip */
 .section {
-  background: var(--secondary);
-  color: #fff;
+  background: var(--bg);
+  color: var(--text);
   padding: 5rem 0;
   position: relative;
-}
-
-/* Subtle gold accent border top */
-.section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: var(--primary);
 }
 
 .layout {
@@ -25,26 +13,23 @@
 }
 
 .text {
-  color: #fff;
+  color: var(--text);
 }
 
 .heading {
-  font-family: var(--font-playfair), serif;
   font-size: 2.5rem;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 1rem;
-  color: #fff;
+  color: var(--secondary);
 }
 
 .heading span {
-  font-style: italic;
-  font-weight: 400;
   color: var(--primary);
 }
 
 .sub {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-muted);
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -58,7 +43,7 @@
 
 .list li {
   font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text);
   padding-left: 1rem;
   border-left: 3px solid var(--primary);
   display: flex;
@@ -77,17 +62,18 @@
 }
 
 .link:hover {
-  color: #fff;
-  border-bottom-color: #fff;
+  color: var(--primary-hover);
+  border-bottom-color: var(--primary-hover);
 }
 
 /* Image */
 .imgWrap {
   position: relative;
   height: 380px;
-  border-radius: 12px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border);
 }
 
 .img {
@@ -100,5 +86,5 @@
     gap: 2rem;
   }
 
-  .imgWrap { height: 220px; }
+  .imgWrap { height: 280px; }
 }

@@ -70,13 +70,11 @@ export default function Hero() {
 
   return (
     <section className={styles.hero}>
-      <div className={styles.overlay}></div>
-      <div className={styles.heroContainer + " container"}>
+      <div className={`container ${styles.heroContainer}`}>
         <div className={styles.heroTextContent}>
-
           <h1 className={styles.title}>
-            Bespoke Private <br />
-            Transfers Ireland
+            Private Chauffeur <br />
+            <span>Transfers</span> Ireland
           </h1>
           <p className={styles.description}>
             Experience luxury travel with Ireland's premier chauffeur service. 
@@ -85,59 +83,62 @@ export default function Hero() {
 
           <div className={styles.bookingBar}>
             <div className={styles.barFields}>
-              <div className={styles.barField}>
-                <LocationAutocomplete 
-                  id="hero-from"
-                  label="From"
-                  placeholder="Pickup"
-                  onSelect={setPickup}
-                  variant="light"
-                />
-              </div>
-
-              <div className={styles.barField}>
-                <LocationAutocomplete 
-                  id="hero-to"
-                  label="To"
-                  placeholder="Dropoff"
-                  onSelect={setDropoff}
-                  variant="light"
-                />
-              </div>
-
-              <div className={styles.barField} onClick={() => dateInputRef.current?.showPicker()}>
-                <label>Date</label>
-                <div className={styles.inputWithFormat}>
-                  <input 
-                    type="text" 
-                    readOnly 
-                    placeholder="DD/MM/YY" 
-                    value={dateDisplay}
+              <div className={styles.rowFields}>
+                <div className={styles.barField}>
+                  <LocationAutocomplete 
+                    id="hero-from"
+                    label="From"
+                    placeholder="Pickup"
+                    onSelect={setPickup}
+                    variant="light"
                   />
-                  <input 
-                    type="date" 
-                    ref={dateInputRef}
-                    className={styles.hiddenDateInput}
-                    onChange={handleDateChange}
+                </div>
+                <div className={styles.barField}>
+                  <LocationAutocomplete 
+                    id="hero-to"
+                    label="To"
+                    placeholder="Dropoff"
+                    onSelect={setDropoff}
+                    variant="light"
                   />
                 </div>
               </div>
 
-              <div className={styles.barField} onClick={() => { try { timeInputRef.current?.showPicker(); } catch(e){} }}>
-                <label>Time</label>
-                <div className={styles.inputWithFormat}>
-                  <input 
-                    type="text" 
-                    readOnly 
-                    placeholder="HH:MM" 
-                    value={timeDisplay}
-                  />
-                  <input 
-                    type="time" 
-                    ref={timeInputRef} 
-                    className={styles.hiddenDateInput} 
-                    onChange={handleTimeChange}
-                  />
+              <div className={styles.rowFields}>
+                <div className={styles.barField} onClick={() => dateInputRef.current?.showPicker()}>
+                  <label>Date</label>
+                  <div className={styles.inputWithFormat}>
+                    <input 
+                      type="text" 
+                      readOnly 
+                      placeholder="DD/MM/YY" 
+                      value={dateDisplay}
+                    />
+                    <input 
+                      type="date" 
+                      ref={dateInputRef}
+                      className={styles.hiddenDateInput}
+                      onChange={handleDateChange}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.barField} onClick={() => { try { timeInputRef.current?.showPicker(); } catch(e){} }}>
+                  <label>Time</label>
+                  <div className={styles.inputWithFormat}>
+                    <input 
+                      type="text" 
+                      readOnly 
+                      placeholder="HH:MM" 
+                      value={timeDisplay}
+                    />
+                    <input 
+                      type="time" 
+                      ref={timeInputRef} 
+                      className={styles.hiddenDateInput} 
+                      onChange={handleTimeChange}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -150,8 +151,20 @@ export default function Hero() {
           </div>
 
           <div className={styles.heroActions}>
-            <Link href="/services" className="btn-primary">View Services</Link>
+            <Link href="/services" className="btn-outline">View Services</Link>
           </div>
+        </div>
+
+        <div className={styles.heroImageContainer}>
+          <img 
+            src="/hero_fresh.png" 
+            alt="Private Chauffeur Ireland" 
+            className={styles.heroImage}
+            onError={(e) => {
+              // Fallback if hero_fresh.png doesn't exist
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1200';
+            }}
+          />
         </div>
       </div>
 

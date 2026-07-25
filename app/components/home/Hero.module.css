@@ -1,55 +1,50 @@
 .hero {
   position: relative;
-  background-image: url('https://images.unsplash.com/photo-1564507004663-b6dfb3c824d5?q=80&w=2000&auto=format&fit=crop');
-  background-size: cover;
-  background-position: center;
+  background-color: var(--bg);
   display: flex;
   align-items: center;
   padding: 140px 0 100px;
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
 .heroContainer {
   position: relative;
   z-index: 2;
   width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
 }
 
 .heroTextContent {
-  max-width: 100%;
+  max-width: 600px;
 }
 
-.eyebrow {
-  color: var(--primary);
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.heroImageContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
 
-.eyebrow::after {
-  content: '';
-  width: 50px;
-  height: 1px;
-  background: var(--primary);
+.heroImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 24px;
 }
 
 .title {
   font-size: 4rem;
-  font-family: var(--font-playfair), serif;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 800;
+  color: var(--text);
   line-height: 1.1;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-outfit), sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .title span {
@@ -57,17 +52,17 @@
 }
 
 .description {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.25rem;
+  color: var(--text-muted);
   line-height: 1.6;
   margin-bottom: 2.5rem;
-  max-width: 600px;
+  max-width: 500px;
 }
 
 .heroActions {
   display: flex;
   gap: 1.5rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 /* ── Horizontal Booking Bar ───────────────────────────────── */
@@ -76,32 +71,37 @@
   border: none;
   box-shadow: none;
   padding: 0;
-  max-width: 1100px;
+  max-width: 100%;
   margin-bottom: 2.5rem;
   position: relative;
   z-index: 50;
 }
 
 .barFields {
-  display: grid;
-  grid-template-columns: 1.25fr 1.25fr 1fr 1fr auto;
-  align-items: stretch;
-  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
   position: relative;
+}
+
+.rowFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .barField {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 6px;
-  padding: 0.6rem 1.1rem;
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   position: relative;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
   cursor: pointer;
   z-index: 1;
 }
@@ -109,30 +109,25 @@
 .barField:hover {
   border-color: var(--primary-light);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 20px rgba(15, 76, 58, 0.06);
   z-index: 5;
 }
 
 .barField:focus-within {
   border-color: var(--primary);
   background: #ffffff;
-  box-shadow: 0 12px 24px rgba(26, 107, 90, 0.12);
+  box-shadow: 0 12px 24px rgba(15, 76, 58, 0.12);
   transform: translateY(-2px);
-  z-index: 15; /* Establish higher stacking priority so suggestions render on top of subsequent cards */
+  z-index: 15;
 }
 
 .barField label {
-  font-size: 0.625rem;
+  font-size: 0.65rem;
   font-weight: 800;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  transition: color 0.2s ease;
+  letter-spacing: 1px;
   margin-bottom: 0.1rem;
-}
-
-.barField:hover label {
-  color: var(--primary);
 }
 
 .barField input,
@@ -140,14 +135,13 @@
   background: transparent;
   border: none;
   color: var(--secondary);
-  font-size: 0.9rem;
-  font-weight: 700;
-  padding: 0.1rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.2rem 0;
   width: 100%;
   cursor: pointer;
 }
 
-/* Overriding child component input for this specific bar (Specifying more specific selectors to override !important) */
 .barField :global(input),
 .barField :global(.inputLight) {
   background: transparent !important;
@@ -156,8 +150,8 @@
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
   cursor: pointer;
 }
 
@@ -183,55 +177,49 @@
   cursor: pointer;
 }
 
-.timeInput {
-  cursor: pointer;
-  height: 24px;
-}
-
 .barAction {
   display: flex;
   align-items: stretch;
+  margin-top: 0.5rem;
 }
 
 .searchBtn {
   background: var(--primary);
   color: #fff;
-  padding: 0 2.5rem;
-  border-radius: 6px;
+  padding: 1.1rem 2.5rem;
+  border-radius: 12px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1rem;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   white-space: nowrap;
-  box-shadow: 0 6px 16px rgba(26, 107, 90, 0.2);
+  box-shadow: 0 6px 16px rgba(15, 76, 58, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
-
+.searchBtn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
 
 /* Responsive */
 @media (max-width: 1100px) {
+  .heroContainer {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
   .title {
     font-size: 3.5rem;
   }
-
-  .barFields {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .barAction {
-    grid-column: span 2;
-  }
-
-  .searchBtn {
-    width: 100%;
-    padding: 1.1rem 2.4rem;
+  .heroImageContainer {
+    max-width: 600px;
+    margin: 0 auto;
   }
 }
 
@@ -239,21 +227,15 @@
   .hero {
     padding: 100px 0 60px;
   }
-
   .title {
     font-size: 2.5rem;
   }
-
-  .barFields {
+  .rowFields {
     grid-template-columns: 1fr;
-  }
-
-  .barAction {
-    grid-column: span 1;
   }
 }
 
-/* Custom Alert Popup (Replaces Native Alert) */
+/* Custom Alert Popup */
 .customAlertOverlay {
   position: fixed;
   top: 0;
@@ -270,7 +252,7 @@
 .customAlertBox {
   background: #fff;
   padding: 1.5rem 2rem;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 90%;
   max-width: 400px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -287,11 +269,11 @@
 }
 
 .customAlertBox button {
-  background: #2563eb;
+  background: var(--primary);
   color: #fff;
   border: none;
   padding: 0.6rem 1.5rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   align-self: center;
@@ -300,5 +282,5 @@
 }
 
 .customAlertBox button:hover {
-  background: #1d4ed8;
+  background: var(--primary-hover);
 }

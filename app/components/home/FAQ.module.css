@@ -1,7 +1,6 @@
 .section {
   padding: 90px 0 100px;
-  background: var(--bg-light);
-  border-top: 1px solid var(--border);
+  background: var(--bg-dark);
 }
 
 .inner {
