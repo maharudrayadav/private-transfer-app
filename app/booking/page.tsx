@@ -202,6 +202,17 @@ export default function BookingPage() {
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
+    setForm(prev => {
+      const currentPax = parseInt(prev.passengers) || 1;
+      const currentLug = parseInt(prev.luggage) || 1;
+      const maxPax = vehicle.passengers || 8;
+      const maxLug = vehicle.bags || 8;
+      return {
+        ...prev,
+        passengers: currentPax > maxPax ? maxPax.toString() : prev.passengers,
+        luggage: currentLug > maxLug ? maxLug.toString() : prev.luggage
+      };
+    });
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
@@ -715,15 +726,19 @@ export default function BookingPage() {
 
                 <div className={styles.formRow}>
                   <div className={styles.formField}>
-                    <label>Passengers</label>
+                    <label>Passengers {selectedVehicle?.passengers ? `(Max: ${selectedVehicle.passengers})` : ''}</label>
                     <select name="passengers" value={form.passengers} onChange={handleChange}>
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}</option>)}
+                      {Array.from({ length: selectedVehicle?.passengers || 8 }, (_, i) => i + 1).map(n => (
+                        <option key={n} value={n}>{n}</option>
+                      ))}
                     </select>
                   </div>
                   <div className={styles.formField}>
-                    <label>Luggage</label>
+                    <label>Luggage {selectedVehicle?.bags ? `(Max: ${selectedVehicle.bags})` : ''}</label>
                     <select name="luggage" value={form.luggage} onChange={handleChange}>
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}</option>)}
+                      {Array.from({ length: selectedVehicle?.bags || 8 }, (_, i) => i + 1).map(n => (
+                        <option key={n} value={n}>{n}</option>
+                      ))}
                     </select>
                   </div>
                 </div>

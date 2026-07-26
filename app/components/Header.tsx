@@ -80,14 +80,14 @@ export default function Header() {
           
           {/* Mobile CTA (visible only inside the open menu on small screens) */}
           <Link href="/booking" className={`${styles.btnPrimaryMobile} btn-primary`} onClick={() => setIsMobileMenuOpen(false)}>
-            Get Quote & Book
+            Get Quote
           </Link>
         </nav>
 
         {/* Desktop CTA */}
         <div className={styles.desktopCta}>
           <Link href="/booking" className="btn-primary">
-            Get Quote & Book
+            Get Quote
           </Link>
         </div>
       </div>
