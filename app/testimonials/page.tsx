@@ -103,7 +103,7 @@ export default function TestimonialsPage() {
             >
               <div className={styles.card}>
                 <div className={styles.quoteIcon}>
-                  <Quote size={56} />
+                  <Quote size={48} />
                 </div>
                 
                 <div className={styles.stars}>
