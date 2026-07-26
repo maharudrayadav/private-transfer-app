@@ -74,6 +74,7 @@ export default function Header() {
             </div>
           </div>
 
+          <Link href="/faq" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link>
           <Link href="/booking" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Booking</Link>
           <Link href="/payment" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Payment</Link>
           <Link href="/contact" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
