@@ -60,29 +60,13 @@ export default function ServiceDetailsPage() {
     if (!serviceType) return;
 
     const fetchData = async () => {
-      // Check session cache
-      const cacheKey = `serviceDetails_${serviceType}`;
-      const cachedStr = sessionStorage.getItem(cacheKey);
-      
-      if (cachedStr) {
-        const cached = JSON.parse(cachedStr);
-        setMainContent(cached.mainContent);
-        setFleetImages(cached.fleetImages);
-        setLoading(false);
-        return;
-      }
-
       try {
         const { mainContent: content, fleetImages: images } = await ServiceTypeService.fetchServiceDetails(serviceType);
 
         setMainContent(content);
         setFleetImages(images);
 
-        // Store in session cache
-        sessionStorage.setItem(cacheKey, JSON.stringify({
-          mainContent: content,
-          fleetImages: images
-        }));
+
       } catch (error) {
         console.error('Failed to fetch service details:', error);
       } finally {
