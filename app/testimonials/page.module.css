@@ -30,111 +30,122 @@
 
 .header {
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
+  position: relative;
 }
 
 .eyebrow {
-  font-size: 0.9rem;
-  font-weight: 800;
-  letter-spacing: 4px;
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--primary);
-  margin: 0 0 1rem;
+  color: var(--primary, #15803d);
+  background: rgba(21, 128, 61, 0.08);
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  margin: 0 0 1.5rem;
+  border: 1px solid rgba(21, 128, 61, 0.15);
 }
 
 .title {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 800;
   color: var(--secondary, #1e293b);
-  margin: 0 0 1.25rem;
-  line-height: 1.2;
+  margin: 0 0 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -1px;
 }
 
 .sub {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--text-muted, #475569);
-  max-width: 650px;
+  max-width: 600px;
   margin: 0 auto;
   line-height: 1.8;
+  font-weight: 400;
 }
 
 /* Masonry Layout */
 .masonry {
   column-count: 3;
-  column-gap: 2rem;
+  column-gap: 2.5rem;
   width: 100%;
 }
 
 .cardWrapper {
   break-inside: avoid;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .card {
   background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  border-radius: 20px;
-  padding: 2.5rem;
+  border: none;
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--primary, #15803d), #4ade80);
+  height: 6px;
+  background: var(--primary, #15803d);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transform: translateY(-100%);
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.08);
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .card:hover::before {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .stars {
   display: flex;
-  gap: 4px;
-  margin-bottom: 1.2rem;
-  color: #fbbf24;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+  color: #f59e0b; /* Classy gold */
 }
 
 .quoteIcon {
-  color: rgba(0, 0, 0, 0.03);
+  color: var(--primary, #15803d);
+  opacity: 0.04;
   position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
+  top: -10px;
+  right: -10px;
   z-index: 0;
+  transform: scale(3) rotate(-10deg);
+  pointer-events: none;
 }
 
 .cardTitle {
   font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--secondary, #1e293b);
+  font-weight: 800;
+  color: var(--secondary, #0f172a);
   margin-bottom: 1rem;
-  line-height: 1.4;
+  line-height: 1.5;
   position: relative;
   z-index: 1;
 }
 
 .cardText {
   font-size: 1.05rem;
-  color: var(--text-muted, #475569);
-  line-height: 1.8;
+  color: #475569;
+  line-height: 1.85;
   margin-bottom: 2.5rem;
   flex-grow: 1;
-  font-style: italic;
   position: relative;
   z-index: 1;
 }
@@ -142,24 +153,36 @@
 .authorMeta {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 1.25rem;
   padding-top: 1.5rem;
+  position: relative;
+}
+
+/* Add a delicate separator line */
+.authorMeta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .authorAvatar {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: var(--primary, #15803d);
+  background: rgba(21, 128, 61, 0.1); /* Very subtle primary tint */
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--primary, #15803d);
   font-weight: 800;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(21, 128, 61, 0.2);
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .authorInfo {
@@ -168,9 +191,10 @@
 }
 
 .authorName {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--secondary, #1e293b);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--secondary, #0f172a);
+  letter-spacing: -0.3px;
 }
 
 .authorLocation {
@@ -190,7 +214,7 @@
 
 @media (max-width: 768px) {
   .title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
   
   .masonry {
