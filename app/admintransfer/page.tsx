@@ -33,6 +33,9 @@ export default function AdminLoginPage() {
     <div className={styles.loginWrapper}>
       <div className={styles.loginCard}>
         <div className={styles.loginHeader}>
+          <div className={styles.adminLogoContainer}>
+            <img src="/logo.png" alt="Private Transfers" className={styles.adminLogoImg} />
+          </div>
           <p>SECURE ACCESS</p>
           <h1>Admin Portal</h1>
         </div>

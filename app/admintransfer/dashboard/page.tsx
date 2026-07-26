@@ -454,6 +454,7 @@ export default function AdminDashboard() {
     <div className={styles.adminPage}>
       <header className={styles.topBar}>
         <div className={styles.adminInfo}>
+          <img src="/logo.png" alt="Private Transfers" className={styles.adminDashboardLogo} />
           <span className={styles.adminBadge}>Admin</span>
           <span>Private Transfer Dashboard</span>
         </div>
