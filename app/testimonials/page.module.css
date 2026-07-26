@@ -1,20 +1,20 @@
 .page {
   padding: 140px 0 80px;
-  background: var(--bg-dark);
+  background: var(--bg-light, #fdfbf7);
   min-height: 80vh;
   position: relative;
   overflow: hidden;
 }
 
-/* Subtle background glow effect */
+/* Subtle background decorative element */
 .page::before {
   content: '';
   position: absolute;
-  top: 10%;
-  left: 20%;
-  width: 60vw;
-  height: 60vw;
-  background: radial-gradient(circle, rgba(234, 179, 8, 0.03) 0%, transparent 60%);
+  top: 5%;
+  right: -5%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(22, 163, 74, 0.03) 0%, transparent 70%);
   border-radius: 50%;
   z-index: 0;
   pointer-events: none;
@@ -45,14 +45,14 @@
 .title {
   font-size: 3.5rem;
   font-weight: 800;
-  color: white;
+  color: var(--secondary, #1e293b);
   margin: 0 0 1.25rem;
   line-height: 1.2;
 }
 
 .sub {
   font-size: 1.15rem;
-  color: var(--text-muted);
+  color: var(--text-muted, #475569);
   max-width: 650px;
   margin: 0 auto;
   line-height: 1.8;
@@ -71,10 +71,8 @@
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.04);
   border-radius: 20px;
   padding: 2.5rem;
   display: flex;
@@ -82,6 +80,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .card::before {
@@ -89,16 +88,15 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary), transparent);
+  background: linear-gradient(90deg, var(--primary, #15803d), #4ade80);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 .card:hover::before {
@@ -109,39 +107,43 @@
   display: flex;
   gap: 4px;
   margin-bottom: 1.2rem;
-  color: var(--primary);
+  color: #fbbf24;
 }
 
 .quoteIcon {
-  color: var(--primary);
-  opacity: 0.15;
+  color: rgba(0, 0, 0, 0.03);
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
+  z-index: 0;
 }
 
 .cardTitle {
   font-size: 1.35rem;
   font-weight: 700;
-  color: white;
+  color: var(--secondary, #1e293b);
   margin-bottom: 1rem;
   line-height: 1.4;
+  position: relative;
+  z-index: 1;
 }
 
 .cardText {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.05rem;
+  color: var(--text-muted, #475569);
   line-height: 1.8;
   margin-bottom: 2.5rem;
   flex-grow: 1;
   font-style: italic;
+  position: relative;
+  z-index: 1;
 }
 
 .authorMeta {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   padding-top: 1.5rem;
 }
 
@@ -149,7 +151,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary) 0%, #b8860b 100%);
+  background: var(--primary, #15803d);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,7 +159,7 @@
   font-weight: 800;
   font-size: 1.2rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3);
+  box-shadow: 0 4px 10px rgba(21, 128, 61, 0.2);
 }
 
 .authorInfo {
@@ -168,7 +170,7 @@
 .authorName {
   font-size: 1.1rem;
   font-weight: 700;
-  color: white;
+  color: var(--secondary, #1e293b);
 }
 
 .authorLocation {
