@@ -130,6 +130,12 @@ export default function ServiceDetailsPage() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
+        style={{
+          backgroundImage: mainContent.imageUrl ? `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(${mainContent.imageUrl.replace('/uploadv', '/upload/v')})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
       >
         <div className="container">
           <p className={styles.eyebrow}>{mainContent.subHeading}</p>
