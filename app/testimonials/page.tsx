@@ -1,4 +1,7 @@
-import { Quote } from 'lucide-react';
+'use client';
+
+import { Quote, Star } from 'lucide-react';
+import { motion } from 'framer-motion';
 import styles from './page.module.css';
 
 const testimonials = [
@@ -88,25 +91,41 @@ export default function TestimonialsPage() {
           </p>
         </div>
 
-        <div className={styles.grid}>
+        <div className={styles.masonry}>
           {testimonials.map((item, idx) => (
-            <div key={idx} className={styles.card}>
-              <div className={styles.quoteIcon}>
-                <Quote size={32} />
-              </div>
-              <h3 className={styles.cardTitle}>"{item.title}"</h3>
-              <p className={styles.cardText}>{item.text}</p>
-              
-              <div className={styles.authorMeta}>
-                <div className={styles.authorAvatar}>
-                  {item.author.charAt(0)}
+            <motion.div 
+              key={idx} 
+              className={styles.cardWrapper}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: (idx % 3) * 0.15 }}
+            >
+              <div className={styles.card}>
+                <div className={styles.quoteIcon}>
+                  <Quote size={48} />
                 </div>
-                <div className={styles.authorInfo}>
-                  <span className={styles.authorName}>{item.author}</span>
-                  <span className={styles.authorLocation}>{item.location}</span>
+                
+                <div className={styles.stars}>
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={16} fill="currentColor" />
+                  ))}
+                </div>
+
+                <h3 className={styles.cardTitle}>"{item.title}"</h3>
+                <p className={styles.cardText}>{item.text}</p>
+                
+                <div className={styles.authorMeta}>
+                  <div className={styles.authorAvatar}>
+                    {item.author.charAt(0)}
+                  </div>
+                  <div className={styles.authorInfo}>
+                    <span className={styles.authorName}>{item.author}</span>
+                    <span className={styles.authorLocation}>{item.location}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
