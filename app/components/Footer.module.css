@@ -2,7 +2,7 @@
   background: var(--primary);
   color: #fff;
   border-top: none;
-  padding-top: 4rem;
+  padding-top: 2.5rem;
 }
 
 .grid {
@@ -10,14 +10,14 @@
   grid-template-columns: 280px 150px 150px;
   justify-content: start;
   gap: 6rem;
-  padding-bottom: 3rem;
+  padding-bottom: 1.5rem;
 }
 
 .logoContainer {
   display: flex;
   align-items: center;
-  height: 72px;
-  margin-bottom: 1rem;
+  height: 52px;
+  margin-bottom: 0.75rem;
 }
 
 .logoImg {
@@ -72,8 +72,8 @@
 
 /* Bottom bar */
 .bottom {
-  border-top: 1px solid #333;
-  padding: 1.25rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
 }
 
 .bottom .container {
