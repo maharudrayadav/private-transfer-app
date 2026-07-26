@@ -79,6 +79,7 @@ export default function Header() {
           <Link href="/payment" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Payment</Link>
           <Link href="/contact" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
           <Link href="/about" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+          <Link href="/testimonials" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Testimonials</Link>
           <Link href="/faq" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link>
           
           {/* Mobile CTA (visible only inside the open menu on small screens) */}
