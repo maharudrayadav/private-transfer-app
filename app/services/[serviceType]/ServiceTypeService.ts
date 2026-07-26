@@ -14,10 +14,12 @@ export class ServiceTypeService {
 
     const allServices = await servicesRes.json();
 
-    const matchingServices = allServices.filter((item: any) => 
-      item.mainService?.toLowerCase() === serviceType.toLowerCase() || 
-      item.heading?.toLowerCase().replace(/ /g, '-') === serviceType.toLowerCase()
-    );
+    const targetSlug = serviceType.trim().toLowerCase();
+    const matchingServices = allServices.filter((item: any) => {
+      const mainSlug = item.mainService ? item.mainService.trim().toLowerCase().replace(/\s+/g, '-') : null;
+      const headingSlug = (item.heading || '').trim().toLowerCase().replace(/\s+/g, '-');
+      return mainSlug === targetSlug || headingSlug === targetSlug;
+    });
     
     const mainContent = matchingServices.length > 0 ? matchingServices[0] : null;
     const fleetImages: any[] = [];

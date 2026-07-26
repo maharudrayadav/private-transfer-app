@@ -57,7 +57,8 @@ export default function Header() {
                 <div className={styles.dropdownItem}>Loading...</div>
               ) : services.length > 0 ? (
                 services.map((service, idx) => {
-                  const slug = service.mainService ? service.mainService.toLowerCase() : (service.heading || '').toLowerCase().replace(/\\s+/g, '-');
+                  const rawHeading = (service.heading || '').trim();
+                  const slug = (service.mainService ? service.mainService.trim() : rawHeading).toLowerCase().replace(/\s+/g, '-');
                   return (
                     <Link 
                       key={service.id || idx} 
