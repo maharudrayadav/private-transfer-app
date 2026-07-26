@@ -109,13 +109,17 @@ export default function ServicesSection({ initialServices = [], showMoreServices
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
               >
-                <Link 
-                  href={`/services/${s.mainService ? s.mainService.toLowerCase() : (s.heading || '').toLowerCase().replace(/ /g, '-')}`} 
-                  className={styles.card}
-                >
-                  <div className={styles.imgWrap}>
-                    <Image 
-                      src={s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/placeholder_service.png'}
+                {(() => {
+                  const rawHeading = (s.heading || '').trim();
+                  const slug = (s.mainService ? s.mainService.trim() : rawHeading).toLowerCase().replace(/\s+/g, '-');
+                  return (
+                    <Link 
+                      href={`/services/${slug}`} 
+                      className={styles.card}
+                    >
+                      <div className={styles.imgWrap}>
+                        <Image 
+                          src={s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/placeholder_service.png'}
                       alt={s.heading || 'Service Image'} 
                       fill 
                       sizes="(max-width:768px) 100vw, 400px" 
@@ -142,6 +146,8 @@ export default function ServicesSection({ initialServices = [], showMoreServices
                     <div className={styles.learnMore}>Explore Service <span>→</span></div>
                   </div>
                 </Link>
+                  );
+                })()}
               </motion.div>
             ))
           ) : (
