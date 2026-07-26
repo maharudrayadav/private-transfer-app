@@ -91,7 +91,7 @@ export default function TestimonialsPage() {
           </p>
         </div>
 
-        <div className={styles.masonry}>
+        <div className={styles.grid}>
           {testimonials.map((item, idx) => (
             <motion.div 
               key={idx} 

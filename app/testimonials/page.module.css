@@ -66,16 +66,17 @@
   font-weight: 400;
 }
 
-/* Masonry Layout */
-.masonry {
-  column-count: 3;
-  column-gap: 2.5rem;
+/* Uniform Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
   width: 100%;
 }
 
 .cardWrapper {
-  break-inside: avoid;
-  margin-bottom: 2.5rem;
+  display: flex;
+  height: 100%;
 }
 
 .card {
@@ -89,6 +90,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  height: 100%;
 }
 
 .card::before {
@@ -207,8 +210,8 @@
 }
 
 @media (max-width: 1024px) {
-  .masonry {
-    column-count: 2;
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -217,7 +220,7 @@
     font-size: 2.8rem;
   }
   
-  .masonry {
-    column-count: 1;
+  .grid {
+    grid-template-columns: 1fr;
   }
 }
