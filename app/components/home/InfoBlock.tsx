@@ -7,7 +7,7 @@ export default function InfoBlock() {
       <div className={`container ${styles.content}`}>
         <h2 className={styles.mainTitle}>Private Chauffeur Transfers Across Ireland</h2>
         <p className={styles.mainSubtitle}>
-          Whether you're arriving at Dublin Airport, travelling for business, attending an event or heading to a hotel, VIPtransfer.ie offers private chauffeur service tailored to your journey.
+          Whether you're arriving at Dublin Airport, travelling for business, attending an event or heading to a hotel, PrivateTransfers.ie offers private chauffeur service tailored to your journey.
         </p>
 
         <div className={styles.glassCard}>

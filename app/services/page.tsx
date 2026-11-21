@@ -3,8 +3,11 @@ import ServicesSection from './ServicesSection';
 import styles from './services.module.css';
 
 export const metadata: Metadata = {
-  title: 'Our Services | Private Transfer Ireland',
-  description: 'Explore our full range of premium chauffeur and transfer services across Ireland.',
+  title: 'Chauffeur & Transfer Services Ireland | Airport & Hotel Travel',
+  description: 'Explore bespoke chauffeur services across Ireland: Dublin Airport transfers, luxury hotel and castle transfers, corporate travel, vacation tours, and golf transfers.',
+  alternates: {
+    canonical: 'https://www.privatetransfers.ie/services',
+  },
 };
 
 export default async function ServicesPage() {

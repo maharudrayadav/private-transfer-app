@@ -832,6 +832,13 @@
   font-family: inherit;
 }
 
+.greetMeetSelectActive {
+  border-color: #0f4c3a !important;
+  background-color: #f0fdf4 !important;
+  font-weight: 700 !important;
+  color: #0f4c3a !important;
+}
+
 .inputWithIcon {
   position: relative;
   display: flex;
@@ -1268,12 +1275,42 @@
   }
 }
 
+/* ─── Mobile Vehicle Cards ─────────────────────────────────── */
+@media (max-width: 600px) {
+  .vehicleCard {
+    grid-template-columns: 1fr;
+    grid-template-rows: 200px auto auto;
+  }
+  .vehicleImg {
+    width: 100%;
+    min-height: 200px;
+  }
+  .vehiclePricing {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-left: none;
+    border-top: 1px solid #f1f5f9;
+    padding: 1rem 1.5rem;
+    min-width: unset;
+  }
+  .priceNote,
+  .priceOnRequest {
+    margin-bottom: 0;
+    margin-right: 0.5rem;
+  }
+  .price {
+    font-size: 1.8rem;
+  }
+}
+
 /* ─── Route Map Section ─────────────────────────────────── */
 .routeMapSection {
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  width: 100%;
 }
 
 .toggleRouteBtn {
@@ -1297,6 +1334,7 @@
 
 .mapContainer {
   width: 100%;
+  padding: 0;
   animation: slideDown 0.3s ease;
 }
 

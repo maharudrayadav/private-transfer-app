@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from '../admin.module.css';
 import { 
   Filter, X, Download, RotateCcw, 
@@ -51,6 +52,8 @@ interface Booking {
   returnTime?: string;
   returnPickupLocation?: string;
   returnDropoffLocation?: string;
+  greetMeet?: string;
+  meetAndGreet?: boolean | string;
 }
 
 export default function AdminDashboard() {
@@ -60,6 +63,7 @@ export default function AdminDashboard() {
   const [size, setSize] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [availableDrivers, setAvailableDrivers] = useState<string[]>([]);
 
   // Modal State
   const [showApproveModal, setShowApproveModal] = useState(false);
@@ -73,7 +77,17 @@ export default function AdminDashboard() {
   const [fetchingBooking, setFetchingBooking] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  // Filters
+  // Edit modal date/time states (DD/MM/YYYY formatting)
+  const [editPickupDate, setEditPickupDate] = useState('');
+  const [editPickupDateDisplay, setEditPickupDateDisplay] = useState('');
+  const [editPickupTime, setEditPickupTime] = useState('');
+  const [editReturnDate, setEditReturnDate] = useState('');
+  const [editReturnDateDisplay, setEditReturnDateDisplay] = useState('');
+
+  const pickupDateInputRef = useRef<HTMLInputElement>(null);
+  const returnDateInputRef = useRef<HTMLInputElement>(null);
+
+  // Filters — input state (local, not triggering API)
   const [statusFilter, setStatusFilter] = useState('');
   const [driverFilter, setDriverFilter] = useState('');
   const [customerFilter, setCustomerFilter] = useState('');
@@ -84,6 +98,16 @@ export default function AdminDashboard() {
   const [sortDirection, setSortDirection] = useState('desc');
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [returnDriversCache, setReturnDriversCache] = useState<Record<number, string>>({});
+
+  // Applied filters — these trigger the API call
+  const [appliedStatus, setAppliedStatus] = useState('');
+  const [appliedDriver, setAppliedDriver] = useState('');
+  const [appliedCustomer, setAppliedCustomer] = useState('');
+  const [appliedStart, setAppliedStart] = useState('');
+  const [appliedEnd, setAppliedEnd] = useState('');
+  const [appliedTripType, setAppliedTripType] = useState('');
+  const [appliedSortBy, setAppliedSortBy] = useState('bookingDate');
+  const [appliedSortDir, setAppliedSortDir] = useState('desc');
 
   const router = useRouter();
 
@@ -153,6 +177,19 @@ export default function AdminDashboard() {
     return '';
   };
 
+  const getMeetAndGreet = (b: any): boolean => {
+    if (!b) return false;
+    if (b.greetMeet === 'yes' || b.greetMeet === true) return true;
+    if (b.meetAndGreet === true || b.meetAndGreet === 'yes') return true;
+    if (b.notes) {
+      if (/meet\s*&\s*greet:\s*yes/i.test(b.notes)) return true;
+      if (/greet\s*&\s*meet:\s*yes/i.test(b.notes)) return true;
+      if (/meet\s*and\s*greet:\s*yes/i.test(b.notes)) return true;
+      if (/geetmeet:\s*yes/i.test(b.notes)) return true;
+    }
+    return false;
+  };
+
   // Helper to format date for datetime-local input (YYYY-MM-DDTHH:mm)
   const formatForDateTimeLocal = (dateStr?: string) => {
     if (!dateStr) return '';
@@ -170,6 +207,176 @@ export default function AdminDashboard() {
     }
   };
 
+  // Helper to extract YYYY-MM-DD
+  const getDatePart = (dtStr?: string): string => {
+    if (!dtStr) return '';
+    const match = dtStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return `${match[1]}-${match[2]}-${match[3]}`;
+    try {
+      const d = new Date(dtStr);
+      if (!isNaN(d.getTime())) {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+      }
+    } catch (e) {}
+    return '';
+  };
+
+  // Helper to format YYYY-MM-DD to DD/MM/YYYY
+  const toDisplayDDMMYYYY = (isoDate?: string): string => {
+    if (!isoDate) return '';
+    const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) return `${match[3]}/${match[2]}/${match[1]}`;
+    return '';
+  };
+
+  // Helper to parse DD/MM/YYYY (or DD-MM-YYYY or DD MM YYYY) to YYYY-MM-DD
+  const parseDisplayToIso = (displayStr?: string): string => {
+    if (!displayStr) return '';
+    const match = displayStr.trim().match(/^(\d{1,2})[\/\-\s](\d{1,2})[\/\-\s](\d{4})$/);
+    if (match) {
+      const day = match[1].padStart(2, '0');
+      const month = match[2].padStart(2, '0');
+      const year = match[3];
+      const dNum = parseInt(day, 10);
+      const mNum = parseInt(month, 10);
+      if (mNum >= 1 && mNum <= 12 && dNum >= 1 && dNum <= 31) {
+        return `${year}-${month}-${day}`;
+      }
+    }
+    return '';
+  };
+
+  // Helper to get HH:mm from datetime
+  const getTimePart = (dtStr?: string): string => {
+    if (!dtStr) return '00:00';
+    const match = dtStr.match(/T(\d{2}:\d{2})/);
+    if (match) return match[1];
+    const matchSpace = dtStr.match(/\s(\d{2}:\d{2})/);
+    if (matchSpace) return matchSpace[1];
+    try {
+      const d = new Date(dtStr);
+      if (!isNaN(d.getTime())) {
+        const hours = String(d.getHours()).padStart(2, '0');
+        const minutes = String(d.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+      }
+    } catch (e) {}
+    return '00:00';
+  };
+
+  // Helper for formatting date strings to DD/MM/YYYY
+  const formatDateDDMMYYYY = (dateStr?: string): string => {
+    if (!dateStr) return '—';
+    try {
+      const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return `${match[3]}/${match[2]}/${match[1]}`;
+      }
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (e) {
+      return dateStr;
+    }
+  };
+
+  // Date and Time handlers for Edit Modal
+  const handlePickupDateFromPicker = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value; // YYYY-MM-DD
+    setEditPickupDate(val);
+    const display = toDisplayDDMMYYYY(val);
+    setEditPickupDateDisplay(display);
+    if (val) {
+      const time = editPickupTime || '00:00';
+      setEditingBooking(prev => ({
+        ...prev,
+        pickupTime: `${val}T${time}`
+      }));
+    }
+  };
+
+  const handlePickupDateTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    setEditPickupDateDisplay(text);
+    const iso = parseDisplayToIso(text);
+    if (iso) {
+      setEditPickupDate(iso);
+      const time = editPickupTime || '00:00';
+      setEditingBooking(prev => ({
+        ...prev,
+        pickupTime: `${iso}T${time}`
+      }));
+    }
+  };
+
+  const handlePickupDateBlur = () => {
+    if (editPickupDate) {
+      setEditPickupDateDisplay(toDisplayDDMMYYYY(editPickupDate));
+    } else if (editPickupDateDisplay) {
+      const iso = parseDisplayToIso(editPickupDateDisplay);
+      if (iso) {
+        setEditPickupDate(iso);
+        setEditPickupDateDisplay(toDisplayDDMMYYYY(iso));
+      } else {
+        setEditPickupDateDisplay('');
+      }
+    }
+  };
+
+  const handlePickupTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const timeVal = e.target.value;
+    setEditPickupTime(timeVal);
+    const dateVal = editPickupDate || new Date().toISOString().split('T')[0];
+    setEditingBooking(prev => ({
+      ...prev,
+      pickupTime: `${dateVal}T${timeVal || '00:00'}`
+    }));
+  };
+
+  const handleReturnDateFromPicker = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value; // YYYY-MM-DD
+    setEditReturnDate(val);
+    const display = toDisplayDDMMYYYY(val);
+    setEditReturnDateDisplay(display);
+    setEditingBooking(prev => ({
+      ...prev,
+      returnDate: val
+    }));
+  };
+
+  const handleReturnDateTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    setEditReturnDateDisplay(text);
+    const iso = parseDisplayToIso(text);
+    if (iso) {
+      setEditReturnDate(iso);
+      setEditingBooking(prev => ({
+        ...prev,
+        returnDate: iso
+      }));
+    }
+  };
+
+  const handleReturnDateBlur = () => {
+    if (editReturnDate) {
+      setEditReturnDateDisplay(toDisplayDDMMYYYY(editReturnDate));
+    } else if (editReturnDateDisplay) {
+      const iso = parseDisplayToIso(editReturnDateDisplay);
+      if (iso) {
+        setEditReturnDate(iso);
+        setEditReturnDateDisplay(toDisplayDDMMYYYY(iso));
+      } else {
+        setEditReturnDateDisplay('');
+      }
+    }
+  };
+
   // Auth check
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
@@ -178,23 +385,37 @@ export default function AdminDashboard() {
     }
   }, [router]);
 
+  useEffect(() => {
+    const fetchAvailableDrivers = async () => {
+      try {
+        const res = await fetch('https://api.privatetransfers.ie/privateapi/api/driver/available-names');
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setAvailableDrivers(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch drivers', err);
+      }
+    };
+    fetchAvailableDrivers();
+  }, []);
+
   const fetchBookings = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams({
         page: page.toString(),
         size: size.toString(),
-        sortBy: sortBy,
-        sortDirection: sortDirection,
+        sortBy: appliedSortBy,
+        sortDirection: appliedSortDir,
       });
 
-      if (statusFilter) params.append('status', statusFilter);
-      if (driverFilter) params.append('driverName', driverFilter);
-      if (customerFilter) params.append('customerName', customerFilter);
-      
-      if (startDate) params.append('startDate', `${startDate}T00:00:00`);
-      if (endDate) params.append('endDate', `${endDate}T23:59:59`);
-      if (tripTypeFilter) params.append('tripType', tripTypeFilter);
+      if (appliedStatus) params.append('status', appliedStatus);
+      if (appliedDriver) params.append('driverName', appliedDriver);
+      if (appliedCustomer) params.append('customerName', appliedCustomer);
+      if (appliedStart) params.append('startDate', `${appliedStart}T00:00:00`);
+      if (appliedEnd) params.append('endDate', `${appliedEnd}T23:59:59`);
+      if (appliedTripType) params.append('tripType', appliedTripType);
 
       const data = await DashboardService.fetchBookings(params);
       
@@ -232,7 +453,7 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  }, [page, size, statusFilter, driverFilter, customerFilter, startDate, endDate, tripTypeFilter, sortBy, sortDirection]);
+  }, [page, size, appliedStatus, appliedDriver, appliedCustomer, appliedStart, appliedEnd, appliedTripType, appliedSortBy, appliedSortDir]);
 
   useEffect(() => {
     fetchBookings();
@@ -314,21 +535,47 @@ export default function AdminDashboard() {
         if (!lName) lName = parts.slice(1).join(' ') || '';
       }
 
+      const formattedPickup = formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate);
+      const initialDate = getDatePart(formattedPickup);
+      const initialTime = getTimePart(formattedPickup);
+      setEditPickupDate(initialDate);
+      setEditPickupDateDisplay(toDisplayDDMMYYYY(initialDate));
+      setEditPickupTime(initialTime);
+
+      const initialReturnDate = getDatePart(latestData.returnDate);
+      setEditReturnDate(initialReturnDate);
+      setEditReturnDateDisplay(toDisplayDDMMYYYY(initialReturnDate));
+
+      const isGreetMeet = getMeetAndGreet(latestData) ? 'yes' : (latestData.greetMeet || 'no');
+
       setEditingBooking({
         ...latestData,
         firstName: fName,
         lastName: lName,
         flightNumber: getFlightNumber(latestData),
-        pickupTime: formatForDateTimeLocal(latestData.pickupTime || latestData.bookingDate),
+        pickupTime: formattedPickup,
         returnDriverName: getReturnDriver(latestData),
         passengers: latestData.passengers || 0,
         luggage: latestData.luggage || 0,
-        amount: latestData.amount || 0
+        amount: latestData.amount || 0,
+        greetMeet: isGreetMeet
       });
     } catch (err) {
       console.error('Fetch error:', err);
       // Fallback to local data
-      setEditingBooking({...booking});
+      const formattedPickup = formatForDateTimeLocal(booking.pickupTime || booking.bookingDate);
+      const initialDate = getDatePart(formattedPickup);
+      const initialTime = getTimePart(formattedPickup);
+      setEditPickupDate(initialDate);
+      setEditPickupDateDisplay(toDisplayDDMMYYYY(initialDate));
+      setEditPickupTime(initialTime);
+
+      const initialReturnDate = getDatePart(booking.returnDate);
+      setEditReturnDate(initialReturnDate);
+      setEditReturnDateDisplay(toDisplayDDMMYYYY(initialReturnDate));
+
+      const isGreetMeet = getMeetAndGreet(booking) ? 'yes' : (booking.greetMeet || 'no');
+      setEditingBooking({...booking, greetMeet: isGreetMeet, pickupTime: formattedPickup});
     } finally {
       setFetchingBooking(false);
     }
@@ -339,11 +586,22 @@ export default function AdminDashboard() {
     
     setUpdateLoading(true);
     try {
-      // Ensure pickupTime has seconds (YYYY-MM-DDTHH:mm:ss)
-      let formattedTime = editingBooking.pickupTime || '';
+      let datePart = editPickupDate;
+      if (!datePart && editPickupDateDisplay) {
+        datePart = parseDisplayToIso(editPickupDateDisplay);
+      }
+      const timePart = editPickupTime || '00:00';
+      let formattedTime = datePart ? `${datePart}T${timePart}` : (editingBooking.pickupTime || '');
       if (formattedTime && formattedTime.length === 16) {
         formattedTime += ':00';
       }
+
+      let finalReturnDate = editReturnDate;
+      if (!finalReturnDate && editReturnDateDisplay) {
+        finalReturnDate = parseDisplayToIso(editReturnDateDisplay);
+      }
+
+      const gmVal = editingBooking.greetMeet || (getMeetAndGreet(editingBooking) ? 'yes' : 'no');
 
       const payload = {
         firstName: editingBooking.firstName,
@@ -359,14 +617,16 @@ export default function AdminDashboard() {
         amount: Number(editingBooking.amount) || 0,
         flightNumber: editingBooking.flightNumber,
         driverNote: editingBooking.driverNote,
-        returnDate: editingBooking.returnDate,
+        returnDate: finalReturnDate || editingBooking.returnDate,
         returnTime: editingBooking.returnTime,
         returnPickupLocation: editingBooking.returnPickupLocation,
         returnDropoffLocation: editingBooking.returnDropoffLocation,
         status: editingBooking.status,
         driverName: editingBooking.driverName,
         returnDriverName: editingBooking.returnDriverName,
-        returndriverName: editingBooking.returnDriverName
+        returndriverName: editingBooking.returnDriverName,
+        greetMeet: gmVal,
+        meetAndGreet: gmVal === 'yes'
       };
 
       await DashboardService.updateBooking(editingBooking.id, payload);
@@ -398,7 +658,7 @@ export default function AdminDashboard() {
     }
     
     // Define headers
-    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Flight Number', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Return Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver', 'Return Driver'];
+    const headers = ['ID', 'Customer Name', 'Phone', 'Email', 'Flight Number', 'Meet & Greet', 'Pickup Location', 'Dropoff Location', 'Date/Time', 'Return Date/Time', 'Status', 'Vehicle', 'Amount', 'Driver', 'Return Driver'];
     
     // Create CSV rows
     const rows = bookings.map(b => [
@@ -407,6 +667,7 @@ export default function AdminDashboard() {
       `"${b.phone || ''}"`,
       `"${b.email || b.notes?.match(/Email:\s*([^\s\n]+)/)?.[1] || ''}"`,
       `"${getFlightNumber(b)}"`,
+      `"${getMeetAndGreet(b) ? 'YES' : 'NO'}"`,
       `"${(b.pickupLocation || '').replace(/"/g, '""')}"`,
       `"${(b.dropoffLocation || '').replace(/"/g, '""')}"`,
       `"${b.pickupTime || b.bookingDate || ''}"`,
@@ -454,7 +715,7 @@ export default function AdminDashboard() {
     <div className={styles.adminPage}>
       <header className={styles.topBar}>
         <div className={styles.adminInfo}>
-          <img src="/logo.png" alt="Private Transfers" className={styles.adminDashboardLogo} />
+          <Link href="/"><img src="/logo.png" alt="Private Transfers" className={styles.adminDashboardLogo} style={{ cursor: 'pointer' }} /></Link>
           <span className={styles.adminBadge}>Admin</span>
           <span>Private Transfer Dashboard</span>
         </div>
@@ -575,6 +836,14 @@ export default function AdminDashboard() {
             <button 
               className={styles.resetBtn} 
               onClick={() => {
+                setAppliedStatus('');
+                setAppliedDriver('');
+                setAppliedCustomer('');
+                setAppliedStart('');
+                setAppliedEnd('');
+                setAppliedTripType('');
+                setAppliedSortBy('bookingDate');
+                setAppliedSortDir('desc');
                 setStatusFilter('');
                 setDriverFilter('');
                 setCustomerFilter('');
@@ -592,8 +861,15 @@ export default function AdminDashboard() {
             <button
               className={styles.applyBtn}
               onClick={() => {
+                setAppliedStatus(statusFilter);
+                setAppliedDriver(driverFilter);
+                setAppliedCustomer(customerFilter);
+                setAppliedStart(startDate);
+                setAppliedEnd(endDate);
+                setAppliedTripType(tripTypeFilter);
+                setAppliedSortBy(sortBy);
+                setAppliedSortDir(sortDirection);
                 setPage(0);
-                fetchBookings();
               }}
               title="Apply Filters"
               style={{ height: '42px', padding: '0 1.5rem' }}
@@ -735,6 +1011,39 @@ export default function AdminDashboard() {
                             ✈️ Flight: {getFlightNumber(b)}
                           </div>
                         )}
+                        {getMeetAndGreet(b) ? (
+                          <div style={{ marginTop: '5px' }}>
+                            <span style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              background: '#fef3c7',
+                              color: '#92400e',
+                              padding: '3px 9px',
+                              borderRadius: '6px',
+                              fontWeight: '800',
+                              fontSize: '0.78rem',
+                              letterSpacing: '0.5px',
+                              border: '1.5px solid #d97706',
+                              boxShadow: '0 1px 3px rgba(217, 119, 6, 0.2)'
+                            }}>
+                              🤝 <strong>MEET &amp; GREET: YES</strong>
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ marginTop: '3px' }}>
+                            <span style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              color: '#64748b',
+                              fontSize: '0.74rem',
+                              fontWeight: '600'
+                            }}>
+                              Meet &amp; Greet: <strong>NO</strong>
+                            </span>
+                          </div>
+                        )}
                         {b.bookingCode && <span className={styles.codeBadge}>#{b.bookingCode}</span>}
                         {b.notes && (
                           <div className={styles.notesPreview} title={b.notes}>
@@ -759,9 +1068,7 @@ export default function AdminDashboard() {
                   <td data-label="Date/Time">
                     <div className={styles.dateCell}>
                       <div className={styles.mainDate}>
-                        {b.pickupTime 
-                          ? new Date(b.pickupTime).toLocaleDateString('en-IE', { timeZone: 'Europe/Dublin' }) 
-                          : (b.bookingDate ? new Date(b.bookingDate).toLocaleDateString('en-IE', { timeZone: 'Europe/Dublin' }) : '—')}
+                        {formatDateDDMMYYYY(b.pickupTime || b.bookingDate)}
                       </div>
                       <div className={styles.subText}>
                         {b.pickupTime 
@@ -775,7 +1082,7 @@ export default function AdminDashboard() {
                             <RotateCcw size={10} style={{ display: 'inline-block', marginRight: '4px' }} /> Return
                           </span>
                           <span className={styles.returnTime}>
-                            {b.returnDate || b.notes?.match(/Return Date:\s*([\d-]+)/i)?.[1] || ''} {b.returnTime || b.notes?.match(/Return Time:\s*([\d:]+)/i)?.[1] || ''}
+                            {b.returnDate ? formatDateDDMMYYYY(b.returnDate) : (b.notes?.match(/Return Date:\s*([\d-]+)/i)?.[1] ? formatDateDDMMYYYY(b.notes.match(/Return Date:\s*([\d-]+)/i)![1]) : '')} {b.returnTime || b.notes?.match(/Return Time:\s*([\d:]+)/i)?.[1] || ''}
                           </span>
                         </div>
                       )}
@@ -813,9 +1120,24 @@ export default function AdminDashboard() {
                     €{b.amount?.toFixed(2)}
                   </td>
                   <td data-label="Status">
-                    <span className={`${styles.statusBadge} ${styles['status' + (b.status?.toUpperCase() === 'CONFIRMED' || b.driverName ? 'APPROVED' : b.status?.toUpperCase().replace(/\s+/g, ''))] || ''}`}>
-                      {b.status?.toUpperCase() === 'CONFIRMED' || b.driverName ? 'APPROVED' : b.status?.replace(/_/g, ' ') || 'PENDING'}
-                    </span>
+                    {(() => {
+                      const status = b.status?.toUpperCase() || 'PENDING';
+                      const isCancelled = status === 'CANCELLED';
+                      // Only treat as APPROVED if status is explicitly CONFIRMED
+                      const isApproved = status === 'CONFIRMED';
+                      const displayStatus = isCancelled
+                        ? 'CANCELLED'
+                        : isApproved
+                          ? 'APPROVED'
+                          : status.replace(/_/g, ' ');
+                      const statusClass =
+                        styles['status' + (isCancelled ? 'CANCELLED' : isApproved ? 'APPROVED' : status.replace(/[\s_]+/g, ''))] || '';
+                      return (
+                        <span className={`${styles.statusBadge} ${statusClass}`}>
+                          {displayStatus}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td data-label="Actions">
                     <div className={styles.actionsContainer}>
@@ -826,7 +1148,8 @@ export default function AdminDashboard() {
                       >
                         <Pencil size={16} />
                       </button>
-                      {!b.driverName && (b.status?.toUpperCase().includes('PENDING') || !b.status) && (
+                      {/* Show Approve button only for PENDING_ADMIN status */}
+                      {b.status?.toUpperCase().replace(/[\s]+/g, '_') === 'PENDING_ADMIN' && (
                         <button className={styles.approveBtn} onClick={() => openApproveModal(b.id)}>
                           Approve
                         </button>
@@ -934,7 +1257,17 @@ export default function AdminDashboard() {
                         <label>Flight Number</label>
                         <input type="text" value={editingBooking.flightNumber || ''} onChange={e => setEditingBooking({...editingBooking, flightNumber: e.target.value})} placeholder="e.g. FR1234" />
                       </div>
-                      <div className={styles.formField}></div>
+                      <div className={styles.formField}>
+                        <label>Meet &amp; Greet Service</label>
+                        <select 
+                          value={editingBooking.greetMeet || (getMeetAndGreet(editingBooking) ? 'yes' : 'no')} 
+                          onChange={e => setEditingBooking({...editingBooking, greetMeet: e.target.value})}
+                          style={{ fontWeight: '700' }}
+                        >
+                          <option value="no">NO</option>
+                          <option value="yes">YES (Meet &amp; Greet)</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
 
@@ -968,9 +1301,44 @@ export default function AdminDashboard() {
                     </div>
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
-                        <label>Pickup Date/Time</label>
-                        <input type="datetime-local" value={editingBooking.pickupTime || ''} onChange={e => setEditingBooking({...editingBooking, pickupTime: e.target.value})} />
+                        <label>Pickup Date (DD/MM/YYYY)</label>
+                        <div className={styles.dateInputWrapper}>
+                          <input 
+                            type="text" 
+                            placeholder="DD/MM/YYYY" 
+                            value={editPickupDateDisplay} 
+                            onChange={handlePickupDateTextChange}
+                            onBlur={handlePickupDateBlur}
+                          />
+                          <button 
+                            type="button"
+                            className={styles.datePickerBtn}
+                            onClick={() => { try { pickupDateInputRef.current?.showPicker(); } catch(e){} }}
+                            title="Choose date from calendar"
+                          >
+                            <CalendarIcon size={18} />
+                          </button>
+                          <input 
+                            type="date"
+                            ref={pickupDateInputRef}
+                            className={styles.hiddenPickerInput}
+                            value={editPickupDate}
+                            onChange={handlePickupDateFromPicker}
+                            tabIndex={-1}
+                            aria-hidden="true"
+                          />
+                        </div>
                       </div>
+                      <div className={styles.formField}>
+                        <label>Pickup Time</label>
+                        <input 
+                          type="time" 
+                          value={editPickupTime} 
+                          onChange={handlePickupTimeChange} 
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>Passengers</label>
                         <input type="number" value={editingBooking.passengers || 0} onChange={e => setEditingBooking({...editingBooking, passengers: parseInt(e.target.value) || 0})} />
@@ -1004,11 +1372,23 @@ export default function AdminDashboard() {
                     <div className={styles.formRow}>
                       <div className={styles.formField}>
                         <label>Outbound Driver</label>
-                        <input type="text" value={editingBooking.driverName || ''} onChange={e => setEditingBooking({...editingBooking, driverName: e.target.value})} placeholder="Driver name" />
+                        <select value={editingBooking.driverName || ''} onChange={e => setEditingBooking({...editingBooking, driverName: e.target.value})}>
+                          <option value="">Unassigned</option>
+                          {editingBooking.driverName && !availableDrivers.includes(editingBooking.driverName) && (
+                            <option value={editingBooking.driverName}>{editingBooking.driverName}</option>
+                          )}
+                          {availableDrivers.map(d => <option key={d} value={d}>{d}</option>)}
+                        </select>
                       </div>
                       <div className={styles.formField}>
                         <label>Return Driver</label>
-                        <input type="text" value={editingBooking.returnDriverName || ''} onChange={e => setEditingBooking({...editingBooking, returnDriverName: e.target.value})} placeholder="Return driver name" />
+                        <select value={editingBooking.returnDriverName || ''} onChange={e => setEditingBooking({...editingBooking, returnDriverName: e.target.value})}>
+                          <option value="">Unassigned</option>
+                          {editingBooking.returnDriverName && !availableDrivers.includes(editingBooking.returnDriverName) && (
+                            <option value={editingBooking.returnDriverName}>{editingBooking.returnDriverName}</option>
+                          )}
+                          {availableDrivers.map(d => <option key={d} value={d}>{d}</option>)}
+                        </select>
                       </div>
                     </div>
                     <div className={styles.formField}>
@@ -1029,8 +1409,33 @@ export default function AdminDashboard() {
                       </div>
                       <div className={styles.formRow}>
                         <div className={styles.formField}>
-                          <label>Return Date</label>
-                          <input type="date" value={editingBooking.returnDate || ''} onChange={e => setEditingBooking({...editingBooking, returnDate: e.target.value})} />
+                          <label>Return Date (DD/MM/YYYY)</label>
+                          <div className={styles.dateInputWrapper}>
+                            <input 
+                              type="text" 
+                              placeholder="DD/MM/YYYY" 
+                              value={editReturnDateDisplay} 
+                              onChange={handleReturnDateTextChange}
+                              onBlur={handleReturnDateBlur}
+                            />
+                            <button 
+                              type="button"
+                              className={styles.datePickerBtn}
+                              onClick={() => { try { returnDateInputRef.current?.showPicker(); } catch(e){} }}
+                              title="Choose return date from calendar"
+                            >
+                              <CalendarIcon size={18} />
+                            </button>
+                            <input 
+                              type="date"
+                              ref={returnDateInputRef}
+                              className={styles.hiddenPickerInput}
+                              value={editReturnDate}
+                              onChange={handleReturnDateFromPicker}
+                              tabIndex={-1}
+                              aria-hidden="true"
+                            />
+                          </div>
                         </div>
                         <div className={styles.formField}>
                           <label>Return Time</label>
@@ -1077,24 +1482,26 @@ export default function AdminDashboard() {
             
             <div className={styles.modalField}>
               <label>{bookings.find(b => b.id === selectedBookingId)?.returnDate ? 'Outbound Driver Name' : 'Driver Name'}</label>
-              <input 
-                type="text" 
+              <select 
                 value={driverNameInput} 
                 onChange={(e) => setDriverNameInput(e.target.value)}
-                placeholder="e.g. Michael Smith"
                 autoFocus
-              />
+              >
+                <option value="">Select a driver</option>
+                {availableDrivers.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
             </div>
 
             {bookings.find(b => b.id === selectedBookingId)?.returnDate || bookings.find(b => b.id === selectedBookingId)?.notes?.includes('Return Date:') ? (
               <div className={styles.modalField}>
                 <label>Return Driver Name</label>
-                <input 
-                  type="text" 
+                <select 
                   value={returnDriverNameInput} 
                   onChange={(e) => setReturnDriverNameInput(e.target.value)}
-                  placeholder="e.g. Sarah Johnson"
-                />
+                >
+                  <option value="">Select a driver</option>
+                  {availableDrivers.map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
               </div>
             ) : null}
 

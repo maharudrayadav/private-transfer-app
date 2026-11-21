@@ -1,0 +1,114 @@
+/* ─── RouteMap Responsive Wrapper ────────────────────────────── */
+
+.mapWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* needed for absolute legend on desktop */
+}
+
+/* ── Map tile (the Leaflet canvas) ── */
+.mapTile {
+  width: 100%;
+  height: 360px;
+  border-radius: 14px 14px 0 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+/* ── Route legend — desktop: absolute overlay bottom-left ── */
+.legend {
+  position: absolute;
+  bottom: 28px;
+  left: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 250px;
+  pointer-events: all;
+}
+
+.legendItem {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(200, 200, 200, 0.7);
+  backdrop-filter: blur(6px);
+  transition: all 0.18s ease;
+}
+
+.legendItemActive {
+  border-width: 2.5px;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.swatch {
+  width: 22px;
+  height: 4px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legendName {
+  font-size: 0.83em;
+  color: #1a202c;
+}
+
+.legendMeta {
+  font-size: 0.76em;
+  color: #4a5568;
+  padding-left: 30px;
+}
+
+/* ─── Mobile (≤ 700px): legend moves BELOW the map ─────────── */
+@media (max-width: 700px) {
+  .mapWrapper {
+    position: static !important;
+  }
+
+  .mapTile {
+    height: 260px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  /* Override absolute positioning — stack below map */
+  .legend {
+    position: static;
+    max-width: 100%;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .legendItem {
+    width: 100%;
+    backdrop-filter: none;
+    background: #fff;
+  }
+
+  .legendMeta {
+    padding-left: 0;
+    margin-top: 2px;
+  }
+}
+
+/* ─── Small mobile (≤ 420px) ────────────────────────────────── */
+@media (max-width: 420px) {
+  .mapTile {
+    height: 220px;
+  }
+}

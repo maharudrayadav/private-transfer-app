@@ -14,7 +14,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top right, var(--secondary-light), var(--bg-dark));
+  background: #0f172a;
+  background: radial-gradient(circle at top right, #334155, #0f172a);
   padding: 2rem;
 }
 
@@ -41,9 +42,15 @@
 }
 
 .adminLogoImg {
-  height: 68px;
+  height: 100px;
   width: auto;
   object-fit: contain;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.adminLogoImg:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
 }
 
 .loginHeader h1 {
@@ -178,13 +185,19 @@
 }
 
 .adminDashboardLogo {
-  height: 48px;
+  height: 72px;
   width: auto;
   object-fit: contain;
   margin-right: 0.25rem;
   background: white;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.adminDashboardLogo:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
 }
 
 .adminBadge {
@@ -284,6 +297,17 @@
   color: #1e293b;
   letter-spacing: -0.025em;
   margin: 0;
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(26, 107, 90, 0.1);
+  border-radius: 14px;
+  flex-shrink: 0;
 }
 
 .headerActions {
@@ -1509,6 +1533,51 @@
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(26, 107, 90, 0.1);
+}
+
+.dateInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.dateInputWrapper input[type="text"] {
+  width: 100%;
+  padding-right: 2.75rem;
+}
+
+.datePickerBtn {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.datePickerBtn:hover {
+  color: var(--primary);
+  background: rgba(26, 107, 90, 0.08);
+}
+
+.hiddenPickerInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
 @media (max-width: 640px) {

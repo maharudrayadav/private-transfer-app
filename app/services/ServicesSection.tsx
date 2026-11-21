@@ -25,33 +25,72 @@ interface ServicesSectionProps {
   showMoreServicesLink?: boolean;
 }
 
+const DEFAULT_SERVICES: ServiceItem[] = [
+  {
+    id: 11,
+    heading: 'Airport Transfers',
+    subHeading: 'Effortless Airport Travel',
+    description: 'Direct, reliable private airport transfers to and from Dublin Airport and all destinations across Ireland with comfort, precision, and flight tracking.',
+    imageUrl: 'https://res.cloudinary.com/dl1w0pw8g/image/upload/v1778863204/ovpfqlxqv1jainiikxev.jpg',
+    service: 'services',
+    passengers: 7,
+    mainService: 'Airport'
+  },
+  {
+    id: 10,
+    heading: 'Hotel Transfers',
+    subHeading: 'Seamless Arrivals',
+    description: "Direct luxury transfers from Dublin Airport to Ireland's most prestigious hotels, boutique city stays, and historic castle estates.",
+    imageUrl: 'https://res.cloudinary.com/dl1w0pw8g/image/upload/v1778127273/czq2sd2gan4gzcybz5km.jpg',
+    service: 'services',
+    passengers: 7,
+    mainService: 'Hotel'
+  },
+  {
+    id: 12,
+    heading: 'Vacation Transfers',
+    subHeading: 'Stress-Free Vacation Travel',
+    description: 'Comfortable and reliable private transport to resorts, tourist destinations, and scenic holiday getaways across Ireland with customizable stops.',
+    imageUrl: 'https://res.cloudinary.com/dl1w0pw8g/image/upload/v1778863889/z3aaezjz6qq201lxtke3.jpg',
+    service: 'services',
+    passengers: 7,
+    mainService: 'Vacation'
+  }
+];
+
 export default function ServicesSection({ initialServices = [], showMoreServicesLink = false }: ServicesSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [displayServices, setDisplayServices] = useState<ServiceItem[]>(initialServices);
+  const [displayServices, setDisplayServices] = useState<ServiceItem[]>(
+    initialServices && initialServices.length > 0 ? initialServices : DEFAULT_SERVICES
+  );
 
   useEffect(() => {
     const fetchServices = async () => {
       // Check if we already have the data in this session
       const cachedStr = sessionStorage.getItem('servicesCache');
       if (cachedStr) {
-        const cached = JSON.parse(cachedStr);
-        setDisplayServices(cached.data);
-        return; // Use session cache on refresh
+        try {
+          const cached = JSON.parse(cachedStr);
+          if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+            setDisplayServices(cached.data);
+            return;
+          }
+        } catch (e) {
+          // fallback
+        }
       }
 
       try {
         const data = await ServicesSectionService.fetchServices();
-        setDisplayServices(data);
-        // Store data for the current session (persists on refresh)
-        sessionStorage.setItem('servicesCache', JSON.stringify({
-          data: data
-        }));
+        if (Array.isArray(data) && data.length > 0) {
+          setDisplayServices(data);
+          sessionStorage.setItem('servicesCache', JSON.stringify({ data }));
+        }
       } catch (error) {
         console.error('Error fetching services on client:', error);
       }
     };
     
-    // Only fetch if initialServices wasn't provided or we want to ensure fresh data
     fetchServices();
   }, []);
 
@@ -65,8 +104,8 @@ export default function ServicesSection({ initialServices = [], showMoreServices
     }
   };
 
-  // Final list of services to show
-  const servicesList = displayServices;
+  // Ensure servicesList always has verified services
+  const servicesList = displayServices && displayServices.length > 0 ? displayServices : DEFAULT_SERVICES;
 
   const getServiceIcon = (title: string) => {
     const t = title.toLowerCase();
@@ -79,13 +118,22 @@ export default function ServicesSection({ initialServices = [], showMoreServices
     return <Sparkles size={size} />;
   };
 
+  // Helper to format heading into plural clean title
+  const getCleanHeading = (heading: string) => {
+    const trimmed = (heading || '').trim();
+    if (trimmed.toLowerCase() === 'airport transfer') return 'Airport Transfers';
+    if (trimmed.toLowerCase() === 'hotel transfer') return 'Hotel Transfers';
+    if (trimmed.toLowerCase() === 'vacation transfer') return 'Vacation Transfers';
+    return trimmed;
+  };
+
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="services-section">
       <div className="container">
         <div className={styles.header}>
           <div className={styles.headerText}>
-            <p className={styles.eyebrow}>EXCLUSIVITY & COMFORT</p>
-            <h2 className={styles.title}>Bespoke Chauffeur Services</h2>
+            <p className={styles.eyebrow}>EXCLUSIVITY &amp; COMFORT</p>
+            <div className={styles.title} role="heading" aria-level={2}>Bespoke Chauffeur Services Ireland</div>
           </div>
           <div className={styles.navArea}>
             {showMoreServicesLink && (
@@ -93,14 +141,18 @@ export default function ServicesSection({ initialServices = [], showMoreServices
                 More Services ↗
               </Link>
             )}
-            <button className={styles.sliderBtn} onClick={() => scroll('left')}>‹</button>
-            <button className={styles.sliderBtn} onClick={() => scroll('right')}>›</button>
+            <button className={styles.sliderBtn} onClick={() => scroll('left')} aria-label="Previous services">‹</button>
+            <button className={styles.sliderBtn} onClick={() => scroll('right')} aria-label="Next services">›</button>
           </div>
         </div>
 
         <div className={styles.grid} ref={scrollRef}>
-          {servicesList.length > 0 ? (
-            servicesList.map((s, idx) => (
+          {servicesList.map((s, idx) => {
+            const cleanHeading = getCleanHeading(s.heading);
+            const slug = (s.mainService ? s.mainService.trim() : cleanHeading).toLowerCase().replace(/\s+/g, '-');
+            const cleanImgUrl = s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/service_airport.png';
+
+            return (
               <motion.div
                 key={s.id || idx}
                 className={styles.cardWrapper}
@@ -109,18 +161,14 @@ export default function ServicesSection({ initialServices = [], showMoreServices
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
               >
-                {(() => {
-                  const rawHeading = (s.heading || '').trim();
-                  const slug = (s.mainService ? s.mainService.trim() : rawHeading).toLowerCase().replace(/\s+/g, '-');
-                  return (
-                    <Link 
-                      href={`/services/${slug}`} 
-                      className={styles.card}
-                    >
-                      <div className={styles.imgWrap}>
-                        <Image 
-                          src={s.imageUrl ? s.imageUrl.replace('/uploadv', '/upload/v') : '/placeholder_service.png'}
-                      alt={s.heading || 'Service Image'} 
+                <Link 
+                  href={`/services/${slug}`} 
+                  className={styles.card}
+                >
+                  <div className={styles.imgWrap}>
+                    <Image 
+                      src={cleanImgUrl}
+                      alt={`${cleanHeading} - Luxury Chauffeur & Private Airport Transfers Ireland`} 
                       fill 
                       sizes="(max-width:768px) 100vw, 400px" 
                       className={styles.img} 
@@ -129,16 +177,16 @@ export default function ServicesSection({ initialServices = [], showMoreServices
                     <div className={styles.imgOverlay}></div>
                   </div>
                   <div className={styles.cardBody}>
-                    <span className={styles.cardIcon}>{getServiceIcon(s.heading || '')}</span>
+                    <span className={styles.cardIcon}>{getServiceIcon(cleanHeading)}</span>
                     <span className={styles.cardSubtitle}>{(s.subHeading || '').trim()}</span>
-                    <h3>{(s.heading || '').trim()}</h3>
+                    <h3>{cleanHeading}</h3>
                     <p>{s.description}</p>
                     
                     {s.passengers && s.passengers > 0 ? (
                       <div className={styles.cardMeta}>
                         <span className={styles.metaItem}>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                          Capacity: {s.passengers}
+                          Capacity: Up to {s.passengers}
                         </span>
                       </div>
                     ) : null}
@@ -146,15 +194,9 @@ export default function ServicesSection({ initialServices = [], showMoreServices
                     <div className={styles.learnMore}>Explore Service <span>→</span></div>
                   </div>
                 </Link>
-                  );
-                })()}
               </motion.div>
-            ))
-          ) : (
-            <div className={styles.noData}>
-              <p>Services are currently being updated. Please check back soon or contact us directly.</p>
-            </div>
-          )}
+            );
+          })}
           
           {/* Uniform CTA Card */}
           <motion.div 

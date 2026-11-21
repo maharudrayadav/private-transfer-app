@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import styles from './serviceType.module.css';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ServiceTypeService } from './ServiceTypeService';
 import { 
   Castle, Sparkles, UserCheck, Clock, Car, 

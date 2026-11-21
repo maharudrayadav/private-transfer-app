@@ -9,7 +9,7 @@ export default function Footer() {
         {/* Brand */}
         <div className={styles.col}>
           <div className={styles.logoContainer}>
-            <img src="/logo.png" alt="Private Transfers" className={styles.logoImg} />
+            <img src="/logo.png" alt="PrivateTransfers.ie - Dublin Airport Transfers and Chauffeur Services Ireland" className={styles.logoImg} />
           </div>
           <p className={styles.desc}>
             Premium chauffeur and private transfer service in Ireland. Your journey, your way.
@@ -34,8 +34,8 @@ export default function Footer() {
         <div className={styles.col}>
           <h3>Our Services</h3>
           <ul>
-            <li><Link href="/services/-hotel-transfer">Hotel Transfer</Link></li>
-            <li><Link href="/services/airport">Airport Service</Link></li>
+            <li><Link href="/services/hotel">Hotel Transfer</Link></li>
+            <li><Link href="/services/airport">Airport Transfer</Link></li>
             <li><Link href="/services/vacation">Vacation Transfer</Link></li>
           </ul>
         </div>

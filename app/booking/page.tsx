@@ -7,7 +7,7 @@ import styles from './booking.module.css';
 import dynamic from 'next/dynamic';
 import { 
   MapPin, Calendar, Clock, Pencil, 
-  Hourglass, Map, Users, Luggage, 
+  Users, Luggage, 
   Info, AlertTriangle 
 } from 'lucide-react';
 import { BookingService } from './BookingService';
@@ -27,6 +27,64 @@ interface FleetItem {
 
 const COUNTRY_CODES = [
   { code: '+353', flag: '🇮🇪', country: 'Ireland' },
+  { code: '+1',   flag: '🇺🇸', country: 'USA' },
+  { code: '+44',  flag: '🇬🇧', country: 'UK' },
+  { code: '+91',  flag: '🇮🇳', country: 'India' },
+  { code: '+61',  flag: '🇦🇺', country: 'Australia' },
+  { code: '+1',   flag: '🇨🇦', country: 'Canada' },
+  { code: '+49',  flag: '🇩🇪', country: 'Germany' },
+  { code: '+33',  flag: '🇫🇷', country: 'France' },
+  { code: '+39',  flag: '🇮🇹', country: 'Italy' },
+  { code: '+34',  flag: '🇪🇸', country: 'Spain' },
+  { code: '+351', flag: '🇵🇹', country: 'Portugal' },
+  { code: '+31',  flag: '🇳🇱', country: 'Netherlands' },
+  { code: '+32',  flag: '🇧🇪', country: 'Belgium' },
+  { code: '+41',  flag: '🇨🇭', country: 'Switzerland' },
+  { code: '+43',  flag: '🇦🇹', country: 'Austria' },
+  { code: '+46',  flag: '🇸🇪', country: 'Sweden' },
+  { code: '+47',  flag: '🇳🇴', country: 'Norway' },
+  { code: '+45',  flag: '🇩🇰', country: 'Denmark' },
+  { code: '+358', flag: '🇫🇮', country: 'Finland' },
+  { code: '+48',  flag: '🇵🇱', country: 'Poland' },
+  { code: '+420', flag: '🇨🇿', country: 'Czech Republic' },
+  { code: '+36',  flag: '🇭🇺', country: 'Hungary' },
+  { code: '+40',  flag: '🇷🇴', country: 'Romania' },
+  { code: '+30',  flag: '🇬🇷', country: 'Greece' },
+  { code: '+90',  flag: '🇹🇷', country: 'Turkey' },
+  { code: '+7',   flag: '🇷🇺', country: 'Russia' },
+  { code: '+380', flag: '🇺🇦', country: 'Ukraine' },
+  { code: '+86',  flag: '🇨🇳', country: 'China' },
+  { code: '+81',  flag: '🇯🇵', country: 'Japan' },
+  { code: '+82',  flag: '🇰🇷', country: 'South Korea' },
+  { code: '+65',  flag: '🇸🇬', country: 'Singapore' },
+  { code: '+60',  flag: '🇲🇾', country: 'Malaysia' },
+  { code: '+66',  flag: '🇹🇭', country: 'Thailand' },
+  { code: '+84',  flag: '🇻🇳', country: 'Vietnam' },
+  { code: '+62',  flag: '🇮🇩', country: 'Indonesia' },
+  { code: '+63',  flag: '🇵🇭', country: 'Philippines' },
+  { code: '+92',  flag: '🇵🇰', country: 'Pakistan' },
+  { code: '+880', flag: '🇧🇩', country: 'Bangladesh' },
+  { code: '+94',  flag: '🇱🇰', country: 'Sri Lanka' },
+  { code: '+977', flag: '🇳🇵', country: 'Nepal' },
+  { code: '+971', flag: '🇦🇪', country: 'UAE' },
+  { code: '+966', flag: '🇸🇦', country: 'Saudi Arabia' },
+  { code: '+974', flag: '🇶🇦', country: 'Qatar' },
+  { code: '+965', flag: '🇰🇼', country: 'Kuwait' },
+  { code: '+973', flag: '🇧🇭', country: 'Bahrain' },
+  { code: '+968', flag: '🇴🇲', country: 'Oman' },
+  { code: '+972', flag: '🇮🇱', country: 'Israel' },
+  { code: '+20',  flag: '🇪🇬', country: 'Egypt' },
+  { code: '+27',  flag: '🇿🇦', country: 'South Africa' },
+  { code: '+234', flag: '🇳🇬', country: 'Nigeria' },
+  { code: '+254', flag: '🇰🇪', country: 'Kenya' },
+  { code: '+233', flag: '🇬🇭', country: 'Ghana' },
+  { code: '+55',  flag: '🇧🇷', country: 'Brazil' },
+  { code: '+54',  flag: '🇦🇷', country: 'Argentina' },
+  { code: '+57',  flag: '🇨🇴', country: 'Colombia' },
+  { code: '+52',  flag: '🇲🇽', country: 'Mexico' },
+  { code: '+56',  flag: '🇨🇱', country: 'Chile' },
+  { code: '+51',  flag: '🇵🇪', country: 'Peru' },
+  { code: '+64',  flag: '🇳🇿', country: 'New Zealand' },
 ];
 
 export default function BookingPage() {
@@ -69,19 +127,24 @@ export default function BookingPage() {
   const [returnDropoff, setReturnDropoff] = useState('');
 
   // ── Route Info state ──────────────────────────────────────
-  const [routeInfo, setRouteInfo] = useState<{ distance_km: number; time_minutes: number } | null>(null);
-  const [returnRouteInfo, setReturnRouteInfo] = useState<{ distance_km: number; time_minutes: number } | null>(null);
-  const [routeData, setRouteData] = useState<any>(null);
-  const [routeLoading, setRouteLoading] = useState(false);
-  const [showRouteMap, setShowRouteMap] = useState(false);
+  const [routeInfo, setRouteInfo] = useState<{ distance_km: number; time_minutes: number; summary?: string; route_number?: number } | null>(null);
+  const [availableRoutes, setAvailableRoutes] = useState<any[]>([]);
+  const [returnRouteInfo, setReturnRouteInfo] = useState<{ distance_km: number; time_minutes: number; summary?: string; route_number?: number } | null>(null);
+  const [allRouteData, setAllRouteData] = useState<any[]>([]); // polyline data per route
+  const [showMap, setShowMap] = useState(false); // map hidden until user clicks Show Routes
 
   const [form, setForm] = useState({
     firstName: '', lastName: '',
     email: '', phone: '', flightNumber: '',
     passengers: '1',
     luggage: '1', notes: '',
-    returnDate: '', returnTime: ''
+    returnDate: '', returnTime: '',
+    greetMeet: 'no'
   });
+
+  const now = new Date();
+  const today = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+  const currentTime = now.toTimeString().slice(0, 5);
 
   useEffect(() => {
     const stored = sessionStorage.getItem('lastSearch');
@@ -128,22 +191,27 @@ export default function BookingPage() {
 
   useEffect(() => {
     if (search?.pickup && search?.dropoff) {
-      setRouteLoading(true);
-
-      // Fetch Distance/Time
+      // Step 1: Fetch all route summaries (name, distance, time)
       BookingService.fetchDistance(search.pickup, search.dropoff)
-        .then(data => setRouteInfo(data))
-        .catch(() => setRouteInfo(null));
-
-      // Fetch Full Route Data (GeoJSON)
-      BookingService.fetchRoute(search.pickup, search.dropoff)
         .then(data => {
-          setRouteData(data);
-          setRouteLoading(false);
+          if (Array.isArray(data) && data.length > 0) {
+            setAvailableRoutes(data);
+            setRouteInfo(data[0]);
+
+            // Step 2: Fetch polyline data for EACH route individually
+            BookingService.fetchAllRoutePolylines(search.pickup, search.dropoff, data)
+              .then(polylines => setAllRouteData(polylines))
+              .catch(() => setAllRouteData([]));
+          } else {
+            setAvailableRoutes([]);
+            setRouteInfo(null);
+            setAllRouteData([]);
+          }
         })
         .catch(() => {
-          setRouteData(null);
-          setRouteLoading(false);
+          setAvailableRoutes([]);
+          setRouteInfo(null);
+          setAllRouteData([]);
         });
     }
   }, [search?.pickup, search?.dropoff]);
@@ -151,12 +219,21 @@ export default function BookingPage() {
   useEffect(() => {
     if (tripType === 'return' && returnPickup && returnDropoff) {
       BookingService.fetchDistance(returnPickup, returnDropoff)
-        .then(data => setReturnRouteInfo(data))
+        .then(data => {
+           if (Array.isArray(data) && data.length > 0) {
+             setReturnRouteInfo(data[0]);
+           } else {
+             setReturnRouteInfo(null);
+           }
+        })
         .catch(() => setReturnRouteInfo(null));
     } else {
       setReturnRouteInfo(null);
     }
   }, [tripType, returnPickup, returnDropoff]);
+
+  // Helper: vehicles with a rate >= €100 are flat day-rate, not per-km
+  const isDayRate = (price: number) => price >= 100;
 
   // Calculate Combined Journey Price for all vehicles
   useEffect(() => {
@@ -176,8 +253,15 @@ export default function BookingPage() {
       
       const pricePromises = fleet.map(v => {
         if (!v.price) return Promise.resolve({ id: v.id, price: null });
+
+        // Day-rate vehicles: flat price regardless of distance
+        // (above 20 km is always treated as a full day trip)
+        if (isDayRate(v.price)) {
+          const flatPrice = v.price * (tripType === 'return' ? 2 : 1);
+          return Promise.resolve({ id: v.id, price: flatPrice });
+        }
         
-        return BookingService.calculatePrice(km, v.price, returnKm, form.passengers, form.luggage, v.languagePrice || 0)
+        return BookingService.calculatePrice(km, v.price, returnKm, form.passengers, form.luggage, v.languagePrice || 0, form.greetMeet)
         .then(price => ({ id: v.id, price }))
         .catch(err => {
           console.error(`Error calculating price for ${v.heading}:`, err);
@@ -198,7 +282,7 @@ export default function BookingPage() {
     } else {
       setFleetPrices({});
     }
-  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km, form.passengers, form.luggage]);
+  }, [fleet, routeInfo?.distance_km, tripType, returnRouteInfo?.distance_km, form.passengers, form.luggage, form.greetMeet]);
 
   const handleSelect = (vehicle: FleetItem) => {
     setSelectedVehicle(vehicle);
@@ -223,7 +307,21 @@ export default function BookingPage() {
     if (e.target.name === 'phone') {
       value = value.replace(/\D/g, '').slice(0, 10);
     }
-    setForm({ ...form, [e.target.name]: value });
+    setForm(prev => ({ ...prev, [e.target.name]: value }));
+    if (errors[e.target.name]) {
+      setErrors(prev => {
+        const next = { ...prev };
+        delete next[e.target.name];
+        return next;
+      });
+    }
+    if (e.target.name === 'greetMeet' && value === 'no' && errors.flightNumber) {
+      setErrors(prev => {
+        const next = { ...prev };
+        delete next.flightNumber;
+        return next;
+      });
+    }
   };
 
   const validate = () => {
@@ -245,10 +343,17 @@ export default function BookingPage() {
     } else if (form.phone.trim().length !== 10) {
       newErrors.phone = 'Phone number must be exactly 10 digits';
     }
+
+    if (form.greetMeet === 'yes' && !form.flightNumber.trim()) {
+      newErrors.flightNumber = 'Flight number is compulsory for Meet & Greet service';
+    }
     
     if (tripType === 'return') {
       if (!form.returnDate) newErrors.returnDate = 'Return date is required';
+      else if (form.returnDate < today) newErrors.returnDate = 'Return date cannot be in the past';
+
       if (!form.returnTime) newErrors.returnTime = 'Return time is required';
+      else if (form.returnDate === today && form.returnTime < currentTime) newErrors.returnTime = 'Return time cannot be in the past';
     }
 
     setErrors(newErrors);
@@ -309,10 +414,13 @@ export default function BookingPage() {
           returnDropoffLocation: returnDropoff || search.pickup
         } : {}),
         flightNumber: form.flightNumber,
+        greetMeet: form.greetMeet,
+        meetAndGreet: form.greetMeet === 'yes',
         notes: `
           Trip Type: ${tripType.toUpperCase()}
           Luggage: ${form.luggage}
           ${form.flightNumber ? `Flight Number: ${form.flightNumber}` : ''}
+          Meet & Greet: ${form.greetMeet === 'yes' ? 'YES' : 'NO'}
           ${tripType === 'return' ? `
           Return Date: ${form.returnDate}, Return Time: ${form.returnTime}
           Return Pickup: ${returnPickup || search.dropoff}
@@ -336,15 +444,35 @@ export default function BookingPage() {
   // ── Modify Search handlers ───────────────────────────────────
   const handleModDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
+    if (val && val < today) {
+      alert('Journey date cannot be in the past');
+      setModDateRaw('');
+      setModDateDisplay('');
+      if (modDateRef.current) modDateRef.current.value = '';
+      return;
+    }
     setModDateRaw(val);
     if (!val) { setModDateDisplay(''); return; }
     const [y, m, d] = val.split('-');
     setModDateDisplay(`${d}/${m}/${y}`);
+
+    if (val === today && modTime && modTime < currentTime) {
+      setModTime('');
+      if (modTimeRef.current) modTimeRef.current.value = '';
+    }
   };
 
   const handleReturnDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    setForm({ ...form, returnDate: val });
+    const minAllowed = modDateRaw && modDateRaw >= today ? modDateRaw : today;
+    if (val && val < minAllowed) {
+      alert(modDateRaw && modDateRaw > today ? 'Return date cannot be earlier than pickup date' : 'Return date cannot be in the past');
+      setForm(prev => ({ ...prev, returnDate: '' }));
+      setReturnDateDisplay('');
+      if (returnDateRef.current) returnDateRef.current.value = '';
+      return;
+    }
+    setForm(prev => ({ ...prev, returnDate: val }));
     if (!val) { setReturnDateDisplay(''); return; }
     const [y, m, d] = val.split('-');
     setReturnDateDisplay(`${d}/${m}/${y}`);
@@ -361,6 +489,14 @@ export default function BookingPage() {
     }
     if (!modTime) {
       alert('Please select a journey time');
+      return;
+    }
+    if (modDateRaw < today) {
+      alert('Journey date cannot be in the past');
+      return;
+    }
+    if (modDateRaw === today && modTime < currentTime) {
+      alert('Journey time cannot be in the past');
       return;
     }
     const updated = {
@@ -489,6 +625,7 @@ export default function BookingPage() {
                       className={styles.hiddenDateInput}
                       value={modDateRaw}
                       onChange={handleModDateChange}
+                      min={today}
                     />
                   </div>
                 </div>
@@ -510,7 +647,17 @@ export default function BookingPage() {
                       ref={modTimeRef}
                       className={styles.hiddenDateInput}
                       value={modTime}
-                      onChange={e => setModTime(e.target.value)}
+                      onChange={e => {
+                        const val = e.target.value;
+                        if (modDateRaw === today && val < currentTime) {
+                          alert('Journey time cannot be in the past');
+                          setModTime('');
+                          if (modTimeRef.current) modTimeRef.current.value = '';
+                          return;
+                        }
+                        setModTime(val);
+                      }}
+                      min={modDateRaw === today ? currentTime : undefined}
                     />
                   </div>
                 </div>
@@ -522,41 +669,45 @@ export default function BookingPage() {
           )}
         </div>
 
-        {/* ── Route Map Section ─────────────────────────────────── */}
-        {search?.pickup && search?.dropoff && (
+        {/* ── Route Section ─────────────────────────────────── */}
+        {search?.pickup && search?.dropoff && availableRoutes.length > 0 && routeInfo && (
           <div className={styles.routeMapSection}>
-            <button
-              className={styles.toggleRouteBtn}
-              onClick={() => setShowRouteMap(!showRouteMap)}
-            >
-              {showRouteMap ? 'Hide Route' : 'Show Route'}
-            </button>
+            {/* Show Routes toggle button */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: showMap ? '14px' : '0' }}>
+              <button
+                onClick={() => setShowMap(prev => !prev)}
+                style={{
+                  background: showMap
+                    ? 'linear-gradient(135deg,#b8962e,#d4af37)'
+                    : 'linear-gradient(135deg,#1a3a6b,#2a5298)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '10px',
+                  padding: '10px 26px',
+                  fontWeight: 700,
+                  fontSize: '0.92rem',
+                  cursor: 'pointer',
+                  letterSpacing: '0.5px',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                {showMap ? '🗺️ Hide Map' : '🗺️ Show Routes on Map'}
+              </button>
+            </div>
 
-            {showRouteMap && (
+            {/* Map — only visible when showMap is true */}
+            {showMap && (
               <div className={styles.mapContainer}>
-                <div className={styles.mapInfo}>
-                  <span className={styles.mapDistance}>Distance: {routeInfo?.distance_km ?? '—'} km</span>
-                  {routeInfo?.time_minutes && (
-                    <span className={styles.mapTime}>Est. Time: {routeInfo.time_minutes} min</span>
-                  )}
-                </div>
-                {routeLoading ? (
-                  <div className={styles.mapPlaceholder}>
-                    <div className={styles.mapPlaceholderContent}>
-                      <span className={styles.mapIcon}><Hourglass size={24} /></span>
-                      <p>Calculating route path...</p>
-                    </div>
-                  </div>
-                ) : routeData ? (
-                  <RouteMap routeData={routeData.route || routeData} />
-                ) : (
-                  <div className={styles.mapPlaceholder}>
-                    <div className={styles.mapPlaceholderContent}>
-                      <span className={styles.mapIcon}><Map size={24} /></span>
-                      <p>Route visualization not available for this trip.</p>
-                    </div>
-                  </div>
-                )}
+                <RouteMap
+                  allRouteData={allRouteData}
+                  availableRoutes={availableRoutes}
+                  selectedRouteNumber={routeInfo.route_number}
+                  onSelectRoute={(r) => setRouteInfo(r)}
+                />
               </div>
             )}
           </div>
@@ -601,11 +752,17 @@ export default function BookingPage() {
                       {fleetPrices[v.id] ? (
                         <>
                           <div className={styles.price}>€{fleetPrices[v.id].toFixed(2)}</div>
-                          <div className={styles.priceNote}>All-inclusive price</div>
+                          <div className={styles.priceNote}>
+                            {isDayRate(v.price ?? 0) ? 'Flat day rate' : 'All-inclusive price'}
+                          </div>
                         </>
                       ) : (
                         <div className={styles.priceOnRequest}>
-                          {isCalculatingPrice ? 'Calculating...' : (v.price ? `€${v.price.toFixed(2)}/km` : 'Price on request')}
+                          {isCalculatingPrice
+                            ? 'Calculating...'
+                            : v.price
+                              ? `€${v.price.toFixed(2)}${isDayRate(v.price) ? '/day' : '/km'}`
+                              : 'Price on request'}
                         </div>
                       )}
                       <button
@@ -658,7 +815,7 @@ export default function BookingPage() {
                       className={errors.firstName ? styles.inputError : ''} 
                       value={form.firstName} 
                       onChange={handleChange} 
-                      placeholder="First name" 
+                      placeholder="" 
                     />
                     {errors.firstName && <span className={styles.errorText}>{errors.firstName}</span>}
                   </div>
@@ -670,7 +827,7 @@ export default function BookingPage() {
                       className={errors.lastName ? styles.inputError : ''} 
                       value={form.lastName} 
                       onChange={handleChange} 
-                      placeholder="Last name" 
+                      placeholder="" 
                     />
                     {errors.lastName && <span className={styles.errorText}>{errors.lastName}</span>}
                   </div>
@@ -693,7 +850,7 @@ export default function BookingPage() {
                     <div className={`${styles.phoneGroup} ${errors.phone ? styles.inputError : ''}`}>
                       <select className={styles.phoneCode} value={countryCode} onChange={e => setCountryCode(e.target.value)}>
                         {COUNTRY_CODES.map(c => (
-                          <option key={c.code} value={c.code}>{c.flag} {c.code}</option>
+                          <option key={c.country} value={c.code}>{c.flag} {c.code}</option>
                         ))}
                       </select>
                       <input 
@@ -702,7 +859,7 @@ export default function BookingPage() {
                         maxLength={10}
                         value={form.phone} 
                         onChange={handleChange} 
-                        placeholder="Enter 10-digit phone number" 
+                        placeholder="" 
                       />
                     </div>
                     {errors.phone && <span className={styles.errorText}>{errors.phone}</span>}
@@ -711,17 +868,31 @@ export default function BookingPage() {
 
                 <div className={styles.formRow}>
                   <div className={styles.formField}>
-                    <label>Flight Number</label>
+                    <label>Meet &amp; Greet Service</label>
+                    <select 
+                      name="greetMeet" 
+                      value={form.greetMeet} 
+                      onChange={handleChange}
+                      className={form.greetMeet === 'yes' ? styles.greetMeetSelectActive : ''}
+                    >
+                      <option value="no">No (Standard Pickup)</option>
+                      <option value="yes">Yes (Arrivals Hall)</option>
+                    </select>
+                  </div>
+                  <div className={styles.formField}>
+                    <label>
+                      Flight Number {form.greetMeet === 'yes' ? <span style={{ color: '#dc2626', fontWeight: 700 }}>* (Compulsory)</span> : <span style={{ color: '#64748b', fontWeight: 400 }}>(Optional)</span>}
+                    </label>
                     <input 
                       type="text" 
                       name="flightNumber" 
+                      className={errors.flightNumber ? styles.inputError : ''}
                       value={form.flightNumber} 
                       onChange={handleChange} 
-                      placeholder="e.g. FR1234 (Optional)" 
+                      placeholder={form.greetMeet === 'yes' ? 'e.g. EI123 / FR456 (Required for Meet & Greet)' : '(Optional)'} 
                     />
+                    {errors.flightNumber && <span className={styles.errorText}>{errors.flightNumber}</span>}
                   </div>
-                  {/* Empty field to maintain grid layout if needed, or we can just let it flow */}
-                  <div className={styles.formField}></div>
                 </div>
 
                 <div className={styles.formRow}>
@@ -811,6 +982,7 @@ export default function BookingPage() {
                             name="returnDate"
                             value={form.returnDate}
                             onChange={handleReturnDateChange}
+                            min={modDateRaw && modDateRaw >= today ? modDateRaw : today}
                           />
                         </div>
                         {errors.returnDate && <span className={styles.errorText}>{errors.returnDate}</span>}
@@ -834,6 +1006,7 @@ export default function BookingPage() {
                             name="returnTime"
                             value={form.returnTime}
                             onChange={handleChange}
+                            min={form.returnDate === today ? currentTime : undefined}
                           />
                         </div>
                         {errors.returnTime && <span className={styles.errorText}>{errors.returnTime}</span>}
@@ -843,7 +1016,7 @@ export default function BookingPage() {
                 )}
                 <div className={styles.formField}>
                   <label>Notes to Driver (Optional)</label>
-                  <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} placeholder="Any special instructions..." />
+                  <textarea name="notes" rows={3} value={form.notes} onChange={handleChange} placeholder="(Optional)" />
                 </div>
 
 
@@ -852,6 +1025,13 @@ export default function BookingPage() {
                     <span>{tripType === 'return' ? 'Journey Fare (Outbound & Return)' : 'Outbound Journey'}</span>
                     <strong>{isCalculatingPrice ? '...' : `€${journeyFare.toFixed(2)}`}</strong>
                   </div>
+
+                  {form.greetMeet === 'yes' && (
+                    <div className={styles.finalPriceRow} style={{ color: '#0f4c3a', fontWeight: '600' }}>
+                      <span>Meet &amp; Greet Service</span>
+                      <span>Included ✓</span>
+                    </div>
+                  )}
 
                   <div className={`${styles.finalPriceRow} ${styles.finalTotalRow}`}>
                     <span>Total Amount</span>
@@ -973,6 +1153,13 @@ export default function BookingPage() {
                   <span>{tripType === 'return' ? 'Journey Fare' : 'Outbound Journey'}</span>
                   <span>{isCalculatingPrice ? 'Calculating...' : (selectedVehicle ? `€${journeyFare.toFixed(2)}` : '—')}</span>
                 </div>
+
+                {form.greetMeet === 'yes' && (
+                  <div className={styles.priceRow} style={{ color: '#0f4c3a', fontWeight: '600' }}>
+                    <span>Meet &amp; Greet</span>
+                    <span>Included ✓</span>
+                  </div>
+                )}
 
                 <div className={styles.totalRow}>
                   <span>Total</span>

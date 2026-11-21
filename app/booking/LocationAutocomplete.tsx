@@ -69,6 +69,7 @@ export default function LocationAutocomplete({ label, placeholder, id, onSelect,
     const val = e.target.value;
     setQuery(val);
     setShowSuggestions(true);
+    if (onSelect) onSelect(val);
   };
 
   const handleSelect = (suggestion: string) => {

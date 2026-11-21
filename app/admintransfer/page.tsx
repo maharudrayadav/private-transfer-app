@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from './admin.module.css';
 
 export default function AdminLoginPage() {
@@ -34,7 +35,7 @@ export default function AdminLoginPage() {
       <div className={styles.loginCard}>
         <div className={styles.loginHeader}>
           <div className={styles.adminLogoContainer}>
-            <img src="/logo.png" alt="Private Transfers" className={styles.adminLogoImg} />
+            <Link href="/"><img src="/logo.png" alt="Private Transfers" className={styles.adminLogoImg} style={{ cursor: 'pointer' }} /></Link>
           </div>
           <p>SECURE ACCESS</p>
           <h1>Admin Portal</h1>

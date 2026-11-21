@@ -6,12 +6,6 @@ import styles from './page.module.css';
 
 const testimonials = [
   {
-    title: "Simply the Best Way to Tour Ireland",
-    text: "We toured Ireland with Ciaran, Dan, and Dave across several days and each one was fantastic. Comfortable vehicle, amazing stories, and breath-taking locations across the island. We recommend Irish Vacation Tours to everyone we know.",
-    author: "Chris & Natalie H.",
-    location: "Arizona, USA"
-  },
-  {
     title: "A Once-in-a-Lifetime Trip Made Perfect",
     text: "Ireland was always on our bucket list and Dave made it truly special. From the Wild Atlantic Way to the Giant’s Causeway, everything was perfectly organized. His knowledge, humor, and care made this trip unforgettable.",
     author: "Mark T.",

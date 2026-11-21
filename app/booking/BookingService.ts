@@ -14,19 +14,30 @@ export class BookingService {
     return res.json();
   }
 
-  /**
-   * Fetches distance and estimated time between two locations.
-   */
   static async fetchDistance(from: string, to: string): Promise<any> {
     const res = await fetch(`${API_BASE_URL}/api/routes/place-distance?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
     if (!res.ok) {
       throw new Error('Failed to fetch distance data');
     }
-    return res.json();
+    const data = await res.json();
+    if (data && data.routes && Array.isArray(data.routes)) {
+      return data.routes;
+    }
+    return [];
   }
 
   /**
-   * Fetches full route calculations (GeoJSON path).
+   * The place-distance API already includes polyline data in each route object.
+   * This method simply returns the routes array as-is so RouteMap can decode
+   * the `polyline` field directly — no extra API calls needed.
+   */
+  static async fetchAllRoutePolylines(from: string, to: string, routes: any[]): Promise<any[]> {
+    // Each route already contains a `polyline` encoded string from place-distance
+    return routes;
+  }
+
+  /**
+   * Fetches full route calculation (polyline) for the primary route.
    */
   static async fetchRoute(from: string, to: string): Promise<any> {
     const res = await fetch(`${API_BASE_URL}/api/routes/calculate?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
@@ -45,10 +56,18 @@ export class BookingService {
     returnKm: number,
     passengers: string | number,
     luggage: string | number,
-    languagePrice: number
+    languagePrice: number,
+    greetMeet?: string
   ): Promise<number> {
+    let greetMeetParam = '';
+    if (greetMeet === 'yes') {
+      greetMeetParam = '&greetMeet=yes';
+    } else if (greetMeet === 'no') {
+      greetMeetParam = '&greetMeet=no';
+    }
+
     const res = await fetch(
-      `${API_BASE_URL}/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}&passgener=${passengers}&language=${luggage}&languagePrice=${languagePrice}`,
+      `${API_BASE_URL}/api/admin/caldata?km=${km}&rate=${rate}&returnkm=${returnKm}&passgener=${passengers}&language=${luggage}&languagePrice=${languagePrice}${greetMeetParam}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }

@@ -17,8 +17,9 @@ export class ServiceTypeService {
     const targetSlug = serviceType.trim().toLowerCase();
     const matchingServices = allServices.filter((item: any) => {
       const mainSlug = item.mainService ? item.mainService.trim().toLowerCase().replace(/\s+/g, '-') : null;
+      const mainDirect = item.mainService ? item.mainService.trim().toLowerCase() : null;
       const headingSlug = (item.heading || '').trim().toLowerCase().replace(/\s+/g, '-');
-      return mainSlug === targetSlug || headingSlug === targetSlug;
+      return mainSlug === targetSlug || mainDirect === targetSlug || headingSlug === targetSlug;
     });
     
     const mainContent = matchingServices.length > 0 ? matchingServices[0] : null;

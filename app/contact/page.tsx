@@ -14,9 +14,9 @@ export default function ContactPage() {
 
       <div className={`container ${styles.content}`}>
         <div className={styles.grid}>
-          {/* Contact Info Centered */}
-          <div className={`${styles.card} ${styles.contactInfo}`} style={{ maxWidth: '600px', margin: '0 auto', gridColumn: '1 / -1' }}>
-            <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Get in Touch</h2>
+          {/* Left Column: Contact Info */}
+          <div className={`${styles.card} ${styles.contactInfo}`}>
+            <h2>Get in Touch</h2>
             <div className={styles.infoItems}>
               <div className={styles.infoItem}>
                 <div className={styles.icon}>
@@ -24,7 +24,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className={styles.itemLabel}>Call or WhatsApp</span>
-                  <span className={styles.itemValue}> </span>
+                  <a href="tel:+353894881562" className={styles.itemValue}>+353 89 488 1562</a>
                 </div>
               </div>
 
@@ -34,7 +34,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className={styles.itemLabel}>Email Us directly</span>
-                  <span className={styles.itemValue}> </span>
+                  <a href="mailto:info@privatetransfers.ie" className={styles.itemValue}>info@privatetransfers.ie</a>
                 </div>
               </div>
 
@@ -48,6 +48,38 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Right Column: Contact Form */}
+          <div className={`${styles.card} ${styles.form}`}>
+            <h2>Send a Message</h2>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className={styles.fieldGroup}>
+                <div className={styles.field}>
+                  <label htmlFor="name">Full Name</label>
+                  <input id="name" type="text" placeholder="John Doe" />
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="email">Email</label>
+                  <input id="email" type="email" placeholder="john@example.com" />
+                </div>
+              </div>
+              <div className={styles.fieldGroup}>
+                <div className={styles.field}>
+                  <label htmlFor="phone">Phone Number</label>
+                  <input id="phone" type="tel" placeholder="+353 ..." />
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="subject">Subject</label>
+                  <input id="subject" type="text" placeholder="How can we help?" />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <label htmlFor="message">Message</label>
+                <textarea id="message" rows={4} placeholder="Your message..."></textarea>
+              </div>
+              <button type="submit" className={styles.submitBtn}>Send Message</button>
+            </form>
           </div>
         </div>
       </div>

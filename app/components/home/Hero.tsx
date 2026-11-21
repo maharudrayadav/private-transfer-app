@@ -9,22 +9,50 @@ import LocationAutocomplete from '../../booking/LocationAutocomplete';
 export default function Hero() {
   const router = useRouter();
   const [dateDisplay, setDateDisplay] = useState('');
+  const [rawDate, setRawDate] = useState('');
   const dateInputRef = useRef<HTMLInputElement>(null);
   const timeInputRef = useRef<HTMLInputElement>(null);
   const [timeDisplay, setTimeDisplay] = useState('');
 
+  // Get current local date and time
+  const now = new Date();
+  const today = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+  const currentTime = now.toTimeString().slice(0, 5);
+
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeDisplay(e.target.value);
+    const val = e.target.value;
+    if (rawDate === today && val < currentTime) {
+      triggerPopup('Journey time cannot be in the past. Please select a future time.');
+      setTimeDisplay('');
+      if (timeInputRef.current) timeInputRef.current.value = '';
+      return;
+    }
+    setTimeDisplay(val);
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value; // YYYY-MM-DD
     if (!val) {
+      setRawDate('');
       setDateDisplay('');
       return;
     }
+    if (val < today) {
+      triggerPopup('Journey date cannot be in the past. Please select today or a future date.');
+      setRawDate('');
+      setDateDisplay('');
+      if (dateInputRef.current) dateInputRef.current.value = '';
+      return;
+    }
+    setRawDate(val);
     const [y, m, d] = val.split('-');
     setDateDisplay(`${d} / ${m} / ${y}`);
+
+    // If date changed to today and selected time is in the past, reset time
+    if (val === today && timeDisplay && timeDisplay < currentTime) {
+      setTimeDisplay('');
+      if (timeInputRef.current) timeInputRef.current.value = '';
+    }
   };
 
   const [pickup, setPickup] = useState('');
@@ -44,14 +72,24 @@ export default function Hero() {
       return;
     }
 
-    if (!dateDisplay) {
+    if (!dateDisplay || !rawDate) {
       triggerPopup('Please select a journey date');
       return;
     }
 
-    const timeVal = timeInputRef.current?.value;
+    if (rawDate < today) {
+      triggerPopup('Journey date cannot be in the past');
+      return;
+    }
+
+    const timeVal = timeInputRef.current?.value || timeDisplay;
     if (!timeVal) {
       triggerPopup('Please select a journey time');
+      return;
+    }
+
+    if (rawDate === today && timeVal < currentTime) {
+      triggerPopup('Journey time cannot be in the past');
       return;
     }
     
@@ -119,6 +157,8 @@ export default function Hero() {
                       ref={dateInputRef}
                       className={styles.hiddenDateInput}
                       onChange={handleDateChange}
+                      min={today}
+                      value={rawDate}
                     />
                   </div>
                 </div>
@@ -137,6 +177,8 @@ export default function Hero() {
                       ref={timeInputRef} 
                       className={styles.hiddenDateInput} 
                       onChange={handleTimeChange}
+                      min={rawDate === today ? currentTime : undefined}
+                      value={timeDisplay}
                     />
                   </div>
                 </div>
@@ -157,12 +199,12 @@ export default function Hero() {
 
         <div className={styles.heroImageContainer}>
           <img 
-            src="https://www.irishvacationtours.ie/wp-content/uploads/2025/10/314eb1f767f740ff8cd0e8795798a887.jpeg" 
+            src="/hero_fresh.png" 
             alt="Private Chauffeur Ireland" 
             className={styles.heroImage}
             onError={(e) => {
               // Fallback
-              e.currentTarget.src = 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=1200';
+              e.currentTarget.src = 'https://www.irishvacationtours.ie/wp-content/uploads/2025/10/314eb1f767f740ff8cd0e8795798a887.jpeg';
             }}
           />
         </div>

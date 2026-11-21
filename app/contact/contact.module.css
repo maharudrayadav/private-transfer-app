@@ -72,16 +72,16 @@
 .infoItems {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 .infoItem {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  text-align: center;
-  gap: 1rem;
+  text-align: left;
+  gap: 1.25rem;
 }
 
 .icon {

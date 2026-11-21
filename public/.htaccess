@@ -1,16 +1,24 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Remove trailing slashes
+  # 1. Force HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # 2. Redirect non-www to www (Consistent Canonical Domain matching Google Search)
+  RewriteCond %{HTTP_HOST} ^privatetransfers\.ie$ [NC]
+  RewriteRule ^(.*)$ https://www.privatetransfers.ie/$1 [L,R=301]
+
+  # 3. Remove trailing slashes
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-  # Serve .html file if it exists
+  # 4. Serve .html file if it exists
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.html -f
   RewriteRule ^(.*)$ $1.html [L]
 
-  # Handle 404 errors with Next.js 404 page
+  # 5. Handle 404 errors with Next.js 404 page
   ErrorDocument 404 /404.html
 </IfModule>

@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
 import { API_BASE_URL } from '@/lib/api';
 
 export async function generateStaticParams() {
   const defaultServices = [
+    { serviceType: 'airport' },
     { serviceType: 'airport-transfers' },
+    { serviceType: 'hotel' },
+    { serviceType: 'hotel-transfers' },
+    { serviceType: 'vacation' },
+    { serviceType: 'vacation-transfers' },
     { serviceType: 'corporate-travel' },
     { serviceType: 'wedding-chauffeurs' },
     { serviceType: 'golf-tours' },
@@ -10,7 +16,10 @@ export async function generateStaticParams() {
   ];
 
   try {
-    const res = await fetch(`${API_BASE_URL}/api/images?service=services`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1500);
+    const res = await fetch(`${API_BASE_URL}/api/images?service=services`, { signal: controller.signal });
+    clearTimeout(timeoutId);
     if (res.ok) {
       const data = await res.json();
       const apiServices = data.map((item: any) => ({
@@ -23,10 +32,26 @@ export async function generateStaticParams() {
       return uniqueServices;
     }
   } catch (error) {
-    console.error('Failed to fetch services for static export:', error);
+    // Falls back immediately if network unavailable
   }
 
   return defaultServices;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ serviceType: string }> }): Promise<Metadata> {
+  const { serviceType } = await params;
+  const formatted = (serviceType || '')
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+
+  return {
+    title: `${formatted} | Private Transfers Ireland`,
+    description: `Professional ${formatted} service across Ireland with PrivateTransfers.ie. Luxury executive vehicles, transparent fixed pricing, and dedicated professional chauffeurs.`,
+    alternates: {
+      canonical: `https://www.privatetransfers.ie/services/${serviceType}`,
+    },
+  };
 }
 
 export default function ServiceTypeLayout({ children }: { children: React.ReactNode }) {

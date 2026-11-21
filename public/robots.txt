@@ -1,0 +1,9 @@
+# robots.txt for https://www.privatetransfers.ie/
+User-agent: *
+Allow: /
+Disallow: /admintransfer
+Disallow: /admintransfer/*
+Disallow: /driver/dashboard
+
+# Sitemap
+Sitemap: https://www.privatetransfers.ie/sitemap.xml
